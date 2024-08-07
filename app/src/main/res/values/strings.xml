@@ -9,4 +9,8 @@
     <string name="category">Category</string>
     <string name="smartphone">Smartphone</string>
     <string name="tablet">Tablet</string>
+    <string name="accommodations">Accommodations</string>
+    <string name="cart">Cart</string>
+    <string name="navigation_drawer_open">Navigation Drawer Open</string>
+    <string name="navigation_drawer_close">Navigation Drawer Close</string>
 </resources>
