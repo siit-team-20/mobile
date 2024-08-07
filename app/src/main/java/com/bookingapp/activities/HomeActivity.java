@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.bookingapp.R;
 import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.fragments.accommodation.AccommodationListFragment;
+import com.bookingapp.fragments.accommodation.AccommodationsPageFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -14,6 +15,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        FragmentTransition.to(AccommodationListFragment.newInstance(), HomeActivity.this, false, R.id.activity_main);
+        FragmentTransition.to(AccommodationsPageFragment.newInstance(), HomeActivity.this, false, R.id.activity_main);
     }
 }

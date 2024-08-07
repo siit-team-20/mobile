@@ -4,4 +4,9 @@
     <string name="accommodation_name">Accommodation 1</string>
     <string name="accommodation_location">Location 1</string>
     <string name="accommodation_image">Accommodation image</string>
+    <string name="filters">Filters</string>
+    <string name="sort">Sort</string>
+    <string name="category">Category</string>
+    <string name="smartphone">Smartphone</string>
+    <string name="tablet">Tablet</string>
 </resources>
