@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress NavigationFile -->
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,7 +14,59 @@
         tools:layout="@layout/fragment_accommodations_page"
         />
 
-<!--    <fragment-->
+    <fragment
+        android:id="@+id/nav_accommodation_detail"
+        android:name="com.bookingapp.fragments.accommodation.DetailAccommodation"
+        android:label="Detail"
+        tools:layout="@layout/fragment_detail_accommodation"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true">
+        <argument
+            android:name="id"
+            app:argType="long" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="location"
+            app:argType="string" />
+        <argument
+            android:name="ownerEmail"
+            app:argType="string" />
+        <argument
+            android:name="accommodationType"
+            app:argType="string" />
+        <argument
+            android:name="benefits"
+            app:argType="string[]" />
+        <argument
+            android:name="isApproved"
+            app:argType="boolean" />
+        <argument
+            android:name="isAutomaticAcceptance"
+            app:argType="boolean" />
+        <argument
+            android:name="isPriceByGuest"
+            app:argType="boolean" />
+        <argument
+            android:name="minGuests"
+            app:argType="integer" />
+        <argument
+            android:name="maxGuests"
+            app:argType="integer" />
+        <argument
+            android:name="reservationCancellationDeadline"
+            app:argType="integer" />
+        <argument
+            android:name="availabilityDates"
+            app:argType="com.bookingapp.model.DateRange[]" />
+    </fragment>
+
+
+    <!--    <fragment-->
 <!--        android:id="@+id/nav_new"-->
 <!--        android:name="com.example.shopapp.fragments.new_product.NewProductFragment"-->
 <!--        android:label="New product"-->

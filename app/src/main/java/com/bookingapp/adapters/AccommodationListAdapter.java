@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 
 import com.bookingapp.R;
 import com.bookingapp.model.Accommodation;
+import com.bookingapp.model.DateRange;
 
 import java.util.ArrayList;
 
@@ -84,17 +85,16 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                 args.putString("location", accommodation.getLocation());
                 args.putString("ownerEmail", accommodation.getOwnerEmail());
                 args.putString("accommodationType", accommodation.getAccommodationType().toString());
-                args.putStringArrayList("benefits", new ArrayList<>(accommodation.getBenefits()));
+                args.putStringArray("benefits", accommodation.getBenefits().toArray(new String[0]));
                 args.putBoolean("isApproved", accommodation.getIsApproved());
                 args.putBoolean("isAutomaticAcceptance", accommodation.getIsAutomaticAcceptance());
                 args.putBoolean("isPriceByGuest", accommodation.getIsPriceByGuest());
                 args.putInt("minGuests", accommodation.getMinGuests());
                 args.putInt("maxGuests", accommodation.getMaxGuests());
                 args.putInt("reservationCancellationDeadline", accommodation.getReservationCancellationDeadline());
-                args.putParcelableArrayList("availabilityDates", new ArrayList<>(accommodation.getAvailabilityDates()));
-//                NavController navController = Navigation.findNavController(activity, R.id.fragment_nav_content_main);
-//                navController.navigate(R.id.nav_product_detail, args);
-
+                args.putParcelableArray("availabilityDates", accommodation.getAvailabilityDates().toArray(new DateRange[accommodation.getAvailabilityDates().size()]));
+                NavController navController = Navigation.findNavController(activity, R.id.fragment_nav_content_main);
+                navController.navigate(R.id.nav_accommodation_detail, args);
             });
         }
 

@@ -111,7 +111,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         mAppBarConfiguration = new AppBarConfiguration
-                .Builder(R.id.nav_accommodations)
+                .Builder(R.id.nav_accommodations, R.id.nav_accommodation_detail)
                 //R.id.nav_new, R.id.nav_profile, R.id.nav_logout, R.id.nav_settings, R.id.nav_language
                 .setOpenableLayout(drawer)
                 .build();

@@ -6,12 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bookingapp.R;
 import com.bookingapp.adapters.AccommodationListAdapter;
 import com.bookingapp.databinding.FragmentAccommodationListBinding;
 import com.bookingapp.model.Accommodation;
@@ -41,7 +49,7 @@ public class AccommodationListFragment extends ListFragment {
         Log.i("BookingApp", "onCreateView Accommodation List Fragment");
         binding = FragmentAccommodationListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        //addMenu();
+        addMenu();
         return root;
     }
 
@@ -59,29 +67,23 @@ public class AccommodationListFragment extends ListFragment {
         getDataFromClient();
     }
 
-//    private void addMenu() {
-//        menuProvider = new MenuProvider() {
-//            @Override
-//            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-//                menu.clear();
-//                menuInflater.inflate(R.menu.products_menu, menu);
-//            }
-//
-//            @Override
-//            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-//                NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
-//                // Nakon toga, koristi se NavigationUI.onNavDestinationSelected(item, navController)
-//                // kako bi se omogućila integracija između MenuItem-a i odredišta unutar aplikacije
-//                // definisanih unutar navigacionog grafa (NavGraph).
-//                // Ova funkcija proverava da li je odabrana stavka izbornika povezana s nekim
-//                // odredištem unutar navigacionog grafa i pokreće tu navigaciju ako postoji
-//                // odgovarajuće podudaranje.
-//                return NavigationUI.onNavDestinationSelected(menuItem, navController);
-//            }
-//        };
-//
-//        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
-//    }
+    private void addMenu() {
+        menuProvider = new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.clear();
+                menuInflater.inflate(R.menu.accommodations_menu, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+                return NavigationUI.onNavDestinationSelected(menuItem, navController);
+            }
+        };
+
+        requireActivity().addMenuProvider(menuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED);
+    }
 
 
     @Override

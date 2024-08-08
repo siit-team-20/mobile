@@ -58,15 +58,11 @@ public class AccommodationsPageFragment extends Fragment {
         });
 
         spinner = binding.btnSort;
-        // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item,
                 getResources().getStringArray(R.array.sort_array));
-        // Specify the layout to use when the list of choices appears
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
         spinner.setAdapter(arrayAdapter);
-
 
         return root;
     }
@@ -86,7 +82,7 @@ public class AccommodationsPageFragment extends Fragment {
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Log.v("ShopApp", (String) parent.getItemAtPosition(position));
+                                Log.v("BookingApp", (String) parent.getItemAtPosition(position));
                                 ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
                             }
                         })
@@ -102,13 +98,10 @@ public class AccommodationsPageFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
             }
         });
 
-
         FragmentTransition.to(AccommodationListFragment.newInstance(), getActivity(), false, R.id.scroll_accommodations_list);
-
     }
 
     @Override
