@@ -33,4 +33,5 @@ public class ServiceUtils {
             .build();
 
     public static AccommodationService accommodationService = retrofit.create(AccommodationService.class);
+    public static ReservationService reservationService = retrofit.create(ReservationService.class);
 }

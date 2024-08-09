@@ -115,7 +115,6 @@ public class AccommodationListFragment extends ListFragment {
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
             }
         });
-
     }
 
 

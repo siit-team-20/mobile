@@ -14,20 +14,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp">
                 <TextView
-                    android:id="@+id/accommodation_detail_title"
+                    android:id="@+id/accommodation_name"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Title"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/accommodation_name"
                     android:fontFamily="sans-serif-medium"
-                    android:textSize="40sp" />
+                    android:textSize="25sp" />
                 <ImageButton
                     android:id="@+id/deleteAccommodationButton"
                     android:layout_width="50dp"
@@ -47,123 +49,367 @@
                     android:clickable="true"/>
             </LinearLayout>
             <TextView
-                android:id="@+id/accommodation_name"
+                android:id="@+id/accommodation_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Name"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/accommodation_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Description"
+                android:text="Location"
+                android:layout_marginHorizontal="10dp"
                 android:fontFamily="sans-serif-light"
                 android:textSize="20sp"/>
             <ImageView
                 android:id="@+id/accommodation_image"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="10dp"
                 app:srcCompat="@drawable/a"
                 android:contentDescription="@string/accommodation_image" />
             <TextView
-                android:id="@+id/accommodation_id"
+                android:id="@+id/accommodation_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Id"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:text="Description"
+                android:justificationMode="inter_word"
                 android:fontFamily="sans-serif-light"
                 android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/accommodation_location"
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:layout_marginTop="25dp"-->
+<!--                android:layout_marginHorizontal="10dp">-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Accommodation id: "-->
+<!--                    android:fontFamily="sans-serif-light"-->
+<!--                    android:textSize="20sp"></TextView>-->
+<!--                <TextView-->
+<!--                    android:id="@+id/accommodation_id"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Id"-->
+<!--                    android:fontFamily="sans-serif-light"-->
+<!--                    android:textSize="20sp"/>-->
+<!--            </LinearLayout>-->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Location"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/accommodation_owner_email"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Owner email: "
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"></TextView>
+                <TextView
+                    android:id="@+id/accommodation_owner_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Owner email"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Owner email"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/accommodation_accommodation_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Accommodation Type"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp">
+                <TextView
+                    android:id="@+id/accommodation_accommodation_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Accommodation type"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" with:"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"></TextView>
+            </LinearLayout>
             <TextView
                 android:id="@+id/accommodation_benefits"
                 android:layout_width="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginHorizontal="10dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
                 android:text="Benefits"
                 android:fontFamily="sans-serif-light"
                 android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/accommodation_approved"
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:layout_marginTop="25dp"-->
+<!--                android:layout_marginHorizontal="10dp">-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Approved: "-->
+<!--                    android:fontFamily="sans-serif-light"-->
+<!--                    android:textSize="20sp"></TextView>-->
+<!--                <TextView-->
+<!--                    android:id="@+id/accommodation_approved"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Approved"-->
+<!--                    android:fontFamily="sans-serif-light"-->
+<!--                    android:textSize="20sp"/>-->
+<!--            </LinearLayout>-->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Approved"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/accommodation_automatic_acceptance"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Acceptance: "
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"></TextView>
+                <TextView
+                    android:id="@+id/accommodation_automatic_acceptance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Automatic acceptance"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Automatic Acceptance"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pricing: "
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"></TextView>
+                <TextView
+                    android:id="@+id/accommodation_price_by_guest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Price by guest"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"/>
+            </LinearLayout>
             <TextView
-                android:id="@+id/accommodation_price_by_guest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Price By Guest"
+                android:text="Availability dates: "
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/accommodation_min_guests"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Min guests"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/accommodation_max_guests"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Max guests"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/accommodation_reservation_cancellation_deadline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Reservation Cancellation Deadline"
-                android:fontFamily="sans-serif-light"
-                android:textSize="20sp"/>
+                android:textSize="20sp"></TextView>
             <TextView
                 android:id="@+id/accommodation_availability_dates"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:text="Availability Dates"
+                android:layout_marginTop="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:text="Availability dates"
                 android:fontFamily="sans-serif-light"
                 android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Currently reserved for: "
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"></TextView>
+            <TextView
+                android:id="@+id/accommodation_reserved_dates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginHorizontal="10dp"
+                android:text="Reserved dates"
+                android:fontFamily="sans-serif-light"
+                android:textSize="20sp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginHorizontal="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Guest number: "
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"></TextView>
+                <TextView
+                    android:id="@+id/accommodation_min_guests"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Min guests"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"></TextView>
+                <TextView
+                    android:id="@+id/accommodation_max_guests"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Max guests"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginHorizontal="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reservation cancellation deadline: "
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"></TextView>
+                <TextView
+                    android:id="@+id/accommodation_reservation_cancellation_deadline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="7"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" days"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="20sp"></TextView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="Make a reservation"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="30sp" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start date: "
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="20sp"></TextView>
+                    <Button
+                        android:id="@+id/reservation_start_date_button"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Pick Start Date"
+                        android:layout_alignParentRight="true"
+                        android:textAllCaps="false" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="End date: "
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="20sp"></TextView>
+                    <Button
+                        android:id="@+id/reservation_end_date_button"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Pick End Date"
+                        android:layout_alignParentRight="true"
+                        android:textAllCaps="false" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Guests: "
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="20sp"></TextView>
+                    <EditText
+                        android:id="@+id/reservation_guest_number"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/reservation_guest_input_hint"
+                        android:selectAllOnFocus="true"
+                        android:layout_alignParentRight="true"
+                        android:textAllCaps="false" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calculated price: "
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="sans-serif-light"
+                        android:textSize="20sp"></TextView>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true">
+                        <TextView
+                            android:id="@+id/reservation_calculated_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="sans-serif-light"
+                            android:textSize="20sp"></TextView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="e"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="sans-serif-light"
+                            android:textSize="20sp"></TextView>
+                    </LinearLayout>
+                </RelativeLayout>
+                <Button
+                    android:id="@+id/reservation_reserve_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Reserve"></Button>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

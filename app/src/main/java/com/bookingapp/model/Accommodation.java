@@ -58,9 +58,9 @@ public class Accommodation implements Parcelable {
         maxGuests = in.readInt();
         accommodationType = AccommodationType.valueOf(in.readString());
         benefits = new ArrayList<String>();
-        in.readList(benefits, String.class.getClassLoader());
+        in.readList(benefits, String.class.getClassLoader(), String.class);
         availabilityDates = new ArrayList<DateRange>();
-        in.readList(availabilityDates, DateRange.class.getClassLoader());
+        in.readList(availabilityDates, DateRange.class.getClassLoader(), DateRange.class);
         isApproved = in.readBoolean();
         isPriceByGuest = in.readBoolean();
         isAutomaticAcceptance = in.readBoolean();
@@ -199,6 +199,4 @@ public class Accommodation implements Parcelable {
             return new Accommodation[size];
         }
     };
-
-
 }

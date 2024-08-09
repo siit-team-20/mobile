@@ -15,4 +15,5 @@
     <string name="navigation_drawer_close">Navigation Drawer Close</string>
     <string name="language">Language</string>
     <string name="booking_app">Booking App</string>
+    <string name="reservation_guest_input_hint">Enter guest number</string>
 </resources>
