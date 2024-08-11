@@ -56,6 +56,20 @@ public class AccommodationsPageFragment extends Fragment {
 
         SearchView searchView = binding.searchText;
         accommodationsViewModel.getSearchText().observe(getViewLifecycleOwner(), searchView::setQueryHint);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                accommodationsViewModel.setSearchText(newText);
+                return false;
+            }
+        });
+        if (accommodationsViewModel.getSearchText().getValue() != null)
+            searchView.setQuery(accommodationsViewModel.getSearchText().getValue(), false);
 
         Button btnFilters = binding.btnFilters;
         btnFilters.setOnClickListener(v -> {

@@ -57,7 +57,7 @@ public class AccommodationListFragment extends ListFragment {
         Log.i("BookingApp", "onCreateView Accommodation List Fragment");
         binding = FragmentAccommodationListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        addMenu();
+        //addMenu();
         return root;
     }
 
@@ -83,7 +83,7 @@ public class AccommodationListFragment extends ListFragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void applyFilters(Set<String> types, Set<String> benefits, String price) {
+    private void applyFilters(Set<String> types, Set<String> benefits, String price, String search) {
         if (adapter == null)
             return;
         filteredAccommodations.clear();
@@ -155,6 +155,13 @@ public class AccommodationListFragment extends ListFragment {
             }
         }
 
+        if (search != null) {
+            for (Accommodation accommodation : accommodations) {
+                if (!accommodation.getName().toLowerCase().contains(search.toLowerCase()))
+                    toRemove.add(accommodation);
+            }
+        }
+
         filteredAccommodations.removeAll(toRemove);
         adapter.notifyDataSetChanged();
     }
@@ -170,21 +177,28 @@ public class AccommodationListFragment extends ListFragment {
             applySort(sort);
         });
         accommodationsViewModel.getSelectedTypes().observe(getViewLifecycleOwner(), types -> {
-            applyFilters(types, accommodationsViewModel.getSelectedBenefits().getValue(), accommodationsViewModel.getSelectedPrice().getValue());
+            applyFilters(types, accommodationsViewModel.getSelectedBenefits().getValue(), accommodationsViewModel.getSelectedPrice().getValue(), accommodationsViewModel.getSearchText().getValue());
             if (accommodationsViewModel.getSelectedSort().getValue() == null)
                 accommodationsViewModel.setSelectedSort("Ascending");
             else
                 accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
         });
         accommodationsViewModel.getSelectedBenefits().observe(getViewLifecycleOwner(), benefits -> {
-            applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), benefits, accommodationsViewModel.getSelectedPrice().getValue());
+            applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), benefits, accommodationsViewModel.getSelectedPrice().getValue(), accommodationsViewModel.getSearchText().getValue());
             if (accommodationsViewModel.getSelectedSort().getValue() == null)
                 accommodationsViewModel.setSelectedSort("Ascending");
             else
                 accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
         });
         accommodationsViewModel.getSelectedPrice().observe(getViewLifecycleOwner(), price -> {
-            applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), accommodationsViewModel.getSelectedBenefits().getValue(), price);
+            applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), accommodationsViewModel.getSelectedBenefits().getValue(), price, accommodationsViewModel.getSearchText().getValue());
+            if (accommodationsViewModel.getSelectedSort().getValue() == null)
+                accommodationsViewModel.setSelectedSort("Ascending");
+            else
+                accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
+        });
+        accommodationsViewModel.getSearchText().observe(getViewLifecycleOwner(), search -> {
+            applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), accommodationsViewModel.getSelectedBenefits().getValue(), accommodationsViewModel.getSelectedPrice().getValue(), search);
             if (accommodationsViewModel.getSelectedSort().getValue() == null)
                 accommodationsViewModel.setSelectedSort("Ascending");
             else
@@ -239,7 +253,7 @@ public class AccommodationListFragment extends ListFragment {
                         accommodationsViewModel.setSelectedSort("Ascending");
                     else
                         accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
-                    applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), accommodationsViewModel.getSelectedBenefits().getValue(), accommodationsViewModel.getSelectedPrice().getValue());
+                    applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), accommodationsViewModel.getSelectedBenefits().getValue(), accommodationsViewModel.getSelectedPrice().getValue(), accommodationsViewModel.getSearchText().getValue());
                     applySort(accommodationsViewModel.getSelectedSort().getValue());
                 }
                 else {
