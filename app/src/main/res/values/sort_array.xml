@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sort_array">
-        <item>ASC</item>
-        <item>DSC</item>
-        <item>Rising price</item>
-        <item>Decreasing price</item>
+        <item>Ascending</item>
+        <item>Descending</item>
     </string-array>
 </resources>

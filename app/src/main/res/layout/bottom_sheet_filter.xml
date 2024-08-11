@@ -5,9 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:theme="@style/Theme.BookingApp"
-    android:background="@color/white"
-
-    >
+    android:background="@color/white">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,15 +17,13 @@
             android:fontFamily="sans-serif"
             android:text="@string/filters"
             android:textAlignment="viewStart"
-            android:textSize="24sp"
-            android:textStyle="italic" />
+            android:textSize="24sp"/>
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/black"
-        android:layout_margin="2dp"
-        />
+        android:layout_margin="2dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,70 +32,118 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/category"/>
-        <RadioGroup
+            android:text="@string/type"/>
+        <CheckBox
+            android:id="@+id/accommodation_type_hotel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/smartphone"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/tablet"/>
-        </RadioGroup>
+            android:layout_height="wrap_content"
+            android:text="@string/hotel"/>
+        <CheckBox
+            android:id="@+id/accommodation_type_apartment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/apartment"/>
+        <CheckBox
+            android:id="@+id/accommodation_type_motel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/motel"/>
+        <CheckBox
+            android:id="@+id/accommodation_type_studio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/studio"/>
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="2dp"
             android:background="@color/black"
             android:layout_margin="2dp"
             />
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/manufacturer"/>-->
-<!--        <CheckBox-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/samsung"/>-->
-<!--        <CheckBox-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/xiaomi"/>-->
-<!--        <CheckBox-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/huawei"/>-->
-<!--        <CheckBox-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/nokia"/>-->
-
-
-
-
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/black"
-        android:layout_margin="2dp"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="2dp">
+        <RadioGroup
+            android:id="@+id/accommodation_price_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Price"/>
+            <RadioButton
+                android:id="@+id/accommodation_price_any"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Any"
+                android:checked="true"/>
+            <RadioButton
+                android:id="@+id/accommodation_price_0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 - 30e"/>
+            <RadioButton
+                android:id="@+id/accommodation_price_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="30 - 60e"/>
+            <RadioButton
+                android:id="@+id/accommodation_price_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="60 - 90e"/>
+            <RadioButton
+                android:id="@+id/accommodation_price_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="90e +"/>
+        </RadioGroup>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/black"
+            android:layout_margin="2dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date"/>
-        <CalendarView
+            android:text="Benefits"/>
+        <CheckBox
+            android:id="@+id/accommodation_benefit_wifi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:text="Wi-Fi"/>
+        <CheckBox
+            android:id="@+id/accommodation_benefit_parking"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Parking"/>
+        <CheckBox
+            android:id="@+id/accommodation_benefit_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TV"/>
+        <CheckBox
+            android:id="@+id/accommodation_benefit_fridge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fridge"/>
     </LinearLayout>
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="2dp"-->
+<!--        android:background="@color/black"-->
+<!--        android:layout_margin="2dp"-->
+<!--        />-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:layout_margin="2dp">-->
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Starting date"/>-->
+<!--        <CalendarView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            />-->
+<!--    </LinearLayout>-->
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"

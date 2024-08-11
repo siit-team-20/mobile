@@ -16,4 +16,9 @@
     <string name="language">Language</string>
     <string name="booking_app">Booking App</string>
     <string name="reservation_guest_input_hint">Enter guest number</string>
+    <string name="type">Type</string>
+    <string name="hotel">Hotel</string>
+    <string name="apartment">Apartment</string>
+    <string name="motel">Motel</string>
+    <string name="studio">Studio</string>
 </resources>
