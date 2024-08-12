@@ -5,12 +5,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 public class AccommodationsPageViewModel extends ViewModel {
     private final MutableLiveData<String> searchText;
+    private final MutableLiveData<Integer> guestNumber;
+    private final MutableLiveData<LocalDate> startDate;
+    private final MutableLiveData<LocalDate> endDate;
     private final MutableLiveData<String> selectedSort;
     private final Set<String> selectedTypes;
     private final MutableLiveData<Set<String>> selectedTypesLiveData;
@@ -20,12 +24,36 @@ public class AccommodationsPageViewModel extends ViewModel {
 
     public AccommodationsPageViewModel() {
         searchText = new MutableLiveData<>();
+        guestNumber = new MutableLiveData<>();
+        startDate = new MutableLiveData<>();
+        endDate = new MutableLiveData<>();
         selectedSort = new MutableLiveData<>();
         selectedTypes = new HashSet<>();
         selectedTypesLiveData = new MutableLiveData<>();
         selectedPrice = new MutableLiveData<>();
         selectedBenefits = new HashSet<>();
         selectedBenefitsLiveData = new MutableLiveData<>();
+    }
+
+    public void setGuestNumber(Integer guestNumber) {
+        this.guestNumber.setValue(guestNumber);
+    }
+    public LiveData<Integer> getGuestNumber() {
+        return guestNumber;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate.setValue(startDate);
+    }
+    public LiveData<LocalDate> getStartDate() {
+        return startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate.setValue(endDate);
+    }
+    public LiveData<LocalDate> getEndDate() {
+        return endDate;
     }
 
     public void addSelectedType(String selectedType) {

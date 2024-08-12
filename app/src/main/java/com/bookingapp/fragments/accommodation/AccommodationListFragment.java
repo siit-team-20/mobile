@@ -83,7 +83,7 @@ public class AccommodationListFragment extends ListFragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void applyFilters(Set<String> types, Set<String> benefits, String price, String search) {
+    private void applyFilters(Set<String> types, Set<String> benefits, String price, String search, Integer guestNumber, LocalDate startDate, LocalDate endDate) {
         if (adapter == null)
             return;
         filteredAccommodations.clear();
@@ -157,13 +157,62 @@ public class AccommodationListFragment extends ListFragment {
 
         if (search != null) {
             for (Accommodation accommodation : accommodations) {
-                if (!accommodation.getName().toLowerCase().contains(search.toLowerCase()))
+                if (!accommodation.getLocation().toLowerCase().contains(search.toLowerCase()))
                     toRemove.add(accommodation);
+            }
+        }
+
+        if (guestNumber != null) {
+            for (Accommodation accommodation : accommodations) {
+                if (!(guestNumber >= accommodation.getMinGuests() && guestNumber <= accommodation.getMaxGuests())) {
+                    toRemove.add(accommodation);
+                }
+            }
+        }
+
+        if (startDate != null && endDate != null) {
+            for (Accommodation accommodation : accommodations) {
+                boolean isDateOkay = false;
+                for (int i = 0; i < accommodation.getAvailabilityDates().size(); i++) {
+                    DateRange dateRange = accommodation.getAvailabilityDates().get(i);
+                    if (DateRange.isBetween(dateRange.getStartDateAsDate(), dateRange.getEndDateAsDate(), startDate, endDate) && dateRange.getEndDateAsDate().isAfter(LocalDate.now())) {
+                        isDateOkay = true;
+                        break;
+                    }
+                    else {
+                        if (i != accommodation.getAvailabilityDates().size() - 1) {
+                            DateRange dateRangePast = accommodation.getAvailabilityDates().get(i);
+                            if (!startDate.isBefore(dateRange.getStartDateAsDate()) && startDate.isBefore(dateRange.getEndDateAsDate())) {
+                                for (int j = i + 1; j < accommodation.getAvailabilityDates().size(); j++) {
+                                    DateRange dateRangeNext = accommodation.getAvailabilityDates().get(j);
+                                    if (dateRangeNext.getStartDateAsDate().isEqual(dateRangePast.getEndDateAsDate())) {
+                                        if (!endDate.isBefore(dateRangeNext.getStartDateAsDate()) && !endDate.isAfter(dateRangeNext.getEndDateAsDate())) {
+                                            isDateOkay = true;
+                                            break;
+                                        }
+                                    }
+                                    dateRangePast = dateRangeNext;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!isDateOkay) {
+                    toRemove.add(accommodation);
+                }
             }
         }
 
         filteredAccommodations.removeAll(toRemove);
         adapter.notifyDataSetChanged();
+    }
+
+    private void applySortAndFilter(Set<String> types, Set<String> benefits, String price, String search, Integer guestNumber, LocalDate startDate, LocalDate endDate) {
+        applyFilters(types, benefits, price, search, guestNumber, startDate, endDate);
+        if (accommodationsViewModel.getSelectedSort().getValue() == null)
+            accommodationsViewModel.setSelectedSort("Ascending");
+        else
+            accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
     }
 
     @Override
@@ -177,32 +226,81 @@ public class AccommodationListFragment extends ListFragment {
             applySort(sort);
         });
         accommodationsViewModel.getSelectedTypes().observe(getViewLifecycleOwner(), types -> {
-            applyFilters(types, accommodationsViewModel.getSelectedBenefits().getValue(), accommodationsViewModel.getSelectedPrice().getValue(), accommodationsViewModel.getSearchText().getValue());
-            if (accommodationsViewModel.getSelectedSort().getValue() == null)
-                accommodationsViewModel.setSelectedSort("Ascending");
-            else
-                accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
+            applySortAndFilter(
+                    types,
+                    accommodationsViewModel.getSelectedBenefits().getValue(),
+                    accommodationsViewModel.getSelectedPrice().getValue(),
+                    accommodationsViewModel.getSearchText().getValue(),
+                    accommodationsViewModel.getGuestNumber().getValue(),
+                    accommodationsViewModel.getStartDate().getValue(),
+                    accommodationsViewModel.getEndDate().getValue()
+            );
         });
         accommodationsViewModel.getSelectedBenefits().observe(getViewLifecycleOwner(), benefits -> {
-            applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), benefits, accommodationsViewModel.getSelectedPrice().getValue(), accommodationsViewModel.getSearchText().getValue());
-            if (accommodationsViewModel.getSelectedSort().getValue() == null)
-                accommodationsViewModel.setSelectedSort("Ascending");
-            else
-                accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
+            applySortAndFilter(
+                    accommodationsViewModel.getSelectedTypes().getValue(),
+                    benefits,
+                    accommodationsViewModel.getSelectedPrice().getValue(),
+                    accommodationsViewModel.getSearchText().getValue(),
+                    accommodationsViewModel.getGuestNumber().getValue(),
+                    accommodationsViewModel.getStartDate().getValue(),
+                    accommodationsViewModel.getEndDate().getValue()
+            );
         });
         accommodationsViewModel.getSelectedPrice().observe(getViewLifecycleOwner(), price -> {
-            applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), accommodationsViewModel.getSelectedBenefits().getValue(), price, accommodationsViewModel.getSearchText().getValue());
-            if (accommodationsViewModel.getSelectedSort().getValue() == null)
-                accommodationsViewModel.setSelectedSort("Ascending");
-            else
-                accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
+            applySortAndFilter(
+                    accommodationsViewModel.getSelectedTypes().getValue(),
+                    accommodationsViewModel.getSelectedBenefits().getValue(),
+                    price,
+                    accommodationsViewModel.getSearchText().getValue(),
+                    accommodationsViewModel.getGuestNumber().getValue(),
+                    accommodationsViewModel.getStartDate().getValue(),
+                    accommodationsViewModel.getEndDate().getValue()
+            );
         });
         accommodationsViewModel.getSearchText().observe(getViewLifecycleOwner(), search -> {
-            applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), accommodationsViewModel.getSelectedBenefits().getValue(), accommodationsViewModel.getSelectedPrice().getValue(), search);
-            if (accommodationsViewModel.getSelectedSort().getValue() == null)
-                accommodationsViewModel.setSelectedSort("Ascending");
-            else
-                accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
+            applySortAndFilter(
+                    accommodationsViewModel.getSelectedTypes().getValue(),
+                    accommodationsViewModel.getSelectedBenefits().getValue(),
+                    accommodationsViewModel.getSelectedPrice().getValue(),
+                    search,
+                    accommodationsViewModel.getGuestNumber().getValue(),
+                    accommodationsViewModel.getStartDate().getValue(),
+                    accommodationsViewModel.getEndDate().getValue()
+            );
+        });
+        accommodationsViewModel.getGuestNumber().observe(getViewLifecycleOwner(), guestNumber -> {
+            applySortAndFilter(
+                    accommodationsViewModel.getSelectedTypes().getValue(),
+                    accommodationsViewModel.getSelectedBenefits().getValue(),
+                    accommodationsViewModel.getSelectedPrice().getValue(),
+                    accommodationsViewModel.getSearchText().getValue(),
+                    guestNumber,
+                    accommodationsViewModel.getStartDate().getValue(),
+                    accommodationsViewModel.getEndDate().getValue()
+            );
+        });
+        accommodationsViewModel.getStartDate().observe(getViewLifecycleOwner(), startDate -> {
+            applySortAndFilter(
+                    accommodationsViewModel.getSelectedTypes().getValue(),
+                    accommodationsViewModel.getSelectedBenefits().getValue(),
+                    accommodationsViewModel.getSelectedPrice().getValue(),
+                    accommodationsViewModel.getSearchText().getValue(),
+                    accommodationsViewModel.getGuestNumber().getValue(),
+                    startDate,
+                    accommodationsViewModel.getEndDate().getValue()
+            );
+        });
+        accommodationsViewModel.getEndDate().observe(getViewLifecycleOwner(), endDate -> {
+            applySortAndFilter(
+                    accommodationsViewModel.getSelectedTypes().getValue(),
+                    accommodationsViewModel.getSelectedBenefits().getValue(),
+                    accommodationsViewModel.getSelectedPrice().getValue(),
+                    accommodationsViewModel.getSearchText().getValue(),
+                    accommodationsViewModel.getGuestNumber().getValue(),
+                    accommodationsViewModel.getStartDate().getValue(),
+                    endDate
+            );
         });
     }
 
@@ -253,7 +351,15 @@ public class AccommodationListFragment extends ListFragment {
                         accommodationsViewModel.setSelectedSort("Ascending");
                     else
                         accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
-                    applyFilters(accommodationsViewModel.getSelectedTypes().getValue(), accommodationsViewModel.getSelectedBenefits().getValue(), accommodationsViewModel.getSelectedPrice().getValue(), accommodationsViewModel.getSearchText().getValue());
+                    applyFilters(
+                            accommodationsViewModel.getSelectedTypes().getValue(),
+                            accommodationsViewModel.getSelectedBenefits().getValue(),
+                            accommodationsViewModel.getSelectedPrice().getValue(),
+                            accommodationsViewModel.getSearchText().getValue(),
+                            accommodationsViewModel.getGuestNumber().getValue(),
+                            accommodationsViewModel.getStartDate().getValue(),
+                            accommodationsViewModel.getEndDate().getValue()
+                    );
                     applySort(accommodationsViewModel.getSelectedSort().getValue());
                 }
                 else {

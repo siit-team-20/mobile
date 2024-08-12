@@ -5,6 +5,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -34,7 +39,10 @@ import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.model.Accommodation;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -43,6 +51,8 @@ public class AccommodationsPageFragment extends Fragment {
     private Spinner spinner;
     private AccommodationsPageViewModel accommodationsViewModel;
     private FragmentAccommodationsPageBinding binding;
+    private Button startDateButton;
+    private Button endDateButton;
 
     public static AccommodationsPageFragment newInstance() {
         return new AccommodationsPageFragment();
@@ -70,6 +80,85 @@ public class AccommodationsPageFragment extends Fragment {
         });
         if (accommodationsViewModel.getSearchText().getValue() != null)
             searchView.setQuery(accommodationsViewModel.getSearchText().getValue(), false);
+
+        EditText guestNumberInput = binding.searchGuestNumber;
+        guestNumberInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    accommodationsViewModel.setGuestNumber(Integer.parseInt(s.toString()));
+                }
+                catch (Exception e) {
+                    accommodationsViewModel.setGuestNumber(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        startDateButton = binding.searchStartDate;
+        startDateButton.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onInputChange();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+        startDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        startDateButton.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year + ".");
+                    }
+                }, year, month, day);
+                datePickerDialog.show();
+            }
+        });
+
+        endDateButton = binding.searchEndDate;
+        endDateButton.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onInputChange();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+        endDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        endDateButton.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year + ".");
+                    }
+                }, year, month, day);
+                datePickerDialog.show();
+            }
+        });
 
         Button btnFilters = binding.btnFilters;
         btnFilters.setOnClickListener(v -> {
@@ -200,6 +289,20 @@ public class AccommodationsPageFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void onInputChange() {
+        try {
+            LocalDate startDate = LocalDate.parse(startDateButton.getText().toString(), DateTimeFormatter.ofPattern("d.M.yyyy."));
+            LocalDate endDate = LocalDate.parse(endDateButton.getText().toString(), DateTimeFormatter.ofPattern("d.M.yyyy."));
+            if (!(startDate.isBefore(endDate)))
+                return;
+            accommodationsViewModel.setStartDate(startDate);
+            accommodationsViewModel.setEndDate(endDate);
+        }
+        catch (Exception e) {
+            return;
+        }
     }
 
 }

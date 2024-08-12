@@ -505,12 +505,6 @@ public class DetailAccommodation extends Fragment {
         return true;
     }
 
-    private boolean isBetween(LocalDate startDate, LocalDate endDate, LocalDate reservationStartDate, LocalDate reservationEndDate) {
-        if (!reservationStartDate.isBefore(startDate) && !reservationEndDate.isAfter(endDate))
-            return true;
-        return false;
-    }
-
     private void onInputChange() {
         try {
             reservationStartDate = LocalDate.parse(reservationStartDateButton.getText().toString(), DateTimeFormatter.ofPattern("d.M.yyyy."));
@@ -588,7 +582,7 @@ public class DetailAccommodation extends Fragment {
             List<Integer> endDateList = accommodation.getAvailabilityDates().get(i).getEndDate();
             LocalDate endDateCurrent = LocalDate.of(endDateList.get(0), endDateList.get(1), endDateList.get(2));
 
-            if (isBetween(startDateCurrent, endDateCurrent, reservationStartDate, reservationEndDate)) {
+            if (DateRange.isBetween(startDateCurrent, endDateCurrent, reservationStartDate, reservationEndDate)) {
                 int days = (int) Duration.between(reservationStartDate.atStartOfDay(), reservationEndDate.atStartOfDay()).toDays();
                 if (validStart && validGuestNumber && validStartBeforeTomorrow && validAvailable)
                     calculatedPrice += days * priceCurrent;

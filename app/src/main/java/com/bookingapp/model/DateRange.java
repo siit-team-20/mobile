@@ -79,6 +79,12 @@ public class DateRange implements Parcelable {
         this.accommodationId = accommodationId;
     }
 
+    public static boolean isBetween(LocalDate startDate, LocalDate endDate, LocalDate reservationStartDate, LocalDate reservationEndDate) {
+        if (!reservationStartDate.isBefore(startDate) && !reservationEndDate.isAfter(endDate))
+            return true;
+        return false;
+    }
+
     @Override
     public int describeContents() {
         return 0;

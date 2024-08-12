@@ -20,14 +20,91 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp">
-
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:text="Location: "
+                android:textSize="18sp"
+                android:layout_marginTop="12dp"></TextView>
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_text"
-                app:queryHint="Search"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                app:queryHint="Location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.65"
                 android:background="@drawable/border_background"
                 android:theme="@style/Theme.BookingApp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="Guest number: "
+                android:textSize="18sp"
+                android:layout_marginTop="3dp"></TextView>
+            <EditText
+                android:id="@+id/search_guest_number"
+                app:queryHint="Location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/reservation_guest_input_hint"
+                android:layout_weight="0.6"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:text="Start date: "
+                android:textSize="18sp"
+                android:layout_marginTop="3dp"></TextView>
+            <Button
+                android:id="@+id/search_start_date"
+                android:layout_width="0dp"
+                android:layout_weight="0.65"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Pick Start Date"
+                android:layout_alignParentRight="true"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.35"
+                android:text="End date: "
+                android:textSize="18sp"
+                android:layout_marginTop="3dp"></TextView>
+            <Button
+                android:id="@+id/search_end_date"
+                android:layout_width="0dp"
+                android:layout_weight="0.65"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Pick End Date"
+                android:layout_alignParentRight="true"
+                android:textAllCaps="false" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/linear2"
