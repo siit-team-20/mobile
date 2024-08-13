@@ -86,6 +86,10 @@ public class HomeActivity extends AppCompatActivity {
                         navController.navigate(R.id.nav_accommodations);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
+                    case 1000008:
+                        navController.navigate(R.id.nav_create_accommodation);
+                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
+                        break;
 //                    case R.id.nav_new:
 //                        Toast.makeText(HomeActivity.this, "New product", Toast.LENGTH_SHORT).show();
 //                        break;

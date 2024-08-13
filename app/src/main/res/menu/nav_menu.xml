@@ -9,6 +9,12 @@
             android:icon="@drawable/ic_product"
             android:orderInCategory="100" />
 
+
+        <item android:id="@+id/nav_create_accommodation"
+            android:title="Create Accommodation"
+            android:icon="@drawable/ic_product"
+            android:orderInCategory="100" />
+
 <!--        <item android:id="@+id/nav_new"-->
 <!--            android:title="@string/new_product"-->
 <!--            android:icon="@drawable/ic_new"-->
