@@ -373,6 +373,4 @@ public class AccommodationListFragment extends ListFragment {
             }
         });
     }
-
-
 }

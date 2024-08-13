@@ -86,8 +86,8 @@ public class HomeActivity extends AppCompatActivity {
                         navController.navigate(R.id.nav_accommodations);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
-                    case 1000008:
-                        navController.navigate(R.id.nav_create_accommodation);
+                    case 1000038:
+                        navController.navigate(R.id.nav_reservations);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
 //                    case R.id.nav_new:
@@ -115,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         mAppBarConfiguration = new AppBarConfiguration
-                .Builder(R.id.nav_accommodations, R.id.nav_accommodation_detail)
+                .Builder(R.id.nav_accommodations, R.id.nav_accommodation_detail, R.id.nav_reservations)
                 //R.id.nav_new, R.id.nav_profile, R.id.nav_logout, R.id.nav_settings, R.id.nav_language
                 .setOpenableLayout(drawer)
                 .build();

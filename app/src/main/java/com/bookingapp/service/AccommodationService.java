@@ -15,14 +15,14 @@ public interface AccommodationService {
             "User-Agent: Mobile-Android",
             "Content-Type: application/json",
     })
-    @GET("accommodations")
+    @GET("api/accommodations")
     Call<ArrayList<Accommodation>> getAll();
 
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type: application/json"
     })
-    @GET("accommodations/{id}")
+    @GET("api/accommodations/{id}")
     Call<Accommodation> getById(@Path("id") Long id);
 
 }

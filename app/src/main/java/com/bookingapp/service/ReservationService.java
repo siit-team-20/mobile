@@ -18,20 +18,28 @@ public interface ReservationService {
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
-    @POST("accommodations/reservations")
+    @POST("api/accommodations/reservations")
     Call<Reservation> add(@Body Reservation reservation);
 
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type: application/json",
     })
-    @GET("accommodations/reservations")
+    @GET("api/accommodations/reservations")
     Call<ArrayList<ReservationWithAccommodation>> getAll();
 
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type: application/json",
     })
-    @GET("accommodations/reservations")
+    @GET("api/accommodations/reservations")
     Call<ArrayList<ReservationWithAccommodation>> get(@Query("accommodationId") Long accommodationId, @Query("status") String status);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @GET("api/accommodations/reservations")
+    Call<ArrayList<ReservationWithAccommodation>> get(@Query("guestEmail") String guestEmail, @Query("status") String status);
+
 }

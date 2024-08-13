@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class ReservationWithAccommodation implements Parcelable {
     private int guestNumber;
     private double price;
     private ReservationStatus status;
+    private Integer cancelledTimes = -1;
 
     public ReservationWithAccommodation() {
 
@@ -82,6 +84,14 @@ public class ReservationWithAccommodation implements Parcelable {
         this.id = id;
     }
 
+    public Integer getCancelledTimes() {
+        return cancelledTimes;
+    }
+
+    public void setCancelledTimes(Integer cancelledTimes) {
+        this.cancelledTimes = cancelledTimes;
+    }
+
     public String getGuestEmail() {
         return guestEmail;
     }
@@ -100,6 +110,10 @@ public class ReservationWithAccommodation implements Parcelable {
 
     public List<Integer> getDate() {
         return date;
+    }
+
+    public LocalDate getDateAsDate() {
+        return LocalDate.of(date.get(0), date.get(1), date.get(2));
     }
 
     public void setDate(List<Integer> date) {
