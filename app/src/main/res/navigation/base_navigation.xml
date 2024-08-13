@@ -15,6 +15,13 @@
         />
 
     <fragment
+        android:id="@+id/nav_reservations"
+        android:name="com.bookingapp.fragments.reservation.ReservationsPageFragment"
+        android:label="Reservations"
+        tools:layout="@layout/fragment_reservations_page"
+        />
+
+    <fragment
         android:id="@+id/nav_accommodation_detail"
         android:name="com.bookingapp.fragments.accommodation.DetailAccommodation"
         android:label="Detail"
