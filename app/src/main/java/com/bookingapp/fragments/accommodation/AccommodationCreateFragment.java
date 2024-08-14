@@ -3,9 +3,11 @@ package com.bookingapp.fragments.accommodation;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintHelper;
 import androidx.fragment.app.Fragment;
 
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,23 +147,66 @@ public class AccommodationCreateFragment extends Fragment {
         rangeLayout.setOrientation(LinearLayout.VERTICAL);
         rangeLayout.setPadding(0, 0, 0, 16); // Add spacing between ranges
 
+        TextView textView = new TextView(getContext());
+
+        // Set layout parameters (width and height)
+        textView.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+
+        // Set the text to be displayed
+        textView.setText("Data range");
+
+        // Set the text style to bold
+        textView.setTypeface(null, android.graphics.Typeface.BOLD);
+
+        // Set padding on top (16dp)
+        int paddingInDp = (int) (16 * getResources().getDisplayMetrics().density);
+        textView.setPadding(0, paddingInDp, 0, 0);
+
+        container.addView(textView);
+
+
+
         // Create and add start date input
-        EditText startDateInput = new EditText(getContext());
-        startDateInput.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        startDateInput.setHint("Availability start");
-        startDateInput.setInputType(InputType.TYPE_CLASS_DATETIME );
-        rangeLayout.addView(startDateInput);
+        Button startDateButton = new Button(getContext());
+        startDateButton.setId(View.generateViewId());
+        startDateButton.setText("Pick Start Date");
+        startDateButton.setAllCaps(false);
+
+        // Set layout parameters for the button
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.gravity = Gravity.END; // Align to the right (end) of the parent layout
+
+        // Apply layout parameters to the button
+        startDateButton.setLayoutParams(layoutParams);
+
+        // Add the button to the parent layout
+        container.addView(startDateButton);
+
 
         // Create and add end date input
-        EditText endDateInput = new EditText(getContext());
-        endDateInput.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        endDateInput.setHint("Availability end");
-        endDateInput.setInputType(InputType.TYPE_CLASS_DATETIME );
-        rangeLayout.addView(endDateInput);
+        Button endDateButton = new Button(getContext());
+        endDateButton.setId(View.generateViewId());
+        endDateButton.setText("Pick End Date");
+        endDateButton.setAllCaps(false);
+
+        // Set layout parameters for the button
+        LinearLayout.LayoutParams layoutParamsEnd = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        layoutParamsEnd.gravity = Gravity.END; // Align to the right (end) of the parent layout
+
+        // Apply layout parameters to the button
+        endDateButton.setLayoutParams(layoutParamsEnd);
+
+        // Add the button to the parent layout
+        container.addView(endDateButton);
 
         // Create and add price input
         EditText priceInput = new EditText(getContext());

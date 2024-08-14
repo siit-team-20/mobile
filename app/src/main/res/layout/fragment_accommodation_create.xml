@@ -173,6 +173,13 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data range"
+                    android:textStyle="bold"
+                    android:paddingTop="16dp"/>
+
                 <!-- Availability Start Date -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -180,20 +187,16 @@
                     android:orientation="vertical"
                     android:paddingBottom="8dp">
 
-                    <TextView
-                        android:id="@+id/tvAvailabilityStart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Availability start"
-                        android:textStyle="bold"
-                        android:paddingBottom="4dp"/>
 
-                    <EditText
-                        android:id="@+id/etAvailabilityStart"
+
+                    <Button
+                        android:id="@+id/startDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Select date"
-                        android:inputType="date"></EditText>
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:text="Pick Start Date"
+                        android:textAllCaps="false" />
 
                     <TextView
                         android:id="@+id/tvAvailabilityStartError"
@@ -212,20 +215,16 @@
                     android:orientation="vertical"
                     android:paddingBottom="8dp">
 
-                    <TextView
-                        android:id="@+id/tvAvailabilityEnd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Availability end"
-                        android:textStyle="bold"
-                        android:paddingBottom="4dp"/>
 
-                    <EditText
-                        android:id="@+id/etAvailabilityEnd"
+
+                    <Button
+                        android:id="@+id/endDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Select date"
-                        android:inputType="date"/>
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:text="Pick End Date"
+                        android:textAllCaps="false" />
 
                     <TextView
                         android:id="@+id/tvAvailabilityEndError"
@@ -244,13 +243,7 @@
                     android:orientation="vertical"
                     android:paddingBottom="8dp">
 
-                    <TextView
-                        android:id="@+id/tvPrice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Price"
-                        android:textStyle="bold"
-                        android:paddingBottom="4dp"/>
+
 
                     <EditText
                         android:id="@+id/etPrice"
