@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import androidx.navigation.Navigation;
 import com.bookingapp.R;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.DateRange;
+import com.bookingapp.model.Reservation;
 import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
 import com.bookingapp.service.ServiceUtils;
@@ -37,12 +39,14 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
     private ArrayList<ReservationWithAccommodation> rReservations;
     private Activity activity;
     private FragmentManager fragmentManager;
+    private boolean[] viewVisibility = null;
 
     public ReservationListAdapter(Activity context, FragmentManager fragmentManager, ArrayList<ReservationWithAccommodation> reservations) {
         super(context, R.layout.reservation_card, reservations);
         rReservations = reservations;
         activity = context;
         fragmentManager = fragmentManager;
+        this.viewVisibility = new boolean[reservations.size()];
     }
 
     @Override
@@ -70,7 +74,6 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
                     parent, false);
         }
 
-        LinearLayout reservationCard = convertView.findViewById(R.id.reservation_card_item);
         ImageView imageView = convertView.findViewById(R.id.reservation_accommodation_image);
         TextView name = convertView.findViewById(R.id.reservation_accommodation_name_and_type);
         TextView location = convertView.findViewById(R.id.reservation_accommodation_location);
@@ -81,6 +84,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
         TextView guestNumber = convertView.findViewById(R.id.reservation_guest_number);
         TextView status = convertView.findViewById(R.id.reservation_status);
         TextView deadline = convertView.findViewById(R.id.reservation_cancellation_deadline);
+        Button cancelButton = convertView.findViewById(R.id.reservation_cancel_button);
 
         if(reservation != null) {
             //String uri = "@drawable/" + product.getImagePath();
@@ -97,6 +101,19 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
             guestNumber.setText(Integer.toString(reservation.getGuestNumber()));
             status.setText(reservation.getStatus().toString());
             deadline.setText(Integer.toString(reservation.getAccommodation().getReservationCancellationDeadline()));
+            Log.d("Update", "Updated");
+            if (reservation.getStatus().equals(ReservationStatus.Waiting)) {
+                viewVisibility[position] = true;
+                cancelButton.setEnabled(reservation.getShowCancelButton());
+            }
+            else {
+                viewVisibility[position] = false;
+            }
+            if(viewVisibility[position]) {
+                cancelButton.setVisibility(View.VISIBLE);
+            } else {
+                cancelButton.setVisibility(View.GONE);
+            }
         }
 
         return convertView;

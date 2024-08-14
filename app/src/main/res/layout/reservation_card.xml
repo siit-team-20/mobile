@@ -235,4 +235,17 @@
             android:text=" times before"></TextView>
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp">
+        <Button
+            android:id="@+id/reservation_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="Cancel"
+            android:visibility="gone"></Button>
+    </RelativeLayout>
+
 </LinearLayout>
