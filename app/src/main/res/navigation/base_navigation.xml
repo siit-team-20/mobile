@@ -15,10 +15,17 @@
         />
 
     <fragment
+        android:id="@+id/nav_create_accommodation"
+        android:name="com.bookingapp.fragments.accommodation.AccommodationCreateFragment"
+        android:label="Create Accommodation"
+        tools:layout="@layout/fragment_accommodation_create"
+        />
+
+    <fragment
         android:id="@+id/nav_reservations"
         android:name="com.bookingapp.fragments.reservation.ReservationsPageFragment"
         android:label="Reservations"
-        tools:layout="@layout/fragment_reservations_page"
+        tools:layout="@layout/fragment_accommodation_create"
         />
 
     <fragment

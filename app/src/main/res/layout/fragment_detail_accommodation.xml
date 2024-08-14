@@ -322,13 +322,14 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="sans-serif-light"
                         android:textSize="20sp"></TextView>
+
                     <Button
                         android:id="@+id/reservation_start_date_button"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:text="Pick Start Date"
-                        android:layout_alignParentRight="true"
                         android:textAllCaps="false" />
                 </RelativeLayout>
                 <RelativeLayout
@@ -342,13 +343,14 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="sans-serif-light"
                         android:textSize="20sp"></TextView>
+
                     <Button
                         android:id="@+id/reservation_end_date_button"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:text="Pick End Date"
-                        android:layout_alignParentRight="true"
                         android:textAllCaps="false" />
                 </RelativeLayout>
                 <RelativeLayout
