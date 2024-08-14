@@ -31,9 +31,9 @@ public class DateRange implements Parcelable {
     protected DateRange(Parcel in) {
         id = in.readLong();
         startDate = new ArrayList<Integer>();
-        in.readList(startDate, Integer.class.getClassLoader());
+        in.readList(startDate, Integer.class.getClassLoader(), Integer.class);
         endDate = new ArrayList<Integer>();
-        in.readList(endDate, Integer.class.getClassLoader());
+        in.readList(endDate, Integer.class.getClassLoader(), Integer.class);
         price = in.readDouble();
         accommodationId = in.readLong();
     }
@@ -54,6 +54,13 @@ public class DateRange implements Parcelable {
     public void setStartDate(List<Integer> startDate) {
         this.startDate = startDate;
     }
+    public void setStartDateFromDate(LocalDate startDate) {
+        List<Integer> startDateList = new ArrayList<>();
+        startDateList.add(startDate.getYear());
+        startDateList.add(startDate.getMonthValue());
+        startDateList.add(startDate.getDayOfMonth());
+        this.startDate = startDateList;
+    }
 
     public List<Integer> getEndDate() {
         return endDate;
@@ -63,6 +70,13 @@ public class DateRange implements Parcelable {
     }
     public void setEndDate(List<Integer> endDate) {
         this.endDate = endDate;
+    }
+    public void setEndDateFromDate(LocalDate endDate) {
+        List<Integer> endDateList = new ArrayList<>();
+        endDateList.add(endDate.getYear());
+        endDateList.add(endDate.getMonthValue());
+        endDateList.add(endDate.getDayOfMonth());
+        this.endDate = endDateList;
     }
 
     public double getPrice() {
@@ -83,6 +97,14 @@ public class DateRange implements Parcelable {
         if (!reservationStartDate.isBefore(startDate) && !reservationEndDate.isAfter(endDate))
             return true;
         return false;
+    }
+
+    public static boolean isOverlapping(LocalDate startDate, LocalDate endDate, LocalDate reservationStartDate, LocalDate reservationEndDate) {
+        if (startDate.isBefore(reservationStartDate) && (endDate.isBefore(reservationStartDate) || endDate.isEqual(reservationStartDate)))
+            return false;
+        if ((startDate.isAfter(reservationEndDate) || startDate.isEqual(reservationEndDate)) && endDate.isAfter(reservationEndDate))
+            return false;
+        return true;
     }
 
     @Override

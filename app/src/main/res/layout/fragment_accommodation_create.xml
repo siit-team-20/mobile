@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!-- Title -->
+
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
@@ -25,7 +25,6 @@
                 android:layout_gravity="center_horizontal"
                 android:paddingBottom="16dp"/>
 
-            <!-- Accommodation Name -->
             <EditText
                 android:id="@+id/name"
                 android:layout_width="match_parent"
@@ -33,7 +32,6 @@
                 android:hint="Accommodation Name"
                 android:inputType="text" />
 
-            <!-- Location -->
             <EditText
                 android:id="@+id/location"
                 android:layout_width="match_parent"
@@ -41,7 +39,6 @@
                 android:hint="Location"
                 android:inputType="text" />
 
-            <!-- Description -->
             <EditText
                 android:id="@+id/description"
                 android:layout_width="match_parent"
@@ -51,37 +48,20 @@
                 android:minLines="3"
                 android:gravity="top"/>
 
-            <!-- Price -->
-
-            <!-- Image Upload Button -->
-
-            <!-- Submit Button -->
-
-
-            <TextView
-                android:id="@+id/tvBenefits"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Benefits"
-                android:textStyle="bold"
-                android:paddingTop="16dp"/>
-
             <EditText
                 android:id="@+id/benefits"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="60dp"
                 android:gravity="top"
-                android:hint="Benefits (e.q.,TV,WI-FI, pool..)"
+                android:hint="Benefits (e.q.,TV, WI-FI, pool..)"
                 android:inputType="textMultiLine"
                 android:minLines="3" />
-
-            <!-- Scrollable Amenities List -->
 
 
             <EditText
                 android:id="@+id/minGuests"
                 android:layout_width="match_parent"
-                android:layout_height="59dp"
+                android:layout_height="58dp"
                 android:hint="Minimum Number of Guests"
                 android:inputType="number" />
 
@@ -91,31 +71,21 @@
                 android:layout_height="58dp"
                 android:hint="Maximum Number of Guests"
                 android:inputType="number" />
-            <TextView
-                android:id="@+id/tvCancellationDeadline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reservation Cancellation Deadline"
-                android:textStyle="bold"
-                android:paddingBottom="8dp"/>
 
-            <!-- Reservation Cancellation Deadline EditText -->
             <EditText
                 android:id="@+id/cancellationDeadline"
                 android:layout_width="match_parent"
                 android:layout_height="61dp"
-                android:hint="Enter deadline "
+                android:hint="Enter reservation cancellation deadline"
                 android:importantForAccessibility="yes"
                 android:inputType="text" />
+
             <TextView
-                android:id="@+id/tvAccommodationType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Accommodation Type"
                 android:textStyle="bold"
                 android:paddingTop="16dp"/>
-
-            <!-- Accommodation Type RadioGroup -->
 
             <RadioGroup
                 android:id="@+id/accommodationType"
@@ -123,51 +93,60 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- RadioButton for Studio -->
+                <RadioButton
+                    android:id="@+id/rbHotel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hotel"
+                    android:checked="true"/>
+
+                <RadioButton
+                    android:id="@+id/rbApartment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apartment" />
+
+                <RadioButton
+                    android:id="@+id/rbMotel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Motel"/>
+
                 <RadioButton
                     android:id="@+id/rbStudio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Studio"/>
 
-                <!-- RadioButton for Room -->
-
-                <!-- RadioButton for Apartment -->
-                <RadioButton
-                    android:id="@+id/rbRoom"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Room" />
-
-                <RadioButton
-                    android:id="@+id/rbApartment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Apartment"/>
-
-                <!-- RadioButton for House -->
-                <RadioButton
-                    android:id="@+id/rbHouse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="House"/>
-
-                <!-- Add more RadioButtons as needed -->
-
             </RadioGroup>
-            <CheckBox
-                android:id="@+id/automaticAcceptance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Automatic Acceptance"/>
 
-            <CheckBox
-                android:id="@+id/pricePerGuest"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Price Per Guest"/>
+                android:text="Pricing"
+                android:textStyle="bold"
+                android:paddingTop="16dp"/>
+
+            <RadioGroup
+                android:id="@+id/accommodationPricing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/rbPerGuest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Per guest"
+                    android:checked="true"/>
+                <RadioButton
+                    android:id="@+id/rbPerDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Per day"/>
+            </RadioGroup>
+
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -176,117 +155,56 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Data range"
+                    android:text="Availability range 1"
                     android:textStyle="bold"
                     android:paddingTop="16dp"/>
 
-                <!-- Availability Start Date -->
-                <LinearLayout
+                <Button
+                    android:id="@+id/startDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="8dp">
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:text="Pick Start Date"
+                    android:textAllCaps="false" />
 
-
-
-                    <Button
-                        android:id="@+id/startDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:text="Pick Start Date"
-                        android:textAllCaps="false" />
-
-                    <TextView
-                        android:id="@+id/tvAvailabilityStartError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="This input is not valid!"
-                        android:textColor="@android:color/holo_red_light"
-                        android:visibility="gone"
-                        android:paddingTop="4dp"/>
-                </LinearLayout>
-
-                <!-- Availability End Date -->
-                <LinearLayout
+                <Button
+                    android:id="@+id/endDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="8dp">
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:text="Pick End Date"
+                    android:textAllCaps="false" />
 
-
-
-                    <Button
-                        android:id="@+id/endDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:text="Pick End Date"
-                        android:textAllCaps="false" />
-
-                    <TextView
-                        android:id="@+id/tvAvailabilityEndError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="This input is not valid!"
-                        android:textColor="@android:color/holo_red_light"
-                        android:visibility="gone"
-                        android:paddingTop="4dp"/>
-                </LinearLayout>
-
-                <!-- Price -->
-                <LinearLayout
+                <EditText
+                    android:id="@+id/etPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="8dp">
-
-
-
-                    <EditText
-                        android:id="@+id/etPrice"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Price"
-                        android:inputType="numberDecimal"
-                        android:importantForAccessibility="yes"
-                        android:contentDescription="Price input field"/>
-
-                    <TextView
-                        android:id="@+id/tvPriceError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="This input is not valid!"
-                        android:textColor="@android:color/holo_red_light"
-                        android:visibility="gone"
-                        android:paddingTop="4dp"/>
-                </LinearLayout>
+                    android:hint="Price"
+                    android:inputType="numberDecimal"
+                    android:importantForAccessibility="yes"
+                    android:contentDescription="Price input field"/>
 
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Placeholder for dynamic availability ranges -->
                 <LinearLayout
                     android:id="@+id/availabilityRangesContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"/>
 
-                <!-- Button to add new availability range -->
                 <Button
                     android:id="@+id/btnAddNewDateRange"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="+ Add new availability range"
-                    android:textColor="@android:color/holo_blue_light"
                     android:layout_marginTop="16dp"
                     android:layout_gravity="center_horizontal"/>
 

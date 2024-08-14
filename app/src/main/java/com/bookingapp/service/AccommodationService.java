@@ -1,12 +1,15 @@
 package com.bookingapp.service;
 
 import com.bookingapp.model.Accommodation;
+import com.bookingapp.model.Reservation;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface AccommodationService {
@@ -24,5 +27,12 @@ public interface AccommodationService {
     })
     @GET("api/accommodations/{id}")
     Call<Accommodation> getById(@Path("id") Long id);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @POST("api/accommodations")
+    Call<Accommodation> add(@Body Accommodation accommodation);
 
 }

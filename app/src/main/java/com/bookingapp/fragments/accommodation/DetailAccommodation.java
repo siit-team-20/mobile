@@ -32,6 +32,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -497,14 +498,6 @@ public class DetailAccommodation extends Fragment {
         });
     }
 
-    private boolean isOverlapping(LocalDate startDate, LocalDate endDate, LocalDate reservationStartDate, LocalDate reservationEndDate) {
-        if (startDate.isBefore(reservationStartDate) && (endDate.isBefore(reservationStartDate) || endDate.isEqual(reservationStartDate)))
-            return false;
-        if ((startDate.isAfter(reservationEndDate) || startDate.isEqual(reservationEndDate)) && endDate.isAfter(reservationEndDate))
-            return false;
-        return true;
-    }
-
     private void onInputChange() {
         try {
             reservationStartDate = LocalDate.parse(reservationStartDateButton.getText().toString(), DateTimeFormatter.ofPattern("d.M.yyyy."));
@@ -535,7 +528,7 @@ public class DetailAccommodation extends Fragment {
             LocalDate rStartDate = LocalDate.of(reservation.getDate().get(0), reservation.getDate().get(1), reservation.getDate().get(2));
             LocalDate rEndDate = LocalDate.of(reservation.getDate().get(0), reservation.getDate().get(1), reservation.getDate().get(2));
             rEndDate = rEndDate.plusDays(reservation.getDays());
-            if (isOverlapping(rStartDate, rEndDate, reservationStartDate, reservationEndDate)) {
+            if (DateRange.isOverlapping(rStartDate, rEndDate, reservationStartDate, reservationEndDate)) {
                 validAvailable = false;
                 calculatedPrice = 0;
                 reservationCalculatedPrice.setText(String.valueOf(calculatedPrice));
@@ -547,7 +540,7 @@ public class DetailAccommodation extends Fragment {
             LocalDate rStartDate = LocalDate.of(reservation.getDate().get(0), reservation.getDate().get(1), reservation.getDate().get(2));
             LocalDate rEndDate = LocalDate.of(reservation.getDate().get(0), reservation.getDate().get(1), reservation.getDate().get(2));
             rEndDate = rEndDate.plusDays(reservation.getDays());
-            if (isOverlapping(rStartDate, rEndDate, reservationStartDate, reservationEndDate)) {
+            if (DateRange.isOverlapping(rStartDate, rEndDate, reservationStartDate, reservationEndDate)) {
                 validAvailable = false;
                 calculatedPrice = 0;
                 reservationCalculatedPrice.setText(String.valueOf(calculatedPrice));
