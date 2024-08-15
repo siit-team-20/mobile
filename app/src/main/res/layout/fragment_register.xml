@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Page Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Full Name Input -->
+        <EditText
+            android:id="@+id/etFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Surname Input -->
+        <EditText
+            android:id="@+id/etSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Surname"
+            android:inputType="textPersonName"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Email Input -->
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Password Input -->
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Confirm Password Input -->
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Address Input -->
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address"
+            android:inputType="textPostalAddress"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Phone Number Input -->
+        <EditText
+            android:id="@+id/etPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Register As Dropdown -->
+        <TextView
+            android:id="@+id/tvRegisterAs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register as"
+            android:textStyle="bold"
+            android:paddingTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupRegisterAs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
+
+            <RadioButton
+                android:id="@+id/radioGuest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guest"
+                android:layout_marginEnd="16dp"/>
+
+            <RadioButton
+                android:id="@+id/radioOwner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Owner"/>
+
+        </RadioGroup>
+
+        <!-- Register Button -->
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textColor="@android:color/white"
+            android:padding="16dp"
+            android:textAllCaps="false"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Login Link -->
+        <TextView
+            android:id="@+id/tvLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account? Login"
+            android:padding="8dp" />
+
+    </LinearLayout>
+</ScrollView>
