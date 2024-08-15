@@ -16,7 +16,6 @@
         android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Petar Petrovic"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="30sp"

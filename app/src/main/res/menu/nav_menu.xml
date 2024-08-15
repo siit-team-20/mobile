@@ -11,16 +11,19 @@
         <item android:id="@+id/nav_reservations"
             android:title="@string/reservations"
             android:icon="@drawable/ic_product"
-            android:orderInCategory="100" />
+            android:orderInCategory="100"
+            android:visible="false" />
         <item android:id="@+id/nav_account"
             android:title="Account"
             android:icon="@drawable/ic_product"
-            android:orderInCategory="100" />
+            android:orderInCategory="100"
+            android:visible="false"/>
 
         <item android:id="@+id/nav_create_accommodation"
             android:title="Create Accommodation"
             android:icon="@drawable/ic_product"
-            android:orderInCategory="100" />
+            android:orderInCategory="100"
+            android:visible="false" />
 
         <item android:id="@+id/nav_login"
             android:title="Login"

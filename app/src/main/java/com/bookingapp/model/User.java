@@ -14,6 +14,7 @@ public class User implements Parcelable {
     private String phone;
     private UserType type;
     private boolean isBlocked;
+    private String token;
 
     public User() {
 
@@ -92,6 +93,14 @@ public class User implements Parcelable {
 
     public void setIsBlocked(boolean isBlocked) {
         this.isBlocked = isBlocked;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     protected User(Parcel in) {

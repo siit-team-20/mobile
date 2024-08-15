@@ -16,13 +16,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.bookingapp.R;
 import com.bookingapp.databinding.ActivityHomeBinding;
 import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.fragments.accommodation.AccommodationListFragment;
 import com.bookingapp.fragments.accommodation.AccommodationsPageFragment;
+import com.bookingapp.service.UserInfo;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONException;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -102,15 +106,10 @@ public class HomeActivity extends AppCompatActivity {
                         navController.navigate(R.id.nav_register);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
-//                    case R.id.nav_new:
-//                        Toast.makeText(HomeActivity.this, "New product", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case R.id.nav_profile:
-//                        Toast.makeText(HomeActivity.this, "Profile", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case R.id.nav_logout:
-//                        Toast.makeText(HomeActivity.this, "Logout", Toast.LENGTH_SHORT).show();
-//                        break;
+                    case 1000018:
+                        navController.navigate(R.id.nav_account);
+                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
+                        break;
                 }
                 drawer.closeDrawers();
             }
@@ -130,7 +129,8 @@ public class HomeActivity extends AppCompatActivity {
                 .Builder(
                     R.id.nav_accommodations, R.id.nav_accommodation_detail,
                     R.id.nav_reservations, R.id.nav_create_accommodation,
-                    R.id.nav_login, R.id.nav_register
+                    R.id.nav_login, R.id.nav_register,
+                    R.id.nav_account
                 )
                 .setOpenableLayout(drawer)
                 .build();

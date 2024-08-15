@@ -1,5 +1,7 @@
 package com.bookingapp.service;
 
+import com.bookingapp.model.UserType;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,11 +10,11 @@ import java.util.Base64;
 public class UserInfo {
     private static String token;
 
-    public void setToken(String t) {
+    public static void setToken(String t) {
         token = t;
     }
 
-    public String getToken() {
+    public static String getToken() {
         return token;
     }
 
@@ -20,7 +22,7 @@ public class UserInfo {
         return new String(Base64.getUrlDecoder().decode(encodedString));
     }
 
-    public JSONObject getPayload() throws JSONException {
+    public static JSONObject getPayload() throws JSONException {
         Base64.Decoder decoder = Base64.getUrlDecoder();
         String[] chunks = token.split("\\.");
         JSONObject header = new JSONObject(decode(chunks[0]));
@@ -28,7 +30,19 @@ public class UserInfo {
         return payload;
     }
 
-    public String getEmail() throws JSONException {
+    public static String getEmail() throws JSONException {
         return getPayload().getString("sub");
+    }
+
+    public static String getName() throws JSONException {
+        return getPayload().getString("name");
+    }
+
+    public static String getSurname() throws JSONException {
+        return getPayload().getString("surname");
+    }
+
+    public static UserType getType() throws JSONException {
+        return UserType.valueOf(getPayload().getString("type"));
     }
 }
