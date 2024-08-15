@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.account.AccountFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frame_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".AccommodationDetailsScreen"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="36dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="50dp"
+            android:text="Your information"
+            android:gravity="center"></TextView>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:textSize="22dp"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:layout_alignBaseline="@id/name"
+                android:text="First name: "></TextView>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"
+                android:textColor="@color/black"
+                android:layout_alignParentRight="true"
+                android:enabled="false"
+                android:textSize="20dp"
+                android:text="Anastasija"></EditText>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true"
+            android:textSize="22dp"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:layout_alignBaseline="@id/surname"
+                android:text="Last name: "></TextView>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/surname"
+                android:textColor="@color/black"
+                android:layout_alignParentRight="true"
+                android:enabled="false"
+                android:textSize="20dp"
+                android:text="Španović"></EditText>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true"
+            android:textSize="22dp"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:layout_alignBaseline="@id/email"
+                android:text="Email: "></TextView>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/email"
+                android:textColor="@color/black"
+                android:layout_alignParentRight="true"
+                android:enabled="false"
+                android:textSize="20dp"
+                android:text="spanovic@gmail.com"></EditText>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true"
+            android:textSize="22dp"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:layout_alignBaseline="@id/address"
+                android:text="Address: "></TextView>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/address"
+                android:textColor="@color/black"
+                android:layout_alignParentRight="true"
+                android:enabled="false"
+                android:textSize="20dp"
+                android:text="Tike Kolarevića 2."></EditText>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true"
+            android:textSize="22dp"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:layout_alignBaseline="@id/phone"
+                android:text="Phone number: "></TextView>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/phone"
+                android:textColor="@color/black"
+                android:enabled="false"
+                android:textSize="20dp"
+                android:layout_alignParentRight="true"
+                android:text="+381648392200"></EditText>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingHorizontal="25dp"
+            android:layout_marginTop="60dp">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editButton"
+                android:layout_width="110dp"
+                android:layout_height="55dp"
+                android:layout_alignParentLeft="true"
+                android:text="Edit"></com.google.android.material.button.MaterialButton>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveChangesButton"
+                android:layout_width="110dp"
+                android:layout_height="55dp"
+                android:layout_alignParentLeft="true"
+                android:visibility="invisible"
+                android:text="Save changes"></com.google.android.material.button.MaterialButton>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_button"
+                android:layout_width="110dp"
+                android:layout_height="55dp"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="#ba3c3c"
+                android:text="Delete"></com.google.android.material.button.MaterialButton>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/logout_button"
+                android:layout_width="110dp"
+                android:layout_height="55dp"
+                android:layout_alignParentRight="true"
+                android:backgroundTint="@color/material_dynamic_secondary50"
+                android:text="Log out"></com.google.android.material.button.MaterialButton>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
