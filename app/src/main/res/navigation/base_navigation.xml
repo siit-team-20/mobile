@@ -22,6 +22,13 @@
         />
 
     <fragment
+        android:id="@+id/nav_account"
+        android:name="com.bookingapp.fragments.account.AccountFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_account"
+        />
+
+    <fragment
         android:id="@+id/nav_accommodation_detail"
         android:name="com.bookingapp.fragments.accommodation.DetailAccommodation"
         android:label="Detail"

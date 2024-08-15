@@ -82,12 +82,16 @@ public class HomeActivity extends AppCompatActivity {
 
             if (!isTopLevelDestination) {
                 switch (id) {
-                    case 1000005:
+                    case 1000032:
                         navController.navigate(R.id.nav_accommodations);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
-                    case 1000038:
+                    case 1000044:
                         navController.navigate(R.id.nav_reservations);
+                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1000017:
+                        navController.navigate(R.id.nav_account);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
 //                    case R.id.nav_new:
