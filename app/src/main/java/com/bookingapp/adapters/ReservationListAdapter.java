@@ -19,6 +19,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.bookingapp.R;
+import com.bookingapp.activities.HomeActivity;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.DateRange;
 import com.bookingapp.model.Reservation;
@@ -114,6 +115,47 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
             } else {
                 cancelButton.setVisibility(View.GONE);
             }
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Reservation res = new Reservation();
+                    res.setId(reservation.getId());
+                    res.setGuestEmail(reservation.getGuestEmail());
+                    res.setAccommodationId(reservation.getAccommodation().getId());
+                    res.setDate(reservation.getDate());
+                    res.setDays(reservation.getDays());
+                    res.setGuestNumber(reservation.getGuestNumber());
+                    res.setPrice(reservation.getPrice());
+                    res.setStatus(ReservationStatus.Cancelled);
+                    Call<Reservation> call = ServiceUtils.reservationService.update(res.getId(), res);
+                    call.enqueue(new Callback<Reservation>() {
+                        @Override
+                        public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                            if (response.code() == 200){
+                                Log.d("Reservations-Update","Message received");
+                                System.out.println(response.body());
+                                reservation.setStatus(ReservationStatus.Cancelled);
+                                for (int i = 0; i < rReservations.size(); i++) {
+                                    if (rReservations.get(i).getId() == res.getId()) {
+                                        rReservations.set(i, reservation);
+                                        break;
+                                    }
+                                }
+                                notifyDataSetChanged();
+                                //getActivity().getSupportFragmentManager().popBackStack();
+                            }
+                            else {
+                                Log.d("Reservations-Update","Message received: "+response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Reservation> call, Throwable t) {
+                            Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                        }
+                    });
+                }
+            });
         }
 
         return convertView;
