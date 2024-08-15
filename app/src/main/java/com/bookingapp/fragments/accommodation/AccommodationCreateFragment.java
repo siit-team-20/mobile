@@ -49,7 +49,6 @@ import retrofit2.Response;
 
 public class AccommodationCreateFragment extends Fragment {
     private FragmentAccommodationCreateBinding binding;
-
     private static final String ARG_ID ="id";
     private static final String ARG_OWNER_EMAIL = "ownerEmail";
     private static final  String ARG_NAME = "name";
