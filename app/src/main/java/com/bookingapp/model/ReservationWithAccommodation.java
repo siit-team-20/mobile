@@ -20,6 +20,8 @@ public class ReservationWithAccommodation implements Parcelable {
     private ReservationStatus status;
     private Integer cancelledTimes = -1;
 
+    private boolean showCancelButton = false;
+
     public ReservationWithAccommodation() {
 
     }
@@ -90,6 +92,14 @@ public class ReservationWithAccommodation implements Parcelable {
 
     public void setCancelledTimes(Integer cancelledTimes) {
         this.cancelledTimes = cancelledTimes;
+    }
+
+    public boolean getShowCancelButton() {
+        return showCancelButton;
+    }
+
+    public void setShowCancelButton(boolean showCancelButton) {
+        this.showCancelButton = showCancelButton;
     }
 
     public String getGuestEmail() {

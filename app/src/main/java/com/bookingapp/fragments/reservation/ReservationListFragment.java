@@ -178,6 +178,14 @@ public class ReservationListFragment extends ListFragment {
                     System.out.println(response.body());
                     reservations = response.body();
                     filteredReservations = new ArrayList<>(reservations);
+                    adapter = new ReservationListAdapter(getActivity(), getActivity().getSupportFragmentManager(), filteredReservations);
+                    setListAdapter(adapter);
+                    applyFilters(
+                            reservationsViewModel.getSelectedStatuses().getValue(),
+                            reservationsViewModel.getSearchText().getValue(),
+                            reservationsViewModel.getStartDate().getValue(),
+                            reservationsViewModel.getEndDate().getValue()
+                    );
                     Set<String> guestEmails = new HashSet<>();
                     for (ReservationWithAccommodation reservation : filteredReservations) {
                         guestEmails.add(reservation.getGuestEmail());
@@ -194,6 +202,8 @@ public class ReservationListFragment extends ListFragment {
                                     for (ReservationWithAccommodation reservation : filteredReservations) {
                                         if (reservation.getGuestEmail().equals(guestEmail))
                                             reservation.setCancelledTimes(cancelledTimes);
+                                        if (LocalDate.now().isBefore(reservation.getDateAsDate().minusDays(reservation.getAccommodation().getReservationCancellationDeadline())))
+                                            reservation.setShowCancelButton(true);
                                     }
                                     adapter.notifyDataSetChanged();
                                 }
@@ -209,14 +219,6 @@ public class ReservationListFragment extends ListFragment {
                             }
                         });
                     }
-                    adapter = new ReservationListAdapter(getActivity(), getActivity().getSupportFragmentManager(), filteredReservations);
-                    setListAdapter(adapter);
-                    applyFilters(
-                            reservationsViewModel.getSelectedStatuses().getValue(),
-                            reservationsViewModel.getSearchText().getValue(),
-                            reservationsViewModel.getStartDate().getValue(),
-                            reservationsViewModel.getEndDate().getValue()
-                    );
                 }
                 else {
                     Log.d("REZ","Message received: "+response.code());

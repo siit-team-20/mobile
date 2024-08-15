@@ -82,16 +82,20 @@ public class HomeActivity extends AppCompatActivity {
 
             if (!isTopLevelDestination) {
                 switch (id) {
-                    case 1000032:
+                    case 1000005:
                         navController.navigate(R.id.nav_accommodations);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
-                    case 1000044:
+                    case 1000038:
                         navController.navigate(R.id.nav_reservations);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
                     case 1000017:
                         navController.navigate(R.id.nav_account);
+                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1000003:
+                        navController.navigate(R.id.nav_create_accommodation);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
 //                    case R.id.nav_new:
@@ -119,7 +123,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         mAppBarConfiguration = new AppBarConfiguration
-                .Builder(R.id.nav_accommodations, R.id.nav_accommodation_detail, R.id.nav_reservations)
+                .Builder(R.id.nav_accommodations, R.id.nav_accommodation_detail, R.id.nav_reservations, R.id.nav_create_accommodation)
                 //R.id.nav_new, R.id.nav_profile, R.id.nav_logout, R.id.nav_settings, R.id.nav_language
                 .setOpenableLayout(drawer)
                 .build();
