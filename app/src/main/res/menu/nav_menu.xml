@@ -13,6 +13,11 @@
             android:icon="@drawable/ic_product"
             android:orderInCategory="100"
             android:visible="false" />
+        <item android:id="@+id/nav_favourite_accommodations"
+            android:title="Favourite Accommodations"
+            android:icon="@drawable/ic_product"
+            android:orderInCategory="100"
+            android:visible="false" />
         <item android:id="@+id/nav_reservations"
             android:title="@string/reservations"
             android:icon="@drawable/ic_product"

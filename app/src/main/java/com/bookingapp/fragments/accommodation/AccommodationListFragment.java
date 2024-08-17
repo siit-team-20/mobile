@@ -25,7 +25,9 @@ import com.bookingapp.adapters.AccommodationListAdapter;
 import com.bookingapp.databinding.FragmentAccommodationListBinding;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.DateRange;
+import com.bookingapp.model.FavouriteAccommodationWithAccommodation;
 import com.bookingapp.model.UserType;
+import com.bookingapp.service.FavouriteAccommodationService;
 import com.bookingapp.service.ServiceUtils;
 import com.bookingapp.service.UserInfo;
 
@@ -43,18 +45,22 @@ import retrofit2.Response;
 
 public class AccommodationListFragment extends ListFragment {
     private static final String ARG_IS_ON_HOME = "isOnHome";
+    private static final String ARG_IS_ON_FAVOURITES = "isOnFavourites";
     private AccommodationListAdapter adapter;
     private AccommodationsPageViewModel accommodationsViewModel;
     private FragmentAccommodationListBinding binding;
     private MenuProvider menuProvider;
     private ArrayList<Accommodation> accommodations = new ArrayList<>();
+    private ArrayList<FavouriteAccommodationWithAccommodation> favouriteAccommodations = new ArrayList<>();
     private ArrayList<Accommodation> filteredAccommodations = new ArrayList<>();
     private boolean isOnHome;
+    private boolean isOnFavourites;
 
-    public static AccommodationListFragment newInstance(boolean isOnHome) {
+    public static AccommodationListFragment newInstance(boolean isOnHome, boolean isOnFavourites) {
         AccommodationListFragment fragment = new AccommodationListFragment();
         Bundle args = new Bundle();
         args.putBoolean(ARG_IS_ON_HOME, isOnHome);
+        args.putBoolean(ARG_IS_ON_FAVOURITES, isOnFavourites);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,6 +81,7 @@ public class AccommodationListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             isOnHome = getArguments().getBoolean(ARG_IS_ON_HOME);
+            isOnFavourites = getArguments().getBoolean(ARG_IS_ON_FAVOURITES);
         }
     }
 
@@ -362,17 +369,60 @@ public class AccommodationListFragment extends ListFragment {
 
     private void getDataFromClient() throws JSONException {
         Call<ArrayList<Accommodation>> call = ServiceUtils.accommodationService.getAll();
+        Call<ArrayList<FavouriteAccommodationWithAccommodation>> callFavourites = null;
         if (UserInfo.getToken() == null) {
             call = ServiceUtils.accommodationService.get(true);
         }
         else {
-            if (UserInfo.getType().equals(UserType.Owner) && !isOnHome)
+            if (UserInfo.getType().equals(UserType.Guest) && isOnFavourites) {
+                callFavourites = ServiceUtils.favouriteAccommodationService.get(UserInfo.getEmail());
+                callFavourites.enqueue(new Callback<ArrayList<FavouriteAccommodationWithAccommodation>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<FavouriteAccommodationWithAccommodation>> call, Response<ArrayList<FavouriteAccommodationWithAccommodation>> response) {
+                        if (response.code() == 200) {
+                            Log.d("REZ","Message received");
+                            System.out.println(response.body());
+                            favouriteAccommodations = response.body();
+                            accommodations = new ArrayList<>();
+                            for (FavouriteAccommodationWithAccommodation favouriteAccommodation : favouriteAccommodations) {
+                                accommodations.add(favouriteAccommodation.getAccommodation());
+                            }
+                            filteredAccommodations = new ArrayList<>(accommodations);
+                            adapter = new AccommodationListAdapter(getActivity(), getActivity().getSupportFragmentManager(), filteredAccommodations);
+                            setListAdapter(adapter);
+                            if (accommodationsViewModel.getSelectedSort().getValue() == null)
+                                accommodationsViewModel.setSelectedSort("Ascending");
+                            else
+                                accommodationsViewModel.setSelectedSort(accommodationsViewModel.getSelectedSort().getValue());
+                            applyFilters(
+                                    accommodationsViewModel.getSelectedTypes().getValue(),
+                                    accommodationsViewModel.getSelectedBenefits().getValue(),
+                                    accommodationsViewModel.getSelectedPrice().getValue(),
+                                    accommodationsViewModel.getSearchText().getValue(),
+                                    accommodationsViewModel.getGuestNumber().getValue(),
+                                    accommodationsViewModel.getStartDate().getValue(),
+                                    accommodationsViewModel.getEndDate().getValue()
+                            );
+                            applySort(accommodationsViewModel.getSelectedSort().getValue());
+                        }
+                        else {
+                            Log.d("REZ","Message received: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<FavouriteAccommodationWithAccommodation>> call, Throwable t) {
+                        Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+                    }
+                });
+            }
+            else if (UserInfo.getType().equals(UserType.Owner) && !isOnHome)
                 call = ServiceUtils.accommodationService.get(UserInfo.getEmail());
             else if (!UserInfo.getType().equals(UserType.Admin))
                 call = ServiceUtils.accommodationService.get(true);
         }
 
-        call.enqueue(new Callback<ArrayList<Accommodation>>() {
+        Callback<ArrayList<Accommodation>> callback = new Callback<ArrayList<Accommodation>>() {
             @Override
             public void onResponse(Call<ArrayList<Accommodation>> call, Response<ArrayList<Accommodation>> response) {
                 if (response.code() == 200) {
@@ -406,6 +456,9 @@ public class AccommodationListFragment extends ListFragment {
             public void onFailure(Call<ArrayList<Accommodation>> call, Throwable t) {
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
             }
-        });
+        };
+
+        if (!isOnFavourites)
+            call.enqueue(callback);
     }
 }

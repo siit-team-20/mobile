@@ -160,7 +160,8 @@ public class LoginFragment extends Fragment {
             )
                 menuItem.setVisible(false);
             if (menuItem.getTitle().equals("Reservations") ||
-                    menuItem.getTitle().equals("Account")
+                    menuItem.getTitle().equals("Account") ||
+                    menuItem.getTitle().equals("Favourite Accommodations")
             )
                 menuItem.setVisible(true);
         }

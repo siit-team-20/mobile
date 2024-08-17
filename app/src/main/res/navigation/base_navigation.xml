@@ -17,6 +17,10 @@
             android:name="isOnHome"
             app:argType="boolean"
             android:defaultValue="true"/>
+        <argument
+            android:name="isOnFavourites"
+            app:argType="boolean"
+            android:defaultValue="false"/>
     </fragment>
 
     <fragment
@@ -29,6 +33,26 @@
             android:name="isOnHome"
             app:argType="boolean"
             android:defaultValue="false"/>
+        <argument
+            android:name="isOnFavourites"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_favourite_accommodations"
+        android:name="com.bookingapp.fragments.accommodation.AccommodationsPageFragment"
+        android:label="Favourite Accommodations"
+        tools:layout="@layout/fragment_accommodations_page"
+        >
+        <argument
+            android:name="isOnHome"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+        <argument
+            android:name="isOnFavourites"
+            app:argType="boolean"
+            android:defaultValue="true"/>
     </fragment>
 
     <fragment

@@ -1,6 +1,7 @@
 package com.bookingapp.service;
 
 import com.bookingapp.BuildConfig;
+import com.bookingapp.model.FavouriteAccommodationWithAccommodation;
 
 import org.json.JSONException;
 
@@ -58,4 +59,5 @@ public class ServiceUtils {
     public static AccommodationService accommodationService = retrofit.create(AccommodationService.class);
     public static ReservationService reservationService = retrofit.create(ReservationService.class);
     public static UserService userService = retrofit.create(UserService.class);
+    public static FavouriteAccommodationService favouriteAccommodationService = retrofit.create(FavouriteAccommodationService.class);
 }
