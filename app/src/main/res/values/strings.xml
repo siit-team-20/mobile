@@ -23,4 +23,6 @@
     <string name="studio">Studio</string>
     <string name="reservations">Reservations</string>
     <string name="my_accommodations">My Accommodations</string>
+    <string name="don_t_have_an_account_register"><a href="#">Don’t have an account? Register</a></string>
+    <string name="already_have_an_account_login"><a href="#">Already have an account? Login</a></string>
 </resources>

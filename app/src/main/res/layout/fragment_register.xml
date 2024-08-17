@@ -141,7 +141,7 @@
             android:id="@+id/tvLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Already have an account? Login"
+            android:text="@string/already_have_an_account_login"
             android:padding="8dp" />
 
     </LinearLayout>

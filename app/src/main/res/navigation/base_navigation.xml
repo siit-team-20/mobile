@@ -50,13 +50,21 @@
         android:name="com.bookingapp.fragments.auth.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login"
-        />
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true"
+        >
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/nav_register"/>
+    </fragment>
 
     <fragment
         android:id="@+id/nav_register"
         android:name="com.bookingapp.fragments.auth.RegisterFragment"
         android:label="Register"
         tools:layout="@layout/fragment_register"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true"
         />
 
     <fragment
@@ -70,7 +78,9 @@
         android:id="@+id/nav_accommodation_detail"
         android:name="com.bookingapp.fragments.accommodation.DetailAccommodation"
         android:label="Detail"
-        tools:layout="@layout/fragment_detail_accommodation">
+        tools:layout="@layout/fragment_detail_accommodation"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true">
         <argument
             android:name="id"
             app:argType="long" />

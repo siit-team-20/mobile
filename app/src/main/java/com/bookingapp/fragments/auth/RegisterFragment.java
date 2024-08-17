@@ -3,6 +3,9 @@ package com.bookingapp.fragments.auth;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -70,7 +73,20 @@ public class RegisterFragment extends Fragment {
         registerButton = binding.btnRegister;
         addressEt = binding.etAddress;
         phoneEt = binding.etPhoneNumber;
+        TextView loginLink = binding.tvLogin;
         userTypeRg = binding.radioGroupRegisterAs;
+
+        loginLink.setClickable(true);
+        loginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+                com.google.android.material.navigation.NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+                Menu menu = navigationView.getMenu();
+                MenuItem menuItem = menu.findItem(R.id.nav_login);
+                NavigationUI.onNavDestinationSelected(menuItem, navController);
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override

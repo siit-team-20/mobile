@@ -4,9 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,6 +65,18 @@ public class LoginFragment extends Fragment {
         emailEt = binding.etEmail;
         passwordEt = binding.etPassword;
         loginButton = binding.btnLogin;
+        TextView registerLink = binding.tvRegister;
+        registerLink.setClickable(true);
+        registerLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+                com.google.android.material.navigation.NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+                Menu menu = navigationView.getMenu();
+                MenuItem menuItem = menu.findItem(R.id.nav_register);
+                NavigationUI.onNavDestinationSelected(menuItem, navController);
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,19 +108,22 @@ public class LoginFragment extends Fragment {
                                     case Guest: {
                                         prepareGuestMenu();
                                         NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
-                                        navController.navigate(R.id.nav_accommodations, args);
+//                                        navController.navigate(R.id.nav_accommodations, args);
+                                        navController.popBackStack();
                                         break;
                                     }
                                     case Owner: {
                                         prepareOwnerMenu();
                                         NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
-                                        navController.navigate(R.id.nav_accommodations, args);
+//                                        navController.navigate(R.id.nav_accommodations, args);
+                                        navController.popBackStack();
                                         break;
                                     }
                                     case Admin: {
                                         prepareAdminMenu();
                                         NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
-                                        navController.navigate(R.id.nav_accommodations, args);
+//                                        navController.navigate(R.id.nav_accommodations, args);
+                                        navController.popBackStack();
                                         break;
                                     }
                                 }

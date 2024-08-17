@@ -79,45 +79,27 @@ public class HomeActivity extends AppCompatActivity {
 //        topLevelDestinations.add(R.id.nav_settings);
 
         navController = Navigation.findNavController(this, R.id.fragment_nav_content_main);
-//        Bundle defaultBundle = new Bundle();
-//        defaultBundle.putBoolean("isOnHome", true);
-//        navController.setGraph(R.navigation.base_navigation, defaultBundle);
         navController.addOnDestinationChangedListener((navController, navDestination, bundle) -> {
             Log.i("BookingApp", "Destination Changed");
             int id = navDestination.getId();
             boolean isTopLevelDestination = topLevelDestinations.contains(id);
 
             if (!isTopLevelDestination) {
-                switch (id) {
-                    case 1000079:
-                        navController.navigate(R.id.nav_accommodations);
-                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1000086:
-                        navController.navigate(R.id.nav_reservations);
-                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1000005:
-                        navController.navigate(R.id.nav_create_accommodation);
-                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1000049:
-                        navController.navigate(R.id.nav_login);
-                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1000027:
-                        navController.navigate(R.id.nav_register);
-                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1000018:
-                        navController.navigate(R.id.nav_account);
-                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1000035:
-                        navController.navigate(R.id.nav_my_accommodations);
-                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
-                        break;
-                }
+//                if (id == R.id.nav_accommodations)
+//                        navController.navigate(R.id.nav_accommodations);
+//                else if (id == R.id.nav_reservations)
+//                        navController.navigate(R.id.nav_reservations);
+//                else if (id == R.id.nav_create_accommodation)
+//                    navController.navigate(R.id.nav_create_accommodation);
+//                else if (id == R.id.nav_login)
+//                    navController.navigate(R.id.nav_login);
+//                else if (id == R.id.nav_register)
+//                    navController.navigate(R.id.nav_register);
+//                else if (id == R.id.nav_account)
+//                    navController.navigate(R.id.nav_account);
+//                else if (id == R.id.nav_my_accommodations)
+//                    navController.navigate(R.id.nav_my_accommodations);
+
                 drawer.closeDrawers();
             }
 //            else {

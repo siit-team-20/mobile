@@ -53,7 +53,7 @@
         android:id="@+id/tvRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Don’t have an account? Register"
+        android:text="@string/don_t_have_an_account_register"
         android:padding="8dp" />
 
 </LinearLayout>
