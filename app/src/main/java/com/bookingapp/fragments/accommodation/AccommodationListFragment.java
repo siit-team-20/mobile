@@ -388,7 +388,7 @@ public class AccommodationListFragment extends ListFragment {
                                 accommodations.add(favouriteAccommodation.getAccommodation());
                             }
                             filteredAccommodations = new ArrayList<>(accommodations);
-                            adapter = new AccommodationListAdapter(getActivity(), getActivity().getSupportFragmentManager(), filteredAccommodations);
+                            adapter = new AccommodationListAdapter(getActivity(), getActivity().getSupportFragmentManager(), filteredAccommodations, isOnFavourites);
                             setListAdapter(adapter);
                             if (accommodationsViewModel.getSelectedSort().getValue() == null)
                                 accommodationsViewModel.setSelectedSort("Ascending");
@@ -430,7 +430,7 @@ public class AccommodationListFragment extends ListFragment {
                     System.out.println(response.body());
                     accommodations = response.body();
                     filteredAccommodations = new ArrayList<>(accommodations);
-                    adapter = new AccommodationListAdapter(getActivity(), getActivity().getSupportFragmentManager(), filteredAccommodations);
+                    adapter = new AccommodationListAdapter(getActivity(), getActivity().getSupportFragmentManager(), filteredAccommodations, isOnFavourites);
                     setListAdapter(adapter);
                     if (accommodationsViewModel.getSelectedSort().getValue() == null)
                         accommodationsViewModel.setSelectedSort("Ascending");

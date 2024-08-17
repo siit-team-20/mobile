@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,19 +21,32 @@ import androidx.navigation.Navigation;
 import com.bookingapp.R;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.DateRange;
+import com.bookingapp.model.FavouriteAccommodationWithAccommodation;
+import com.bookingapp.model.Reservation;
+import com.bookingapp.model.UserType;
+import com.bookingapp.service.ServiceUtils;
+import com.bookingapp.service.UserInfo;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
     private ArrayList<Accommodation> aAccommodations;
     private Activity activity;
     private FragmentManager fragmentManager;
+    private boolean isOnFavourites;
 
-    public AccommodationListAdapter(Activity context, FragmentManager fragmentManager, ArrayList<Accommodation> accommodations) {
+    public AccommodationListAdapter(Activity context, FragmentManager fragmentManager, ArrayList<Accommodation> accommodations, boolean isOnFavourites) {
         super(context, R.layout.accommodation_card, accommodations);
         aAccommodations = accommodations;
         activity = context;
         fragmentManager = fragmentManager;
+        this.isOnFavourites = isOnFavourites;
     }
 
     @Override
@@ -63,6 +77,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         ImageView imageView = convertView.findViewById(R.id.accommodation_image);
         TextView name = convertView.findViewById(R.id.accommodation_name);
         TextView location = convertView.findViewById(R.id.accommodation_location);
+        ImageButton favouritesButton = convertView.findViewById(R.id.add_to_favourites_button);
 //        TextView minGuests = convertView.findViewById(R.id.accommodation_min_guests);
 //        TextView maxGuests = convertView.findViewById(R.id.accommodation_max_guests);
 
@@ -74,8 +89,77 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
 
             name.setText(accommodation.getName());
             location.setText(accommodation.getLocation());
-//            minGuests.setText(String.valueOf(accommodation.getMinGuests()));
-//            maxGuests.setText(String.valueOf(accommodation.getMaxGuests()));
+            if (UserInfo.getToken() != null) {
+                try {
+                    if (UserInfo.getType().equals(UserType.Guest) && !isOnFavourites) {
+                        favouritesButton.setVisibility(View.VISIBLE);
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            favouritesButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FavouriteAccommodationWithAccommodation favouriteAccommodation = new FavouriteAccommodationWithAccommodation();
+                    favouriteAccommodation.setAccommodation(accommodation);
+                    try {
+                        Call<ArrayList<FavouriteAccommodationWithAccommodation>> call = ServiceUtils.favouriteAccommodationService.get(UserInfo.getEmail());
+                        call.enqueue(new Callback<ArrayList<FavouriteAccommodationWithAccommodation>>() {
+                            @Override
+                            public void onResponse(Call<ArrayList<FavouriteAccommodationWithAccommodation>> call, Response<ArrayList<FavouriteAccommodationWithAccommodation>> response) {
+                                if (response.code() == 200){
+                                    Log.d("Favourite Accommodation-Get","Message received");
+                                    System.out.println(response.body());
+                                    ArrayList<FavouriteAccommodationWithAccommodation> favouriteAccommodations = response.body();
+                                    boolean alreadyFavourite = false;
+                                    for (FavouriteAccommodationWithAccommodation favouriteAcc : favouriteAccommodations) {
+                                        if (favouriteAcc.getAccommodation().getId().equals(favouriteAccommodation.getAccommodation().getId()))
+                                            alreadyFavourite = true;
+                                    }
+                                    try {
+                                        favouriteAccommodation.setGuestEmail(UserInfo.getEmail());
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    if (!alreadyFavourite) {
+                                        Call<FavouriteAccommodationWithAccommodation> callPost = ServiceUtils.favouriteAccommodationService.add(favouriteAccommodation);
+                                        callPost.enqueue(new Callback<FavouriteAccommodationWithAccommodation>() {
+                                            @Override
+                                            public void onResponse(Call<FavouriteAccommodationWithAccommodation> call, Response<FavouriteAccommodationWithAccommodation> response) {
+                                                if (response.code() == 201){
+                                                    Log.d("Favourite Accommodation-New","Message received");
+                                                    System.out.println(response.body());
+                                                }
+                                                else {
+                                                    Log.d("Favourite Accommodation-New","Message received: "+response.code());
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<FavouriteAccommodationWithAccommodation> call, Throwable t) {
+                                                Log.d("Favourite Accommodation-New", t.getMessage() != null?t.getMessage():"error");
+                                            }
+                                        });
+                                    }
+
+                                }
+                                else {
+                                    Log.d("Favourite Accommodation-Get","Message received: "+response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ArrayList<FavouriteAccommodationWithAccommodation>> call, Throwable t) {
+                                Log.d("Favourite Accommodation-Get", t.getMessage() != null?t.getMessage():"error");
+                            }
+                        });
+
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
             accommodationCard.setOnClickListener(v -> {
                 Log.i("BookingApp", "Clicked: " + accommodation.getName() + ", id: " + accommodation.getId().toString());
                 Bundle args = new Bundle();

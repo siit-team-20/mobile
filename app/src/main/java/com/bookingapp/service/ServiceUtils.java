@@ -19,11 +19,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceUtils {
     public static final String SERVICE_API_PATH = "http://" + BuildConfig.IP_ADDR + ":8080/";
 
-    public static String getAuthorizationHeader() {
+    public static String getAuthorizationToken() {
         try {
             if (UserInfo.getType() == null)
                 return "";
-            return "\"Authorization\": \"Bearer \"" + UserInfo.getToken();
+            return UserInfo.getToken();
         }
         catch (Exception e) {
             return "";
@@ -41,7 +41,7 @@ public class ServiceUtils {
                 .addInterceptor(interceptor)
                 .addInterceptor(new Interceptor() {
                     @Override public Response intercept(Chain chain) throws IOException {
-                        Request request = chain.request().newBuilder().addHeader("Authorization", "Bearer " + getAuthorizationHeader()).build();
+                        Request request = chain.request().newBuilder().addHeader("Authorization", "Bearer " + getAuthorizationToken()).build();
                         return chain.proceed(request);
                     }
                 })
