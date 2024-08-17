@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bookingapp.R;
@@ -24,7 +25,12 @@ import com.bookingapp.model.DateRange;
 import com.bookingapp.model.Reservation;
 import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
+import com.bookingapp.model.User;
+import com.bookingapp.model.UserType;
 import com.bookingapp.service.ServiceUtils;
+import com.bookingapp.service.UserInfo;
+
+import org.json.JSONException;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -186,6 +192,16 @@ public class DetailAccommodation extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detail_accommodation, container, false);
         getDataFromClient();
 
+        try {
+            if (UserInfo.getToken() == null || !UserInfo.getType().equals(UserType.Guest)) {
+                LinearLayout reservationLayout = view.findViewById(R.id.reservation_layout);
+                reservationLayout.setVisibility(View.GONE);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+
         reservationGuestNumber = view.findViewById(R.id.reservation_guest_number);
         reservationGuestNumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -207,7 +223,11 @@ public class DetailAccommodation extends Fragment {
                 Log.d("BookingApp", "Create reservation call");
                 if (Double.parseDouble(reservationCalculatedPrice.getText().toString()) == 0)
                     return;
-                getNewReservation();
+                try {
+                    getNewReservation();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
                 call = ServiceUtils.reservationService.add(newReservation);
                 call.enqueue(new Callback<Reservation>() {
                     @Override
@@ -430,7 +450,7 @@ public class DetailAccommodation extends Fragment {
         return reservedDatesString;
     }
 
-    private void getNewReservation() {
+    private void getNewReservation() throws JSONException {
         int guestNumber = -1;
         try {
             guestNumber = Integer.parseInt(reservationGuestNumber.getText().toString());
@@ -449,7 +469,7 @@ public class DetailAccommodation extends Fragment {
         newReservation.setStatus(ReservationStatus.Waiting);
         if (accommodation.getIsAutomaticAcceptance())
             newReservation.setStatus(ReservationStatus.Approved);
-        newReservation.setGuestEmail("test");
+        newReservation.setGuestEmail(UserInfo.getEmail());
         newReservation.setGuestNumber(guestNumber);
         newReservation.setPrice(Double.parseDouble(reservationCalculatedPrice.getText().toString()));
     }

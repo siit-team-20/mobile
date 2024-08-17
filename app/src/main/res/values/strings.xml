@@ -22,4 +22,5 @@
     <string name="motel">Motel</string>
     <string name="studio">Studio</string>
     <string name="reservations">Reservations</string>
+    <string name="my_accommodations">My Accommodations</string>
 </resources>

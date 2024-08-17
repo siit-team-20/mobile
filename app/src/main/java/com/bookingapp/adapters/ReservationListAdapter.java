@@ -25,8 +25,11 @@ import com.bookingapp.model.DateRange;
 import com.bookingapp.model.Reservation;
 import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
+import com.bookingapp.model.UserType;
 import com.bookingapp.service.ServiceUtils;
+import com.bookingapp.service.UserInfo;
 
+import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -85,6 +88,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
         TextView guestNumber = convertView.findViewById(R.id.reservation_guest_number);
         TextView status = convertView.findViewById(R.id.reservation_status);
         TextView deadline = convertView.findViewById(R.id.reservation_cancellation_deadline);
+        TextView cancelledTimes = convertView.findViewById(R.id.reservation_cancelled_times);
         Button cancelButton = convertView.findViewById(R.id.reservation_cancel_button);
 
         if(reservation != null) {
@@ -102,13 +106,17 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
             guestNumber.setText(Integer.toString(reservation.getGuestNumber()));
             status.setText(reservation.getStatus().toString());
             deadline.setText(Integer.toString(reservation.getAccommodation().getReservationCancellationDeadline()));
-            Log.d("Update", "Updated");
-            if (reservation.getStatus().equals(ReservationStatus.Waiting)) {
-                viewVisibility[position] = true;
-                cancelButton.setEnabled(reservation.getShowCancelButton());
-            }
-            else {
-                viewVisibility[position] = false;
+            cancelledTimes.setText(Integer.toString(reservation.getCancelledTimes()));
+            try {
+                if (reservation.getStatus().equals(ReservationStatus.Waiting) && UserInfo.getType().equals(UserType.Guest)) {
+                    viewVisibility[position] = true;
+                    cancelButton.setEnabled(reservation.getShowCancelButton());
+                }
+                else {
+                    viewVisibility[position] = false;
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
             if(viewVisibility[position]) {
                 cancelButton.setVisibility(View.VISIBLE);
@@ -142,7 +150,6 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
                                     }
                                 }
                                 notifyDataSetChanged();
-                                //getActivity().getSupportFragmentManager().popBackStack();
                             }
                             else {
                                 Log.d("Reservations-Update","Message received: "+response.code());

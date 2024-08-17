@@ -25,7 +25,11 @@ import com.bookingapp.adapters.AccommodationListAdapter;
 import com.bookingapp.databinding.FragmentAccommodationListBinding;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.DateRange;
+import com.bookingapp.model.UserType;
 import com.bookingapp.service.ServiceUtils;
+import com.bookingapp.service.UserInfo;
+
+import org.json.JSONException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,15 +42,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AccommodationListFragment extends ListFragment {
+    private static final String ARG_IS_ON_HOME = "isOnHome";
     private AccommodationListAdapter adapter;
     private AccommodationsPageViewModel accommodationsViewModel;
     private FragmentAccommodationListBinding binding;
     private MenuProvider menuProvider;
     private ArrayList<Accommodation> accommodations = new ArrayList<>();
     private ArrayList<Accommodation> filteredAccommodations = new ArrayList<>();
+    private boolean isOnHome;
 
-    public static AccommodationListFragment newInstance() {
+    public static AccommodationListFragment newInstance(boolean isOnHome) {
         AccommodationListFragment fragment = new AccommodationListFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_IS_ON_HOME, isOnHome);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -59,6 +68,14 @@ public class AccommodationListFragment extends ListFragment {
         View root = binding.getRoot();
         //addMenu();
         return root;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isOnHome = getArguments().getBoolean(ARG_IS_ON_HOME);
+        }
     }
 
     private void applySort(String sort) {
@@ -220,7 +237,11 @@ public class AccommodationListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         Log.i("BookingApp", "onCreate Accommodation List Fragment");
         this.getListView().setDividerHeight(2);
-        getDataFromClient();
+        try {
+            getDataFromClient();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         accommodationsViewModel = new ViewModelProvider(requireActivity()).get(AccommodationsPageViewModel.class);
         accommodationsViewModel.getSelectedSort().observe(getViewLifecycleOwner(), sort -> {
             applySort(sort);
@@ -307,7 +328,11 @@ public class AccommodationListFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getDataFromClient();
+        try {
+            getDataFromClient();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void addMenu() {
@@ -335,8 +360,18 @@ public class AccommodationListFragment extends ListFragment {
         binding = null;
     }
 
-    private void getDataFromClient(){
+    private void getDataFromClient() throws JSONException {
         Call<ArrayList<Accommodation>> call = ServiceUtils.accommodationService.getAll();
+        if (UserInfo.getToken() == null) {
+            call = ServiceUtils.accommodationService.get(true);
+        }
+        else {
+            if (UserInfo.getType().equals(UserType.Owner) && !isOnHome)
+                call = ServiceUtils.accommodationService.get(UserInfo.getEmail());
+            else if (!UserInfo.getType().equals(UserType.Admin))
+                call = ServiceUtils.accommodationService.get(true);
+        }
+
         call.enqueue(new Callback<ArrayList<Accommodation>>() {
             @Override
             public void onResponse(Call<ArrayList<Accommodation>> call, Response<ArrayList<Accommodation>> response) {

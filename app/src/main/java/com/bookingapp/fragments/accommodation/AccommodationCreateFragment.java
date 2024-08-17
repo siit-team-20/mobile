@@ -32,8 +32,12 @@ import com.bookingapp.databinding.FragmentAccommodationCreateBinding;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.AccommodationType;
 import com.bookingapp.model.DateRange;
+import com.bookingapp.model.User;
 import com.bookingapp.service.ServiceUtils;
+import com.bookingapp.service.UserInfo;
 import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -78,6 +82,7 @@ public class AccommodationCreateFragment extends Fragment {
     private Button endDateButton;
     private EditText price;
     private EditText reservationCancellationDeadline;
+    private EditText ownerEmail;
     private View root;
     private List<List<Integer>> availabilityRangesIds = new ArrayList<>();
     private Button createButton;
@@ -325,6 +330,12 @@ public class AccommodationCreateFragment extends Fragment {
     @Override
     public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        ownerEmail = binding.ownerEmail;
+        try {
+            ownerEmail.setText(UserInfo.getEmail());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         name = binding.name;
         location = binding.location;
         description = binding.description;
@@ -470,7 +481,7 @@ public class AccommodationCreateFragment extends Fragment {
             for (String benefit : benefits.split(",")) {
                 benefitsList.add(benefit.trim());
             }
-            newAccommodation.setOwnerEmail("owner@gmail.com");
+            newAccommodation.setOwnerEmail(UserInfo.getEmail());
             newAccommodation.setBenefits(benefitsList);
             newAccommodation.setMinGuests(minGuests);
             newAccommodation.setMaxGuests(maxGuests);

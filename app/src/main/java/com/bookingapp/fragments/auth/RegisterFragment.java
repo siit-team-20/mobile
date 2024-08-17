@@ -182,7 +182,9 @@ public class RegisterFragment extends Fragment {
             )
                 menuItem.setVisible(false);
             if (menuItem.getTitle().equals("Create Accommodation") ||
-                    menuItem.getTitle().equals("Account")
+                    menuItem.getTitle().equals("Account") ||
+                    menuItem.getTitle().equals("My Accommodations") ||
+                    menuItem.getTitle().equals("Reservations")
             )
                 menuItem.setVisible(true);
         }

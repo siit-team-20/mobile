@@ -32,7 +32,11 @@ import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.DateRange;
 import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
+import com.bookingapp.model.UserType;
 import com.bookingapp.service.ServiceUtils;
+import com.bookingapp.service.UserInfo;
+
+import org.json.JSONException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -120,7 +124,11 @@ public class ReservationListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         Log.i("BookingApp", "onCreate Accommodation List Fragment");
         this.getListView().setDividerHeight(2);
-        getDataFromClient();
+        try {
+            getDataFromClient();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
         reservationsViewModel = new ViewModelProvider(requireActivity()).get(ReservationsPageViewModel.class);
         reservationsViewModel.getSelectedStatuses().observe(getViewLifecycleOwner(), statuses -> {
             applyFilters(
@@ -159,7 +167,11 @@ public class ReservationListFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getDataFromClient();
+        try {
+            getDataFromClient();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -168,8 +180,12 @@ public class ReservationListFragment extends ListFragment {
         binding = null;
     }
 
-    private void getDataFromClient(){
-        Call<ArrayList<ReservationWithAccommodation>> call = ServiceUtils.reservationService.getAll();
+    private void getDataFromClient() throws JSONException {
+        Call<ArrayList<ReservationWithAccommodation>> call = null;
+        if (UserInfo.getType().equals(UserType.Guest))
+            call = ServiceUtils.reservationService.getByGuestEmail(UserInfo.getEmail());
+        if (UserInfo.getType().equals(UserType.Owner))
+            call = ServiceUtils.reservationService.getByOwnerEmail(UserInfo.getEmail());
         call.enqueue(new Callback<ArrayList<ReservationWithAccommodation>>() {
             @Override
             public void onResponse(Call<ArrayList<ReservationWithAccommodation>> call, Response<ArrayList<ReservationWithAccommodation>> response) {

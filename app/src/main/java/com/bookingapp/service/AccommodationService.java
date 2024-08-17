@@ -11,6 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface AccommodationService {
 
@@ -20,6 +21,20 @@ public interface AccommodationService {
     })
     @GET("api/accommodations")
     Call<ArrayList<Accommodation>> getAll();
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @GET("api/accommodations")
+    Call<ArrayList<Accommodation>> get(@Query("ownerEmail") String ownerEmail);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @GET("api/accommodations")
+    Call<ArrayList<Accommodation>> get(@Query("onlyApproved") boolean onlyApproved);
 
     @Headers({
             "User-Agent: Mobile-Android",

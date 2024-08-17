@@ -48,14 +48,20 @@ import java.util.Map;
 import java.util.Set;
 
 public class AccommodationsPageFragment extends Fragment {
+    private static final String ARG_IS_ON_HOME = "isOnHome";
     private Spinner spinner;
     private AccommodationsPageViewModel accommodationsViewModel;
     private FragmentAccommodationsPageBinding binding;
     private Button startDateButton;
     private Button endDateButton;
+    private boolean isOnHome;
 
-    public static AccommodationsPageFragment newInstance() {
-        return new AccommodationsPageFragment();
+    public static AccommodationsPageFragment newInstance(boolean isOnHome) {
+        AccommodationsPageFragment fragment = new AccommodationsPageFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_IS_ON_HOME, isOnHome);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -266,6 +272,14 @@ public class AccommodationsPageFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isOnHome = getArguments().getBoolean(ARG_IS_ON_HOME);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -282,7 +296,7 @@ public class AccommodationsPageFragment extends Fragment {
             }
         });
 
-        FragmentTransition.to(AccommodationListFragment.newInstance(), getActivity(), false, R.id.scroll_accommodations_list);
+        FragmentTransition.to(AccommodationListFragment.newInstance(isOnHome), getActivity(), false, R.id.scroll_accommodations_list);
     }
 
     @Override

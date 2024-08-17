@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +21,9 @@ import android.widget.TextView;
 
 import com.bookingapp.R;
 import com.bookingapp.databinding.FragmentLoginBinding;
+import com.bookingapp.fragments.FragmentTransition;
+import com.bookingapp.fragments.accommodation.AccommodationListFragment;
+import com.bookingapp.fragments.accommodation.AccommodationsPageFragment;
 import com.bookingapp.model.Credentials;
 import com.bookingapp.model.User;
 import com.bookingapp.service.ServiceUtils;
@@ -83,17 +88,25 @@ public class LoginFragment extends Fragment {
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
                                 }
+                                Bundle args = new Bundle();
+                                args.putBoolean("isOnHome", true);
                                 switch (UserInfo.getType()) {
                                     case Guest: {
                                         prepareGuestMenu();
+                                        NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+                                        navController.navigate(R.id.nav_accommodations, args);
                                         break;
                                     }
                                     case Owner: {
                                         prepareOwnerMenu();
+                                        NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+                                        navController.navigate(R.id.nav_accommodations, args);
                                         break;
                                     }
                                     case Admin: {
                                         prepareAdminMenu();
+                                        NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+                                        navController.navigate(R.id.nav_accommodations, args);
                                         break;
                                     }
                                 }
@@ -146,7 +159,9 @@ public class LoginFragment extends Fragment {
             )
                 menuItem.setVisible(false);
             if (menuItem.getTitle().equals("Create Accommodation") ||
-                    menuItem.getTitle().equals("Account")
+                    menuItem.getTitle().equals("Account") ||
+                    menuItem.getTitle().equals("My Accommodations") ||
+                    menuItem.getTitle().equals("Reservations")
             )
                 menuItem.setVisible(true);
         }

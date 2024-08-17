@@ -26,6 +26,12 @@
                 android:paddingBottom="16dp"/>
 
             <EditText
+                android:id="@+id/ownerEmail"
+                android:layout_width="match_parent"
+                android:layout_height="63dp"
+                android:enabled="false"/>
+
+            <EditText
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="63dp"

@@ -79,6 +79,9 @@ public class HomeActivity extends AppCompatActivity {
 //        topLevelDestinations.add(R.id.nav_settings);
 
         navController = Navigation.findNavController(this, R.id.fragment_nav_content_main);
+//        Bundle defaultBundle = new Bundle();
+//        defaultBundle.putBoolean("isOnHome", true);
+//        navController.setGraph(R.navigation.base_navigation, defaultBundle);
         navController.addOnDestinationChangedListener((navController, navDestination, bundle) -> {
             Log.i("BookingApp", "Destination Changed");
             int id = navDestination.getId();
@@ -110,6 +113,10 @@ public class HomeActivity extends AppCompatActivity {
                         navController.navigate(R.id.nav_account);
                         //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
                         break;
+                    case 1000035:
+                        navController.navigate(R.id.nav_my_accommodations);
+                        //Toast.makeText(HomeActivity.this, "Products", Toast.LENGTH_SHORT).show();
+                        break;
                 }
                 drawer.closeDrawers();
             }
@@ -130,7 +137,7 @@ public class HomeActivity extends AppCompatActivity {
                     R.id.nav_accommodations, R.id.nav_accommodation_detail,
                     R.id.nav_reservations, R.id.nav_create_accommodation,
                     R.id.nav_login, R.id.nav_register,
-                    R.id.nav_account
+                    R.id.nav_account, R.id.nav_my_accommodations
                 )
                 .setOpenableLayout(drawer)
                 .build();
