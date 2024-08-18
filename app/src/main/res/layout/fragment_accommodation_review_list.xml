@@ -4,13 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.accommodation.AccommodationReviewListFragment">
-    >
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@android:id/list"
         tools:listitem="@layout/accommodation_review_card"></ListView>
-
 
 </FrameLayout>

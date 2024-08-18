@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.bookingapp.R;
 import com.bookingapp.model.AccommodationReview;
+import com.bookingapp.model.Rating;
 
 import java.util.ArrayList;
 
@@ -24,12 +25,14 @@ public class AccommodationReviewListAdapter extends ArrayAdapter<AccommodationRe
 
     public AccommodationReviewListAdapter(Activity context, FragmentManager fragmentManager, ArrayList<AccommodationReview> accommodationReviews){
         super(context, R.layout.accommodation_review_card, accommodationReviews);
-        accommodationReviews = accommodationReviews;
+        aAccommodationsReviews = accommodationReviews;
         activity = context;
         fragmentManager = fragmentManager;
     }
     @Override
-    public int getCount(){return aAccommodationsReviews.size();}
+    public int getCount() {
+        return aAccommodationsReviews.size();
+    }
 
     @Nullable
     @Override
@@ -52,8 +55,8 @@ public class AccommodationReviewListAdapter extends ArrayAdapter<AccommodationRe
         if(accommodationReview != null){
             guestEmail.setText(accommodationReview.getGuestEmail());
             comment.setText(accommodationReview.getComment());
-            rating.setText(accommodationReview.getRating().ordinal());
-            submitDate.setText(accommodationReview.getSubmitDate().toString());
+            rating.setText(String.valueOf(accommodationReview.getRating().ordinal() + 1));
+            submitDate.setText(accommodationReview.getSubmitDate().get(2) + "." + accommodationReview.getSubmitDate().get(1) + "." + accommodationReview.getSubmitDate().get(0) + ".");
         }
 
         return convertView;

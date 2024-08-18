@@ -19,7 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bookingapp.R;
+import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.model.Accommodation;
+import com.bookingapp.model.AccommodationReview;
 import com.bookingapp.model.AccommodationType;
 import com.bookingapp.model.DateRange;
 import com.bookingapp.model.Reservation;
@@ -184,6 +186,7 @@ public class DetailAccommodation extends Fragment {
                 }
             });
         }
+        FragmentTransition.to(AccommodationReviewListFragment.newInstance(accommodation.getId()), getActivity(), false, R.id.scroll_accommodation_reviews_list);
     }
 
     @Override

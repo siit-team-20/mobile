@@ -10,10 +10,11 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        android:fillViewport="true">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -328,7 +329,7 @@
                         android:id="@+id/reservation_start_date_button"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerInParent="true"
                         android:text="Pick Start Date"
                         android:textAllCaps="false" />
@@ -349,7 +350,7 @@
                         android:id="@+id/reservation_end_date_button"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerInParent="true"
                         android:text="Pick End Date"
                         android:textAllCaps="false" />
@@ -371,7 +372,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/reservation_guest_input_hint"
                         android:selectAllOnFocus="true"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:textAllCaps="false" />
                 </RelativeLayout>
                 <RelativeLayout
@@ -388,12 +389,12 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true">
+                        android:layout_alignParentEnd="true">
                         <TextView
                             android:id="@+id/reservation_calculated_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="0.0"
                             android:layout_marginTop="10dp"
                             android:fontFamily="sans-serif-light"
                             android:textSize="20sp"></TextView>
@@ -413,53 +414,73 @@
                     android:layout_marginTop="10dp"
                     android:text="Reserve"></Button>
             </LinearLayout>
-            <TextView
-                android:id="@+id/rating_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rating"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp"/>
-
-            <RatingBar
-                android:id="@+id/rating_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:stepSize="1"
-                android:rating="0"
-                android:isIndicator="false"
-                android:layout_marginBottom="16dp"/>
-
-            <!-- Comment Section -->
-            <TextView
-                android:id="@+id/comment_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Comment"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp"/>
-
-            <EditText
-                android:id="@+id/comment_input"
+            <LinearLayout
+                android:id="@+id/rate_accommodation_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Write your comment"
-                android:minLines="3"
-                android:gravity="top|start"
-                android:background="@android:drawable/editbox_background"
-                android:padding="10dp"/>
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:text="Rate accommodation"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="30sp" />
+                <TextView
+                    android:id="@+id/rating_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rating"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
 
-            <!-- Submit Button -->
-            <Button
-                android:id="@+id/submit_review_button"
-                android:layout_width="wrap_content"
+                <RatingBar
+                    android:id="@+id/rating_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="1"
+                    android:rating="0"
+                    android:isIndicator="false"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Comment Section -->
+                <TextView
+                    android:id="@+id/comment_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comment"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <EditText
+                    android:id="@+id/comment_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Write your comment"
+                    android:minLines="3"
+                    android:gravity="top|start"
+                    android:background="@android:drawable/editbox_background"
+                    android:padding="10dp"/>
+
+                <!-- Submit Button -->
+                <Button
+                    android:id="@+id/submit_review_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Submit"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Submit"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center"/>
+                android:id="@+id/scroll_accommodation_reviews_list"/>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

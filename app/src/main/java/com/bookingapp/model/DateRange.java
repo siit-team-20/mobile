@@ -68,6 +68,7 @@ public class DateRange implements Parcelable {
     public LocalDate getEndDateAsDate() {
         return LocalDate.of(endDate.get(0), endDate.get(1), endDate.get(2));
     }
+
     public void setEndDate(List<Integer> endDate) {
         this.endDate = endDate;
     }
