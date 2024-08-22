@@ -26,6 +26,7 @@ import com.bookingapp.databinding.FragmentAccommodationListBinding;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.DateRange;
 import com.bookingapp.model.FavouriteAccommodationWithAccommodation;
+import com.bookingapp.model.Notification;
 import com.bookingapp.model.UserType;
 import com.bookingapp.service.FavouriteAccommodationService;
 import com.bookingapp.service.ServiceUtils;

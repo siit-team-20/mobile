@@ -3,13 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.account.OwnerReviewListFragment">
+    tools:context=".fragments.notification.NotificationsPageFragment">
 
-    <ListView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@android:id/list"
-        tools:listitem="@layout/owner_review_card"></ListView>
-
+        android:layout_margin="10dp"
+        android:id="@+id/scroll_notifications_list"/>
 
 </FrameLayout>

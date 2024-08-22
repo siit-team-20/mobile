@@ -1,14 +1,23 @@
 package com.bookingapp.fragments.accommodation;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,6 +33,8 @@ import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.AccommodationReview;
 import com.bookingapp.model.AccommodationType;
 import com.bookingapp.model.DateRange;
+import com.bookingapp.model.Notification;
+import com.bookingapp.model.NotificationType;
 import com.bookingapp.model.Reservation;
 import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
@@ -36,6 +47,7 @@ import org.json.JSONException;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -159,7 +171,25 @@ public class DetailAccommodation extends Fragment {
                         name.setText(accommodation.getName());
                         description.setText(accommodation.getDescription());
                         location.setText(accommodation.getLocation());
-                        ownerEmail.setText(accommodation.getOwnerEmail());
+                        ownerEmail.setText(Html.fromHtml("<a href='#'>" + accommodation.getOwnerEmail() + "</a>", Html.FROM_HTML_MODE_LEGACY));
+                        ownerEmail.setClickable(true);
+                        ownerEmail.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+                                com.google.android.material.navigation.NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+                                Menu menu = navigationView.getMenu();
+                                MenuItem menuItem = menu.findItem(R.id.nav_account);
+                                NavigationUI.onNavDestinationSelected(menuItem, navController);
+                                Bundle args = new Bundle();
+                                args.putString("userEmail", accommodation.getOwnerEmail());
+                                navController.navigate(R.id.nav_account, args,
+                                        new NavOptions.Builder()
+                                        .setEnterAnim(android.R.animator.fade_in)
+                                        .setExitAnim(android.R.animator.fade_out).setPopUpTo(R.id.nav_accommodations, false)
+                                        .build());
+                            }
+                        });
                         accommodationType.setText(accommodation.getAccommodationType().toString());
                         benefits.setText(benefitsToString());
 //                        isApproved.setText(String.valueOf(accommodation.getIsApproved()));
@@ -204,6 +234,35 @@ public class DetailAccommodation extends Fragment {
             throw new RuntimeException(e);
         }
 
+        LinearLayout rateAccommodationView = view.findViewById(R.id.rate_accommodation_layout);
+        if (UserInfo.getToken() != null) {
+            try {
+                if (UserInfo.getType().equals(UserType.Guest)) {
+                    Call<ArrayList<ReservationWithAccommodation>> reservationWithAccommodationCall = ServiceUtils.reservationService.get(ReservationStatus.Finished.toString(), (long) 7, UserInfo.getEmail(), accommodation.getId());
+                    reservationWithAccommodationCall.enqueue(new Callback<ArrayList<ReservationWithAccommodation>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<ReservationWithAccommodation>> call, Response<ArrayList<ReservationWithAccommodation>> response) {
+                            if (response.code() == 200){
+                                Log.d("Reservations-New","Message received");
+                                System.out.println(response.body());
+                                if (response.body().size() > 0)
+                                    rateAccommodationView.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                Log.d("Reservations-New","Message received: "+response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ArrayList<ReservationWithAccommodation>> call, Throwable t) {
+                            Log.d("Reservations-New", t.getMessage() != null?t.getMessage():"error");
+                        }
+                    });
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         reservationGuestNumber = view.findViewById(R.id.reservation_guest_number);
         reservationGuestNumber.addTextChangedListener(new TextWatcher() {
@@ -243,6 +302,39 @@ public class DetailAccommodation extends Fragment {
                             reservationStartDateButton.setText("Pick Start Date");
                             reservationEndDateButton.setText("Pick End Date");
                             reservationGuestNumber.setText("");
+                            Notification notification = new Notification();
+                            notification.setUserEmail(accommodation.getOwnerEmail());
+                            try {
+                                notification.setOtherUserEmail(UserInfo.getEmail());
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            notification.setType(NotificationType.ReservationCreated);
+                            List<Integer> now = new ArrayList<>();
+                            now.add(LocalDateTime.now().getYear());
+                            now.add(LocalDateTime.now().getMonthValue());
+                            now.add(LocalDateTime.now().getDayOfMonth());
+                            now.add(LocalDateTime.now().getHour());
+                            now.add(LocalDateTime.now().getMinute());
+                            notification.setCreatedAt(now);
+                            Call<Notification> notificationCall = ServiceUtils.notificationService.add(notification);
+                            notificationCall.enqueue(new Callback<Notification>() {
+                                @Override
+                                public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                    if (response.code() == 201) {
+                                        Log.d("Notification-New","Message received");
+                                        System.out.println(response.body());
+                                    }
+                                    else {
+                                        Log.d("Notification-New","Message received: "+response.code());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Notification> call, Throwable t) {
+                                    Log.d("Notification-New", t.getMessage() != null?t.getMessage():"error");
+                                }
+                            });
                             //getActivity().getSupportFragmentManager().popBackStack();
                         }
                         else {
@@ -433,6 +525,8 @@ public class DetailAccommodation extends Fragment {
             String endDate = availabilityDate.getEndDate().get(2) + "." + availabilityDate.getEndDate().get(1) + "." + availabilityDate.getEndDate().get(0) + ".";
             availabilityDatesString += startDate + " to " + endDate + " - " + availabilityDate.getPrice() + "e\n";
         }
+        if (availabilityDatesString.length() == 0)
+            return "None";
         availabilityDatesString = availabilityDatesString.substring(0, availabilityDatesString.length() - 1);
         return availabilityDatesString;
     }

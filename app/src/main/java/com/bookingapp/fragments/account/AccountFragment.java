@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.bookingapp.R;
 import com.bookingapp.adapters.AccommodationListAdapter;
 import com.bookingapp.databinding.FragmentAccountBinding;
+import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.fragments.accommodation.AccommodationListFragment;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.Reservation;
@@ -52,6 +53,8 @@ public class AccountFragment extends Fragment {
     private String permission = android.Manifest.permission.READ_CONTACTS;
     private FragmentAccountBinding binding;
     private ActivityResultLauncher<String> mPermissionResult;
+    private static final String ARG_USER_EMAIL = "userEmail";
+    private String userEmail;
 
     private EditText nameText;
     private EditText surnameText;
@@ -80,19 +83,14 @@ public class AccountFragment extends Fragment {
 
     public AccountFragment() {
     }
-    /*public static AccountFragment newInstance(String name, String surname, String email, String address, String phone) {
-        AccountFragment fragment = new AccountFragment();
 
+    public static AccountFragment newInstance(String userEmail) {
+        AccountFragment fragment = new AccountFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_NAME, name);
-        args.putString(ARG_SURNAME, surname);
-        args.putString(ARG_EMAIL, email);
-        args.putString(ARG_ADDRESS, address);
-        args.putString(ARG_PHONE, phone);
+        args.putString(ARG_USER_EMAIL, userEmail);
         fragment.setArguments(args);
         return fragment;
-    }*/
-
+    }
 
     @Nullable
     @Override
@@ -102,6 +100,22 @@ public class AccountFragment extends Fragment {
         View root = binding.getRoot();
         return root;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userEmail = getArguments().getString(ARG_USER_EMAIL);
+        }
+        if (getArguments().getString(ARG_USER_EMAIL) == null) {
+            try {
+                userEmail = UserInfo.getEmail();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -401,7 +415,7 @@ public class AccountFragment extends Fragment {
     }
 
     private void getData() {
-        Call<User> call = ServiceUtils.userService.getUser("owner@gmail.com");
+        Call<User> call = ServiceUtils.userService.getUser(userEmail);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -414,6 +428,8 @@ public class AccountFragment extends Fragment {
                     emailText.setText(user.getEmail());
                     addressText.setText(user.getAddress());
                     phoneText.setText(user.getPhone());
+                    FragmentTransition.to(OwnerReviewListFragment.newInstance(userEmail), getActivity(), false, R.id.scroll_owner_reviews_list);
+
                 }
                 else {
                     Log.d("REZ","Message received: "+response.code());

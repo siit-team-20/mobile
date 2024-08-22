@@ -30,6 +30,8 @@ import android.widget.TextView;
 import com.bookingapp.R;
 import com.bookingapp.databinding.FragmentAccommodationCreateBinding;
 import com.bookingapp.model.Accommodation;
+import com.bookingapp.model.AccommodationRequest;
+import com.bookingapp.model.AccommodationRequestType;
 import com.bookingapp.model.AccommodationType;
 import com.bookingapp.model.DateRange;
 import com.bookingapp.model.User;
@@ -374,7 +376,28 @@ public class AccommodationCreateFragment extends Fragment {
                             Log.d("REZ","Message received");
                             System.out.println(response.body());
                             Accommodation accommodation = response.body();
-                            //getActivity().getSupportFragmentManager().popBackStack();
+                            AccommodationRequest accommodationRequest = new AccommodationRequest();
+                            accommodationRequest.setNewAccommodation(accommodation);
+                            accommodationRequest.setType(AccommodationRequestType.Created);
+                            Call<AccommodationRequest> accommodationRequestCall = ServiceUtils.accommodationRequestService.add(accommodationRequest);
+                            accommodationRequestCall.enqueue(new Callback<AccommodationRequest>() {
+                                @Override
+                                public void onResponse(Call<AccommodationRequest> call, Response<AccommodationRequest> response) {
+                                    if (response.code() == 201){
+                                        Log.d("REZ","Message received");
+                                        System.out.println(response.body());
+
+                                    }
+                                    else {
+                                        Log.d("REZ","Message received: "+response.code());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<AccommodationRequest> call, Throwable t) {
+                                    Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+                                }
+                            });
                         }
                         else {
                             Log.d("REZ","Message received: "+response.code());
