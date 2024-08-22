@@ -2,48 +2,47 @@ package com.bookingapp.fragments.account;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.ListFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.bookingapp.R;
+import com.bookingapp.adapters.AccommodationReviewListAdapter;
+import com.bookingapp.adapters.OwnerReviewListAdapter;
+import com.bookingapp.databinding.FragmentAccommodationReviewListBinding;
+import com.bookingapp.databinding.FragmentOwnerReviewListBinding;
+import com.bookingapp.fragments.accommodation.AccommodationReviewListFragment;
+import com.bookingapp.model.AccommodationReview;
+import com.bookingapp.model.OwnerReview;
+import com.bookingapp.service.ServiceUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OwnerReviewListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class OwnerReviewListFragment extends Fragment {
+import java.util.ArrayList;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    public OwnerReviewListFragment() {
-        // Required empty public constructor
-    }
+public class OwnerReviewListFragment extends ListFragment {
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment OwnerReviewListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static OwnerReviewListFragment newInstance(String param1, String param2) {
+    private static final String ARG_OWNER_EMAIL = "ownerEmail";
+    private OwnerReviewListAdapter adapter;
+    private FragmentOwnerReviewListBinding binding;
+    private ArrayList<OwnerReview> ownerReviews = new ArrayList<>();
+    private String ownerEmail;
+    private ListView listView;
+
+    public static OwnerReviewListFragment newInstance(String ownerEmail) {
         OwnerReviewListFragment fragment = new OwnerReviewListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_OWNER_EMAIL, ownerEmail);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,15 +51,71 @@ public class OwnerReviewListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            ownerEmail = getArguments().getString(ARG_OWNER_EMAIL);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_owner_review_list, container, false);
+        Log.i("BookingApp", "onCreateView Owner Review List Fragment");
+        binding = FragmentOwnerReviewListBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+        return root;
     }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        listView = this.getListView();
+        this.getListView().setDividerHeight(2);
+        getDataFromClient();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDataFromClient();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+    private void getDataFromClient() {
+        Call<ArrayList<OwnerReview>> callReviews = ServiceUtils.ownerReviewService.get(ownerEmail, false);
+
+        callReviews.enqueue(new Callback<ArrayList<OwnerReview>>() {
+            @Override
+            public void onResponse(Call<ArrayList<OwnerReview>> call, Response<ArrayList<OwnerReview>> response) {
+                if (response.code() == 200) {
+                    Log.d("Reviews-Get","Message received");
+                    System.out.println(response.body());
+                    ownerReviews = response.body();
+                    adapter = new OwnerReviewListAdapter(getActivity(), getActivity().getSupportFragmentManager(), ownerReviews);
+                    setListAdapter(adapter);
+                    int totalHeight = 0;
+                    for (int i = 0; i < adapter.getCount(); i++) {
+                        View listItem = adapter.getView(i, null, listView);
+                        listItem.measure(0, 0);
+                        totalHeight += listItem.getMeasuredHeight();
+                    }
+                    ViewGroup.LayoutParams params = listView.getLayoutParams();
+                    params.height = totalHeight + (listView.getDividerHeight() * adapter.getCount() - 1);
+                    listView.setLayoutParams(params);
+                    listView.requestLayout();
+                    adapter.notifyDataSetChanged();
+                }
+                else {
+                    Log.d("Reviews-Get","Message received: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<OwnerReview>> call, Throwable t) {
+                Log.d("Reviews-Get", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+    }
+
 }

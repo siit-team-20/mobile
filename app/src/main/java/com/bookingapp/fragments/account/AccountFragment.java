@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.bookingapp.R;
 import com.bookingapp.adapters.AccommodationListAdapter;
 import com.bookingapp.databinding.FragmentAccountBinding;
+import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.fragments.accommodation.AccommodationListFragment;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.User;
@@ -194,6 +195,7 @@ public class AccountFragment extends Fragment {
                     emailText.setText(user.getEmail());
                     addressText.setText(user.getAddress());
                     phoneText.setText(user.getPhone());
+                    FragmentTransition.to(OwnerReviewListFragment.newInstance(user.getEmail()), getActivity(), false, R.id.scroll_owner_reviews_list);
                 }
                 else {
                     Log.d("REZ","Message received: "+response.code());

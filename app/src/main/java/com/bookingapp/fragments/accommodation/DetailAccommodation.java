@@ -469,6 +469,8 @@ public class DetailAccommodation extends Fragment {
             String endDate = availabilityDate.getEndDate().get(2) + "." + availabilityDate.getEndDate().get(1) + "." + availabilityDate.getEndDate().get(0) + ".";
             availabilityDatesString += startDate + " to " + endDate + " - " + availabilityDate.getPrice() + "e\n";
         }
+        if (availabilityDatesString.length() == 0)
+            return "None";
         availabilityDatesString = availabilityDatesString.substring(0, availabilityDatesString.length() - 1);
         return availabilityDatesString;
     }
