@@ -203,7 +203,7 @@ public class AccountFragment extends Fragment {
                     emailText.setText(user.getEmail());
                     addressText.setText(user.getAddress());
                     phoneText.setText(user.getPhone());
-                    FragmentTransition.to(OwnerReviewListFragment.newInstance(user.getEmail()), getActivity(), false, R.id.scroll_owner_reviews_list);
+                    FragmentTransition.to(OwnerReviewListFragment.newInstance(userEmail), getActivity(), false, R.id.scroll_owner_reviews_list);
                 }
                 else {
                     Log.d("REZ","Message received: "+response.code());
