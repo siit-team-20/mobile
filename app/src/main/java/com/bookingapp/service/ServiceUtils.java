@@ -62,4 +62,5 @@ public class ServiceUtils {
     public static UserService userService = retrofit.create(UserService.class);
     public static FavouriteAccommodationService favouriteAccommodationService = retrofit.create(FavouriteAccommodationService.class);
     public static AccommodationReviewService accommodationReviewService = retrofit.create(AccommodationReviewService.class);
+    public static NotificationService notificationService = retrofit.create(NotificationService.class);
 }

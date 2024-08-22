@@ -1,8 +1,18 @@
 package com.bookingapp.fragments.auth;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 import androidx.core.view.MenuProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -20,18 +30,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bookingapp.R;
+import com.bookingapp.activities.HomeActivity;
 import com.bookingapp.databinding.FragmentLoginBinding;
 import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.fragments.accommodation.AccommodationListFragment;
 import com.bookingapp.fragments.accommodation.AccommodationsPageFragment;
 import com.bookingapp.model.Credentials;
+import com.bookingapp.model.Notification;
+import com.bookingapp.model.NotificationType;
 import com.bookingapp.model.User;
+import com.bookingapp.model.UserType;
 import com.bookingapp.service.ServiceUtils;
 import com.bookingapp.service.UserInfo;
 
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +60,19 @@ public class LoginFragment extends Fragment {
     private EditText emailEt;
     private EditText passwordEt;
     private Button loginButton;
+
+
+
+    private final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+        @Override
+        public void onActivityResult(Boolean o) {
+            if (o) {
+                Toast.makeText(getActivity(), "Post notification permission granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Post notification permission not granted", Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
 
     public LoginFragment() {
     }
@@ -101,6 +132,77 @@ public class LoginFragment extends Fragment {
                                     user.setText(UserInfo.getName() + " " + UserInfo.getSurname());
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
+                                }
+
+
+                                if (UserInfo.getToken() != null) {
+                                    try {
+                                        if (UserInfo.getType().equals(UserType.Guest) || UserInfo.getType().equals(UserType.Owner)) {
+                                            Call<ArrayList<Notification>> notificationsCall = ServiceUtils.notificationService.get(UserInfo.getEmail());
+                                            notificationsCall.enqueue(new Callback<ArrayList<Notification>>() {
+                                                @Override
+                                                public void onResponse(Call<ArrayList<Notification>> call, Response<ArrayList<Notification>> response) {
+                                                    if (response.code() == 200) {
+                                                        Log.d("REZ","Message received");
+                                                        System.out.println(response.body());
+                                                        List<Notification> notifications = response.body();
+
+                                                        for (Notification notification : notifications) {
+                                                            String desc = "";
+                                                            if (notification.getType().equals(NotificationType.ReservationCreated)) {
+                                                                desc = "New reservation from " + notification.getOtherUserEmail();
+                                                            }
+                                                            else if (notification.getType().equals(NotificationType.ReservationCancelled)) {
+                                                                desc = "Reservation from " + notification.getOtherUserEmail() + " was cancelled";
+                                                            }
+                                                            else if (notification.getType().equals(NotificationType.OwnerReviewAdded)) {
+                                                                desc = notification.getOtherUserEmail() + " reviewed you";
+                                                            }
+                                                            else if (notification.getType().equals(NotificationType.AccommodationReviewAdded)) {
+                                                                desc = notification.getOtherUserEmail() + " reviewed your accommodation";
+                                                            }
+                                                            else if (notification.getType().equals(NotificationType.ReservationResponse)) {
+                                                                desc = notification.getOtherUserEmail() + " responded to your reservation request";
+                                                            }
+                                                            NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), "BookingApp")
+                                                                    .setSmallIcon(R.drawable.baseline_notifications_24)
+                                                                    .setContentTitle(getString(R.string.app_name))
+                                                                    .setWhen(notification.getCreatedAtAsCalendar().getTimeInMillis())
+                                                                    .setContentText(desc)
+                                                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                                                            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+
+                                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                                                                activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                                                            } else {
+                                                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                                                    CharSequence name = getString(R.string.app_name);
+                                                                    String description = "BookingApp Notification";
+                                                                    int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                                                                    NotificationChannel channel = new NotificationChannel("test", name, importance);
+                                                                    channel.setDescription(description);
+                                                                    notificationManager.createNotificationChannel(channel);
+
+                                                                    notificationManager.notify(Math.toIntExact(notification.getId()), builder.build());
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    else {
+                                                        Log.d("REZ","Message received: "+response.code());
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ArrayList<Notification>> call, Throwable t) {
+                                                    Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                 }
                                 Bundle args = new Bundle();
                                 args.putBoolean("isOnHome", true);

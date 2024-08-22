@@ -24,6 +24,8 @@ import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.AccommodationReview;
 import com.bookingapp.model.AccommodationType;
 import com.bookingapp.model.DateRange;
+import com.bookingapp.model.Notification;
+import com.bookingapp.model.NotificationType;
 import com.bookingapp.model.Reservation;
 import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
@@ -36,6 +38,7 @@ import org.json.JSONException;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -243,6 +246,39 @@ public class DetailAccommodation extends Fragment {
                             reservationStartDateButton.setText("Pick Start Date");
                             reservationEndDateButton.setText("Pick End Date");
                             reservationGuestNumber.setText("");
+                            Notification notification = new Notification();
+                            notification.setUserEmail(accommodation.getOwnerEmail());
+                            try {
+                                notification.setOtherUserEmail(UserInfo.getEmail());
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            notification.setType(NotificationType.ReservationCreated);
+                            List<Integer> now = new ArrayList<>();
+                            now.add(LocalDateTime.now().getYear());
+                            now.add(LocalDateTime.now().getMonthValue());
+                            now.add(LocalDateTime.now().getDayOfMonth());
+                            now.add(LocalDateTime.now().getHour());
+                            now.add(LocalDateTime.now().getMinute());
+                            notification.setCreatedAt(now);
+                            Call<Notification> notificationCall = ServiceUtils.notificationService.add(notification);
+                            notificationCall.enqueue(new Callback<Notification>() {
+                                @Override
+                                public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                    if (response.code() == 201) {
+                                        Log.d("Notification-New","Message received");
+                                        System.out.println(response.body());
+                                    }
+                                    else {
+                                        Log.d("Notification-New","Message received: "+response.code());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Notification> call, Throwable t) {
+                                    Log.d("Notification-New", t.getMessage() != null?t.getMessage():"error");
+                                }
+                            });
                             //getActivity().getSupportFragmentManager().popBackStack();
                         }
                         else {
