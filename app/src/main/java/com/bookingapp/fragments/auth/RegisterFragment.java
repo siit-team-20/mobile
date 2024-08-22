@@ -160,15 +160,15 @@ public class RegisterFragment extends Fragment {
         address.length() == 0 || phone.length() < 9 || phone.length() > 10)
             return false;
 
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setName(name);
-        user.setSurname(surname);
-        user.setAddress(address);
-        user.setPhone(phone);
-        user.setType(userType);
-        user.setIsBlocked(false);
+        newUser = new User();
+        newUser.setEmail(email);
+        newUser.setPassword(password);
+        newUser.setName(name);
+        newUser.setSurname(surname);
+        newUser.setAddress(address);
+        newUser.setPhone(phone);
+        newUser.setType(userType);
+        newUser.setIsBlocked(false);
         return true;
     }
 
