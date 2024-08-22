@@ -5,9 +5,11 @@ import com.bookingapp.model.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -37,6 +39,13 @@ public interface UserService {
             "User-Agent: Mobile-Android",
             "Content-Type: application/json",
     })
-    @GET("account/{email}")
-    Call<User> update(@Query("signUpDTO") User user, @Path("email") String email);
+    @PUT("account/{email}")
+    Call<User> update(@Path("email") String email, @Body User user);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @DELETE("account/{email}")
+    Call<User> delete(@Path("email") String email);
 }

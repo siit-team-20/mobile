@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -28,6 +29,13 @@ public interface AccommodationService {
     })
     @GET("api/accommodations")
     Call<ArrayList<Accommodation>> get(@Query("ownerEmail") String ownerEmail);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @DELETE("api/accommodations")
+    Call<ArrayList<Accommodation>> delete(@Query("ownerEmail") String ownerEmail);
 
     @Headers({
             "User-Agent: Mobile-Android",

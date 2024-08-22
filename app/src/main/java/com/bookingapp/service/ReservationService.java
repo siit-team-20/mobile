@@ -63,6 +63,36 @@ public interface ReservationService {
             "User-Agent: Mobile-Android",
             "Content-Type: application/json",
     })
+    @GET("api/accommodations/reservations")
+    Call<ArrayList<ReservationWithAccommodation>> getGuestReservations(@Query("guestEmail") String guestEmail, @Query("status") String status);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @GET("api/accommodations/reservations")
+    Call<ArrayList<ReservationWithAccommodation>> getOwnerReservations(@Query("ownerEmail") String ownerEmail, @Query("status") String status);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @DELETE("api/accommodations/reservations")
+    Call<ArrayList<ReservationWithAccommodation>> deleteGuestReservations(@Query("guestEmail") String guestEmail, @Query("status") String status);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @DELETE("api/accommodations/reservations")
+    Call<ArrayList<ReservationWithAccommodation>> deleteOwnerReservations(@Query("ownerEmail") String ownerEmail, @Query("status") String status);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
     @PUT("api/accommodations/reservations/{id}")
     Call<Reservation> update(@Path("id") Long id, @Body Reservation accommodationReservation);
 
