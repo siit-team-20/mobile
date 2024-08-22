@@ -31,6 +31,9 @@ import com.bookingapp.fragments.accommodation.AccommodationListFragment;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.User;
 import com.bookingapp.service.ServiceUtils;
+import com.bookingapp.service.UserInfo;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -41,6 +44,7 @@ import retrofit2.http.Path;
 
 public class AccountFragment extends Fragment {
 
+    private static final String ARG_USER_EMAIL = "userEmail";
     private boolean isPermissions = true;
     private String permission = android.Manifest.permission.READ_CONTACTS;
     private FragmentAccountBinding binding;
@@ -56,30 +60,34 @@ public class AccountFragment extends Fragment {
     private Button logOutButton;
     private Button saveChangesButton;
     private Button changePasswordButton;
-/*
-    private static final String ARG_NAME = "name";
-    private static final String ARG_SURNAME = "surname";
-    private static final String ARG_EMAIL = "email";
-    private static final String ARG_ADDRESS = "address";
-    private static final String ARG_PHONE = "phone";*/
     private User user;
     private User updateUser;
+    private String userEmail;
 
     public AccountFragment() {
     }
-    /*public static AccountFragment newInstance(String name, String surname, String email, String address, String phone) {
+    public static AccountFragment newInstance(String userEmail) {
         AccountFragment fragment = new AccountFragment();
-
         Bundle args = new Bundle();
-        args.putString(ARG_NAME, name);
-        args.putString(ARG_SURNAME, surname);
-        args.putString(ARG_EMAIL, email);
-        args.putString(ARG_ADDRESS, address);
-        args.putString(ARG_PHONE, phone);
+        args.putString(ARG_USER_EMAIL, userEmail);
         fragment.setArguments(args);
         return fragment;
-    }*/
+    }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userEmail = getArguments().getString(ARG_USER_EMAIL);
+        }
+        if (getArguments().getString(ARG_USER_EMAIL) == null) {
+            try {
+                userEmail = UserInfo.getEmail();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     @Nullable
     @Override
@@ -182,7 +190,7 @@ public class AccountFragment extends Fragment {
     }
 
     private void getData() {
-        Call<User> call = ServiceUtils.userService.getUser("owner@gmail.com");
+        Call<User> call = ServiceUtils.userService.getUser(userEmail);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

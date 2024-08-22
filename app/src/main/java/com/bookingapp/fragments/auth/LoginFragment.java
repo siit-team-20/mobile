@@ -61,8 +61,6 @@ public class LoginFragment extends Fragment {
     private EditText passwordEt;
     private Button loginButton;
 
-
-
     private final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
         @Override
         public void onActivityResult(Boolean o) {
@@ -133,7 +131,6 @@ public class LoginFragment extends Fragment {
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
                                 }
-
 
                                 if (UserInfo.getToken() != null) {
                                     try {

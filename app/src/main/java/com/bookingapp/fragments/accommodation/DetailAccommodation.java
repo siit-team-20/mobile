@@ -1,14 +1,23 @@
 package com.bookingapp.fragments.accommodation;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -162,7 +171,25 @@ public class DetailAccommodation extends Fragment {
                         name.setText(accommodation.getName());
                         description.setText(accommodation.getDescription());
                         location.setText(accommodation.getLocation());
-                        ownerEmail.setText(accommodation.getOwnerEmail());
+                        ownerEmail.setText(Html.fromHtml("<a href='#'>" + accommodation.getOwnerEmail() + "</a>", Html.FROM_HTML_MODE_LEGACY));
+                        ownerEmail.setClickable(true);
+                        ownerEmail.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+                                com.google.android.material.navigation.NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+                                Menu menu = navigationView.getMenu();
+                                MenuItem menuItem = menu.findItem(R.id.nav_account);
+                                NavigationUI.onNavDestinationSelected(menuItem, navController);
+                                Bundle args = new Bundle();
+                                args.putString("userEmail", accommodation.getOwnerEmail());
+                                navController.navigate(R.id.nav_account, args,
+                                        new NavOptions.Builder()
+                                        .setEnterAnim(android.R.animator.fade_in)
+                                        .setExitAnim(android.R.animator.fade_out).setPopUpTo(R.id.nav_accommodations, false)
+                                        .build());
+                            }
+                        });
                         accommodationType.setText(accommodation.getAccommodationType().toString());
                         benefits.setText(benefitsToString());
 //                        isApproved.setText(String.valueOf(accommodation.getIsApproved()));
