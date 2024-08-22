@@ -263,7 +263,8 @@ public class LoginFragment extends Fragment {
                 menuItem.setVisible(false);
             if (menuItem.getTitle().equals("Reservations") ||
                     menuItem.getTitle().equals("Account") ||
-                    menuItem.getTitle().equals("Favourite Accommodations")
+                    menuItem.getTitle().equals("Favourite Accommodations") ||
+                    menuItem.getTitle().equals("Notifications")
             )
                 menuItem.setVisible(true);
         }
@@ -281,7 +282,8 @@ public class LoginFragment extends Fragment {
             if (menuItem.getTitle().equals("Create Accommodation") ||
                     menuItem.getTitle().equals("Account") ||
                     menuItem.getTitle().equals("My Accommodations") ||
-                    menuItem.getTitle().equals("Reservations")
+                    menuItem.getTitle().equals("Reservations") ||
+                    menuItem.getTitle().equals("Notifications")
             )
                 menuItem.setVisible(true);
         }

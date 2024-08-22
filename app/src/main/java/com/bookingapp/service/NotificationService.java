@@ -13,7 +13,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-public interface NotificationService {
+public interface  NotificationService {
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
