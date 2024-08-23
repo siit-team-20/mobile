@@ -295,6 +295,10 @@ public class LoginFragment extends Fragment {
                     menuItem.getTitle().equals("Register")
             )
                 menuItem.setVisible(false);
+            if (menuItem.getTitle().equals("Requests") ||
+                    menuItem.getTitle().equals("Account")
+            )
+                menuItem.setVisible(true);
         }
     }
 }

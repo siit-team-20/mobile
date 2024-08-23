@@ -3,8 +3,11 @@ package com.bookingapp.service;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.AccommodationRequest;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -15,4 +18,11 @@ public interface AccommodationRequestService {
     })
     @POST("api/accommodations/requests")
     Call<AccommodationRequest> add(@Body AccommodationRequest accommodationRequest);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("api/accommodations/requests")
+    Call<ArrayList<AccommodationRequest>> getAll();
 }
