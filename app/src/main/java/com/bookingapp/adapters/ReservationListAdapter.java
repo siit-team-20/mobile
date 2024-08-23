@@ -2,8 +2,11 @@ package com.bookingapp.adapters;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -16,7 +19,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.bookingapp.R;
 import com.bookingapp.activities.HomeActivity;
@@ -85,6 +90,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
         TextView duration = convertView.findViewById(R.id.reservation_duration);
         TextView price = convertView.findViewById(R.id.reservation_price);
         TextView ownerEmail = convertView.findViewById(R.id.reservation_owner_email);
+        TextView guestEmail = convertView.findViewById(R.id.reservation_guest_email);
         TextView guestNumber = convertView.findViewById(R.id.reservation_guest_number);
         TextView status = convertView.findViewById(R.id.reservation_status);
         TextView deadline = convertView.findViewById(R.id.reservation_cancellation_deadline);
@@ -102,7 +108,44 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
             startDate.setText(reservation.getDateAsDate().toString());
             duration.setText(Integer.toString(reservation.getDays()));
             price.setText(Double.toString(reservation.getPrice()));
-            ownerEmail.setText(reservation.getAccommodation().getOwnerEmail());
+            ownerEmail.setText(Html.fromHtml("<a href='#'>" + reservation.getAccommodation().getOwnerEmail() + "</a>", Html.FROM_HTML_MODE_LEGACY));
+            ownerEmail.setClickable(true);
+            ownerEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavController navController = Navigation.findNavController(activity, R.id.fragment_nav_content_main);
+                    com.google.android.material.navigation.NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                    Menu menu = navigationView.getMenu();
+                    MenuItem menuItem = menu.findItem(R.id.nav_account);
+                    NavigationUI.onNavDestinationSelected(menuItem, navController);
+                    Bundle args = new Bundle();
+                    args.putString("userEmail", reservation.getAccommodation().getOwnerEmail());
+                    navController.navigate(R.id.nav_account, args,
+                            new NavOptions.Builder()
+                                    .setEnterAnim(android.R.animator.fade_in)
+                                    .setExitAnim(android.R.animator.fade_out).setPopUpTo(R.id.nav_accommodations, false)
+                                    .build());
+                }
+            });
+            guestEmail.setText(Html.fromHtml("<a href='#'>" + reservation.getGuestEmail() + "</a>", Html.FROM_HTML_MODE_LEGACY));
+            guestEmail.setClickable(true);
+            guestEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NavController navController = Navigation.findNavController(activity, R.id.fragment_nav_content_main);
+                    com.google.android.material.navigation.NavigationView navigationView = activity.findViewById(R.id.nav_view);
+                    Menu menu = navigationView.getMenu();
+                    MenuItem menuItem = menu.findItem(R.id.nav_account);
+                    NavigationUI.onNavDestinationSelected(menuItem, navController);
+                    Bundle args = new Bundle();
+                    args.putString("userEmail", reservation.getGuestEmail());
+                    navController.navigate(R.id.nav_account, args,
+                            new NavOptions.Builder()
+                                    .setEnterAnim(android.R.animator.fade_in)
+                                    .setExitAnim(android.R.animator.fade_out).setPopUpTo(R.id.nav_accommodations, false)
+                                    .build());
+                }
+            });
             guestNumber.setText(Integer.toString(reservation.getGuestNumber()));
             status.setText(reservation.getStatus().toString());
             deadline.setText(Integer.toString(reservation.getAccommodation().getReservationCancellationDeadline()));

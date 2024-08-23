@@ -180,6 +180,7 @@
             android:id="@+id/editButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
             android:layout_alignParentLeft="true"
             android:text="Edit"/>
         <com.google.android.material.button.MaterialButton
@@ -187,6 +188,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="50dp"
             android:backgroundTint="#ba3c3c"
             android:text="Delete"/>
 
@@ -194,43 +196,42 @@
             android:id="@+id/logoutButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_marginHorizontal="50dp"
             android:backgroundTint="@color/material_dynamic_secondary50"
             android:text="Log out"/>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:orientation="horizontal"
-            android:paddingHorizontal="25dp">
+            android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/changePasswordButton"
-                android:layout_width="115dp"
-                android:layout_height="55dp"
-                android:layout_alignParentLeft="true"
-                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginHorizontal="50dp"
                 android:text="Change password"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveChangesButton"
-                android:layout_width="115dp"
-                android:layout_height="55dp"
-                android:layout_centerHorizontal="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
                 android:text="Save changes"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancelButton"
-                android:layout_width="115dp"
-                android:layout_height="55dp"
-                android:layout_alignParentRight="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
                 android:backgroundTint="@color/material_dynamic_secondary50"
                 android:text="Cancel"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -239,7 +240,7 @@
             android:layout_alignParentStart="true"
             android:textSize="22dp"
             android:id="@+id/newPasswordLayout"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:layout_marginHorizontal="50dp"
             android:layout_marginTop="5dp">
 
@@ -269,7 +270,7 @@
             android:orientation="horizontal"
             android:layout_alignParentStart="true"
             android:textSize="22dp"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:id="@+id/confirmPasswordLayout"
             android:layout_marginHorizontal="50dp"
             android:layout_marginTop="5dp">

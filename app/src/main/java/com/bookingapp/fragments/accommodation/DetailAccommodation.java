@@ -23,19 +23,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bookingapp.R;
 import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.model.Accommodation;
+import com.bookingapp.model.AccommodationRequest;
+import com.bookingapp.model.AccommodationRequestType;
 import com.bookingapp.model.AccommodationReview;
 import com.bookingapp.model.AccommodationType;
 import com.bookingapp.model.DateRange;
 import com.bookingapp.model.Notification;
 import com.bookingapp.model.NotificationType;
+import com.bookingapp.model.OwnerReview;
+import com.bookingapp.model.Rating;
 import com.bookingapp.model.Reservation;
 import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
@@ -46,6 +52,7 @@ import com.bookingapp.service.UserInfo;
 
 import org.json.JSONException;
 
+import java.security.acl.Owner;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -107,6 +114,14 @@ public class DetailAccommodation extends Fragment {
     private double calculatedPrice;
     private Button reserveButton;
     private Reservation newReservation;
+    private RatingBar accommodationRatingBar;
+    private EditText accommodationCommentEt;
+    private Button accommodationReviewButton;
+    private AccommodationReview newAccommodationReview;
+    private RatingBar ownerRatingBar;
+    private EditText ownerCommentEt;
+    private Button ownerReviewButton;
+    private OwnerReview newOwnerReview;
 
     public DetailAccommodation() { }
 
@@ -235,6 +250,74 @@ public class DetailAccommodation extends Fragment {
             throw new RuntimeException(e);
         }
 
+        accommodationRatingBar = view.findViewById(R.id.accommodation_rating_bar);
+        accommodationCommentEt = view.findViewById(R.id.accommodation_comment_input);
+        accommodationReviewButton = view.findViewById(R.id.submit_accommodation_review_button);
+        accommodationReviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<AccommodationReview> accommodationReviewCall = null;
+                if (addNewAccommodationReview()) {
+                    accommodationReviewCall = ServiceUtils.accommodationReviewService.add(newAccommodationReview);
+                }
+                else
+                    return;
+                accommodationReviewCall.enqueue(new Callback<AccommodationReview>() {
+                    @Override
+                    public void onResponse(Call<AccommodationReview> call, Response<AccommodationReview> response) {
+                        if (response.code() == 201){
+                            Log.d("Accommodation Review - Create","Message received");
+                            System.out.println(response.body());
+                            accommodationRatingBar.setRating(0);
+                            accommodationCommentEt.setText("");
+                        }
+                        else {
+                            Log.d("Accommodation Review - Create","Message received: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<AccommodationReview> call, Throwable t) {
+                        Log.d("Accommodation Review - Create", t.getMessage() != null?t.getMessage():"error");
+                    }
+                });
+            }
+        });
+
+        ownerRatingBar = view.findViewById(R.id.owner_rating_bar);
+        ownerCommentEt = view.findViewById(R.id.owner_comment_input);
+        ownerReviewButton = view.findViewById(R.id.submit_owner_review_button);
+        ownerReviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Call<OwnerReview> ownerReviewCall = null;
+                if (addNewOwnerReview()) {
+                    ownerReviewCall = ServiceUtils.ownerReviewService.add(newOwnerReview);
+                }
+                else
+                    return;
+                ownerReviewCall.enqueue(new Callback<OwnerReview>() {
+                    @Override
+                    public void onResponse(Call<OwnerReview> call, Response<OwnerReview> response) {
+                        if (response.code() == 201){
+                            Log.d("Owner Review - Create","Message received");
+                            System.out.println(response.body());
+                            ownerRatingBar.setRating(0);
+                            ownerCommentEt.setText("");
+                        }
+                        else {
+                            Log.d("Owner Review - Create","Message received: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<OwnerReview> call, Throwable t) {
+                        Log.d("Owner Review - Create", t.getMessage() != null?t.getMessage():"error");
+                    }
+                });
+            }
+        });
+
         LinearLayout rateAccommodationView = view.findViewById(R.id.rate_accommodation_layout);
         if (UserInfo.getToken() != null) {
             try {
@@ -248,6 +331,36 @@ public class DetailAccommodation extends Fragment {
                                 System.out.println(response.body());
                                 if (response.body().size() > 0)
                                     rateAccommodationView.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                Log.d("Reservations-New","Message received: "+response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ArrayList<ReservationWithAccommodation>> call, Throwable t) {
+                            Log.d("Reservations-New", t.getMessage() != null?t.getMessage():"error");
+                        }
+                    });
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        LinearLayout rateOwnerView = view.findViewById(R.id.rate_owner_layout);
+        if (UserInfo.getToken() != null) {
+            try {
+                if (UserInfo.getType().equals(UserType.Guest)) {
+                    Call<ArrayList<ReservationWithAccommodation>> reservationWithAccommodationCall = ServiceUtils.reservationService.get(accommodation.getOwnerEmail(), ReservationStatus.Finished.toString(), UserInfo.getEmail());
+                    reservationWithAccommodationCall.enqueue(new Callback<ArrayList<ReservationWithAccommodation>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<ReservationWithAccommodation>> call, Response<ArrayList<ReservationWithAccommodation>> response) {
+                            if (response.code() == 200){
+                                Log.d("Reservations-New","Message received");
+                                System.out.println(response.body());
+                                if (response.body().size() > 0)
+                                    rateOwnerView.setVisibility(View.VISIBLE);
                             }
                             else {
                                 Log.d("Reservations-New","Message received: "+response.code());
@@ -767,5 +880,75 @@ public class DetailAccommodation extends Fragment {
         if (accommodation.getIsPriceByGuest())
             calculatedPrice *= Integer.parseInt(reservationGuestNumber.getText().toString());
         reservationCalculatedPrice.setText(String.valueOf(calculatedPrice));
+    }
+
+    private boolean addNewAccommodationReview() {
+        try {
+            Integer rating = (int) this.accommodationRatingBar.getRating();
+            String comment = this.accommodationCommentEt.getText().toString();
+            if (rating < 1 || rating > 5 || comment.length() == 0)
+                return false;
+            newAccommodationReview = new AccommodationReview();
+            if (rating.equals(5))
+                newAccommodationReview.setRating(Rating.five);
+            else if (rating.equals(4))
+                newAccommodationReview.setRating(Rating.four);
+            else if (rating.equals(3))
+                newAccommodationReview.setRating(Rating.three);
+            else if (rating.equals(2))
+                newAccommodationReview.setRating(Rating.two);
+            else if (rating.equals(1))
+                newAccommodationReview.setRating(Rating.one);
+            newAccommodationReview.setGuestEmail(UserInfo.getEmail());
+            newAccommodationReview.setComment(comment);
+            newAccommodationReview.setAccommodationId(accommodation.getId());
+            newAccommodationReview.setIsApproved(false);
+            List<Integer> date = new ArrayList<>();
+            date.add(LocalDate.now().getYear());
+            date.add(LocalDate.now().getMonthValue());
+            date.add(LocalDate.now().getDayOfMonth());
+            newAccommodationReview.setSubmitDate(date);
+            return true;
+        }
+        catch (Exception e) {
+            Log.d("Error", e.getMessage());
+            Log.d("Error", "Inputs not valid");
+            return false;
+        }
+    }
+
+    private boolean addNewOwnerReview() {
+        try {
+            Integer rating = (int) this.ownerRatingBar.getRating();
+            String comment = this.ownerCommentEt.getText().toString();
+            if (rating < 1 || rating > 5 || comment.length() == 0)
+                return false;
+            newOwnerReview = new OwnerReview();
+            if (rating.equals(5))
+                newOwnerReview.setRating(Rating.five);
+            else if (rating.equals(4))
+                newOwnerReview.setRating(Rating.four);
+            else if (rating.equals(3))
+                newOwnerReview.setRating(Rating.three);
+            else if (rating.equals(2))
+                newOwnerReview.setRating(Rating.two);
+            else if (rating.equals(1))
+                newOwnerReview.setRating(Rating.one);
+            newOwnerReview.setGuestEmail(UserInfo.getEmail());
+            newOwnerReview.setComment(comment);
+            newOwnerReview.setOwnerEmail(accommodation.getOwnerEmail());
+            newOwnerReview.setIsReported(false);
+            List<Integer> date = new ArrayList<>();
+            date.add(LocalDate.now().getYear());
+            date.add(LocalDate.now().getMonthValue());
+            date.add(LocalDate.now().getDayOfMonth());
+            newOwnerReview.setSubmitDate(date);
+            return true;
+        }
+        catch (Exception e) {
+            Log.d("Error", e.getMessage());
+            Log.d("Error", "Inputs not valid");
+            return false;
+        }
     }
 }
