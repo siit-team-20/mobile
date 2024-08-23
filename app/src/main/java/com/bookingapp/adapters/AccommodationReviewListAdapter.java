@@ -18,6 +18,8 @@ import androidx.fragment.app.FragmentManager;
 import com.bookingapp.R;
 import com.bookingapp.model.AccommodationReview;
 import com.bookingapp.model.Rating;
+import com.bookingapp.model.Reservation;
+import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
 import com.bookingapp.service.ServiceUtils;
 import com.bookingapp.service.UserInfo;
@@ -94,7 +96,26 @@ public class AccommodationReviewListAdapter extends ArrayAdapter<AccommodationRe
                             if (response.isSuccessful()) {
                                 Log.d("REZ","Message received");
                                 System.out.println(response.body());
-                                activity.recreate();
+                                Call<ArrayList<AccommodationReview>> callReviews = ServiceUtils.accommodationReviewService.get(accommodationReview.getAccommodationId(), false);
+                                callReviews.enqueue(new Callback<ArrayList<AccommodationReview>>() {
+                                    @Override
+                                    public void onResponse(Call<ArrayList<AccommodationReview>> call, Response<ArrayList<AccommodationReview>> response) {
+                                        if (response.code() == 200){
+                                            Log.d("Reservations-Update","Message received");
+                                            System.out.println(response.body());
+                                            aAccommodationsReviews = response.body();
+                                            notifyDataSetChanged();
+                                        }
+                                        else {
+                                            Log.d("Reservations-Update","Message received: "+response.code());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ArrayList<AccommodationReview>> call, Throwable t) {
+                                        Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                                    }
+                                });
                             }
                             else {
                                 Log.d("REZ","Message received: "+response.code());
