@@ -104,6 +104,7 @@ public class AccommodationReviewListAdapter extends ArrayAdapter<AccommodationRe
                                             Log.d("Reservations-Update","Message received");
                                             System.out.println(response.body());
                                             aAccommodationsReviews = response.body();
+                                            guestDeleteButtonVisibility = new boolean[aAccommodationsReviews.size()];
                                             notifyDataSetChanged();
                                         }
                                         else {
