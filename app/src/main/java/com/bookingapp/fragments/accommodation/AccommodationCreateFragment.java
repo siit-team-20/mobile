@@ -6,10 +6,13 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintHelper;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.text.InputType;
 import android.util.Log;
@@ -26,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bookingapp.R;
 import com.bookingapp.databinding.FragmentAccommodationCreateBinding;
@@ -70,6 +74,7 @@ public class AccommodationCreateFragment extends Fragment {
     private static final String ARG_AUTOMATIC_ACCEPTANCE = "isAutomaticAcceptance";
     private static final String ARG_RESERVATION_CANCELLATION_DEADLINE = "reservationCancellationDeadline";
     private Accommodation editAccommodation;
+    private Accommodation oldAccommodation;
     private Accommodation newAccommodation;
     private EditText name;
     private EditText description;
@@ -88,6 +93,7 @@ public class AccommodationCreateFragment extends Fragment {
     private View root;
     private List<List<Integer>> availabilityRangesIds = new ArrayList<>();
     private Button createButton;
+    private Button updateButton;
 
     public AccommodationCreateFragment() {
     }
@@ -122,6 +128,24 @@ public class AccommodationCreateFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            oldAccommodation = new Accommodation();
+            oldAccommodation.setId(getArguments().getLong(ARG_ID));
+            oldAccommodation.setName(getArguments().getString(ARG_NAME));
+            oldAccommodation.setDescription(getArguments().getString(ARG_DESCRIPTION));
+            oldAccommodation.setLocation(getArguments().getString(ARG_LOCATION));
+            oldAccommodation.setOwnerEmail(getArguments().getString(ARG_OWNER_EMAIL));
+            oldAccommodation.setAccommodationType(AccommodationType.valueOf(getArguments().getString(ARG_ACCOMMODATION_TYPE)));
+            oldAccommodation.setBenefits(Arrays.asList(getArguments().getStringArray(ARG_BENEFITS)));
+            oldAccommodation.setIsApproved(getArguments().getBoolean(ARG_APPROVED));
+            oldAccommodation.setIsAutomaticAcceptance(getArguments().getBoolean(ARG_AUTOMATIC_ACCEPTANCE));
+            oldAccommodation.setIsPriceByGuest(getArguments().getBoolean(ARG_PRICE_BY_GUEST));
+            oldAccommodation.setMinGuests(getArguments().getInt(ARG_MIN_GUESTS));
+            oldAccommodation.setMaxGuests(getArguments().getInt(ARG_MAX_GUESTS));
+            oldAccommodation.setReservationCancellationDeadline(getArguments().getInt(ARG_RESERVATION_CANCELLATION_DEADLINE));
+            oldAccommodation.setAvailabilityDates(Arrays.asList(requireArguments().getParcelableArray(ARG_AVAILABILITY_DATES, DateRange.class)));
+
+
+            editAccommodation = new Accommodation();
             editAccommodation.setId(getArguments().getLong(ARG_ID));
             editAccommodation.setName(getArguments().getString(ARG_NAME));
             editAccommodation.setDescription(getArguments().getString(ARG_DESCRIPTION));
@@ -138,7 +162,7 @@ public class AccommodationCreateFragment extends Fragment {
             editAccommodation.setAvailabilityDates(Arrays.asList(requireArguments().getParcelableArray(ARG_AVAILABILITY_DATES, DateRange.class)));
         }
     }
-    private void addNewDateRange() {
+    private void addNewDateRange(DateRange dateRange) {
         LinearLayout container = root.findViewById(R.id.availabilityRangesContainer);
 
         LinearLayout rangeLayout = new LinearLayout(getActivity());
@@ -163,8 +187,14 @@ public class AccommodationCreateFragment extends Fragment {
 
         MaterialButton startDateButton = new MaterialButton(getContext());
         startDateButton.setId(View.generateViewId());
-        startDateButton.setText("Pick Start Date");
+        if(dateRange == null)
+            startDateButton.setText("Pick Start Date");
+        else {
+            startDateButton.setText(dateRange.getStartDate().get(2) + "." + dateRange.getStartDate().get(1) + "." + dateRange.getStartDate().get(0) + ".");
+        }
         startDateButton.setAllCaps(false);
+
+
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -178,7 +208,11 @@ public class AccommodationCreateFragment extends Fragment {
 
         MaterialButton endDateButton = new MaterialButton(getContext());
         endDateButton.setId(View.generateViewId());
-        endDateButton.setText("Pick End Date");
+        if(dateRange == null)
+            endDateButton.setText("Pick End Date");
+        else{
+            endDateButton.setText(dateRange.getEndDate().get(2) + "." + dateRange.getEndDate().get(1) + "." + dateRange.getEndDate().get(0) + ".");
+        }
         endDateButton.setAllCaps(false);
 
         LinearLayout.LayoutParams layoutParamsEnd = new LinearLayout.LayoutParams(
@@ -197,6 +231,9 @@ public class AccommodationCreateFragment extends Fragment {
                 LinearLayout.LayoutParams.WRAP_CONTENT));
         priceInput.setId(View.generateViewId());
         priceInput.setHint("Price");
+        if(dateRange != null)
+            priceInput.setText(String.valueOf(dateRange.getPrice()));
+
         priceInput.setInputType(InputType.TYPE_CLASS_NUMBER);
         rangeLayout.addView(priceInput);
 
@@ -286,12 +323,12 @@ public class AccommodationCreateFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAccommodationCreateBinding.inflate(inflater, container, false);
         root = binding.getRoot();
         Button addButton = root.findViewById(R.id.btnAddNewDateRange);
-        addButton.setOnClickListener(v -> addNewDateRange());
+        addButton.setOnClickListener(v -> addNewDateRange(null));
 
         startDateButton = root.findViewById(R.id.startDate);
         endDateButton = root.findViewById(R.id.endDate);
@@ -351,24 +388,53 @@ public class AccommodationCreateFragment extends Fragment {
         endDateButton = binding.endDate;
         price = binding.etPrice;
 
+        if (editAccommodation != null) {
+            ownerEmail.setText(editAccommodation.getOwnerEmail());
+            name.setText(editAccommodation.getName());
+            location.setText(editAccommodation.getLocation());
+            description.setText(editAccommodation.getDescription());
+            benefits.setText(String.join(", ", editAccommodation.getBenefits()));
+            minGuests.setText(String.valueOf(editAccommodation.getMinGuests()));
+            maxGuests.setText(String.valueOf(editAccommodation.getMaxGuests()));
+            reservationCancellationDeadline.setText(String.valueOf(editAccommodation.getReservationCancellationDeadline()));
+
+            for (int i = 0; i < accommodationType.getChildCount(); i++) {
+                RadioButton rb = (RadioButton) accommodationType.getChildAt(i);
+                if (rb.getText().toString().equals(editAccommodation.getAccommodationType().toString())) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
+            for (int i = 0; i < pricing.getChildCount(); i++) {
+                RadioButton rb = (RadioButton) pricing.getChildAt(i);
+                if (rb.getText().toString().equals(editAccommodation.getIsPriceByGuest() ? "Per guest" : "Fixed price")) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
+
+            List<Integer> startDate = editAccommodation.getAvailabilityDates().get(0).getStartDate();
+            List<Integer> endDate = editAccommodation.getAvailabilityDates().get(0).getEndDate();
+
+            startDateButton.setText(startDate.get(2)+"." + startDate.get(1) + "." + startDate.get(0) + ".");
+            endDateButton.setText(endDate.get(2)+"." + endDate.get(1) + "." + endDate.get(0) + ".");
+            price.setText(String.valueOf(editAccommodation.getAvailabilityDates().get(0).getPrice()));
+            for (int i=1; i< editAccommodation.getAvailabilityDates().size(); i++) {
+                addNewDateRange(editAccommodation.getAvailabilityDates().get(i));
+            }
+        }
+
         createButton = binding.btnSubmit;
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Call<Accommodation> call;
-//                if(editProduct != null) {
-//                    Log.d("ShopApp", "Edit product call");
-//                    editProduct();
-//                    call = ClientUtils.productService.edit(editProduct);
-//                }
-//                else {
                     Log.d("BookingApp", "Add accommodation call");
                     if (addNewAccommodation()) {
                         call = ServiceUtils.accommodationService.add(newAccommodation);
                     }
                     else
                         return;
-//                }
                 call.enqueue(new Callback<Accommodation>() {
                     @Override
                     public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
@@ -405,12 +471,26 @@ public class AccommodationCreateFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<Accommodation> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
                         Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
                     }
                 });
             }
         });
+        updateButton = binding.updateButton;
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateAccommodation();
+            }
+        });
+
+        if(editAccommodation != null){
+            createButton.setVisibility(View.GONE);
+        }
+        else {
+            updateButton.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -419,14 +499,166 @@ public class AccommodationCreateFragment extends Fragment {
         binding = null;
     }
 
-    private void editAccommodation(){
-//        String title = titleText.getText().toString();
-//        String description = descrText.getText().toString();
-//        if (title.length() == 0 && description.length() == 0) {
-//            return;
-//        }
-//        editProduct.setTitle(title);
-//        editProduct.setDescription(description);
+    private boolean getEditAccommodation() {
+
+        try {
+            String name = this.name.getText().toString();
+            String location = this.location.getText().toString();
+            String description = this.description.getText().toString();
+            String benefits = this.benefits.getText().toString();
+
+            Integer minGuests = Integer.valueOf(this.minGuests.getText().toString());
+            Integer maxGuests = Integer.valueOf(this.maxGuests.getText().toString());
+            if (minGuests > maxGuests)
+                return false;
+
+            Integer reservationDeadline = Integer.valueOf(this.reservationCancellationDeadline.getText().toString());
+            RadioButton accommodationTypeRb = this.accommodationType.findViewById(this.accommodationType.getCheckedRadioButtonId());
+            String accommodationType = accommodationTypeRb.getText().toString();
+            RadioButton pricingRb = this.pricing.findViewById(this.pricing.getCheckedRadioButtonId());
+            String pricing = pricingRb.getText().toString();
+
+            List<DateRange> availabilityRanges = new ArrayList<>();
+            DateRange dateRange = new DateRange();
+            LocalDate startDate = LocalDate.parse(this.startDateButton.getText().toString(), DateTimeFormatter.ofPattern("d.M.yyyy."));
+            LocalDate endDate = LocalDate.parse(this.endDateButton.getText().toString(), DateTimeFormatter.ofPattern("d.M.yyyy."));
+            if (!(startDate.isBefore(endDate)))
+                return false;
+            dateRange.setStartDateFromDate(startDate);
+            dateRange.setEndDateFromDate(endDate);
+            Double price = Double.valueOf(this.price.getText().toString());
+            dateRange.setPrice(price);
+            availabilityRanges.add(dateRange);
+
+            for (List<Integer> availabilityRange : availabilityRangesIds) {
+                dateRange = new DateRange();
+                Button startDateButton = root.findViewById(availabilityRange.get(0));
+                Button endDateButton = root.findViewById(availabilityRange.get(1));
+                startDate = LocalDate.parse(startDateButton.getText().toString(), DateTimeFormatter.ofPattern("d.M.yyyy."));
+                endDate = LocalDate.parse(endDateButton.getText().toString(), DateTimeFormatter.ofPattern("d.M.yyyy."));
+                if (!(startDate.isBefore(endDate)))
+                    return false;
+                dateRange.setStartDateFromDate(startDate);
+                dateRange.setEndDateFromDate(endDate);
+                EditText priceEditText = root.findViewById(availabilityRange.get(2));
+                price = Double.valueOf(priceEditText.getText().toString());
+                dateRange.setPrice(price);
+                availabilityRanges.add(dateRange);
+            }
+
+            for (int i = 0; i < availabilityRanges.size(); i++) {
+                if (!availabilityRanges.get(i).getStartDateAsDate().isBefore(availabilityRanges.get(i).getEndDateAsDate())) {
+                    return false;
+                }
+                for (int j = i + 1; j < availabilityRanges.size(); j++) {
+                    if (DateRange.isOverlapping(
+                            availabilityRanges.get(i).getStartDateAsDate(),
+                            availabilityRanges.get(i).getEndDateAsDate(),
+                            availabilityRanges.get(j).getStartDateAsDate(),
+                            availabilityRanges.get(j).getEndDateAsDate())) {
+                        Log.d("Error", "Dates are overlapping " + i + ", " + j);
+                        return false;
+                    }
+                }
+            }
+
+            if (name.length() < 5 || location.length() < 5 || description.length() < 5
+                    || benefits.length() ==0 || minGuests < 1 || maxGuests > 30 || minGuests > 30 || reservationDeadline < 0 || reservationDeadline > 60) {
+                return false;
+            }
+
+            editAccommodation.setName(name);
+            editAccommodation.setLocation(location);
+            editAccommodation.setDescription(description);
+            List<String> benefitsList = new ArrayList<>();
+            for (String benefit : benefits.split(",")) {
+                benefitsList.add(benefit.trim());
+            }
+            editAccommodation.setOwnerEmail(UserInfo.getEmail());
+            editAccommodation.setBenefits(benefitsList);
+            editAccommodation.setMinGuests(minGuests);
+            editAccommodation.setMaxGuests(maxGuests);
+            editAccommodation.setReservationCancellationDeadline(reservationDeadline);
+            editAccommodation.setAccommodationType(AccommodationType.valueOf(accommodationType));
+            if (pricing.equals("Per guest"))
+                editAccommodation.setIsPriceByGuest(true);
+            else
+                editAccommodation.setIsPriceByGuest(false);
+            editAccommodation.setAvailabilityDates(availabilityRanges);
+            editAccommodation.setIsApproved(false);
+
+            //editAccommodation.setIsAutomaticAcceptance();
+
+            editAccommodation.setId(null);
+            return true;
+        }
+        catch (Exception e) {
+            Log.d("Error", e.getMessage());
+            Log.d("Error", "Inputs not valid");
+            return false;
+        }
+
+    }
+
+    private void updateAccommodation() {
+        if (editAccommodation != null) {
+
+            Call<Accommodation> call = null;
+            Log.d("BookingApp", "Add accommodation call");
+            if (getEditAccommodation()) {
+                call = ServiceUtils.accommodationService.add(editAccommodation);
+            }
+            else
+                return;
+
+            call.enqueue(new Callback<Accommodation>() {
+                @Override
+                public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
+                    if (response.isSuccessful()) {
+
+                        AccommodationRequest accommodationRequest = new AccommodationRequest(null, oldAccommodation, response.body(), AccommodationRequestType.Updated);
+
+                        ServiceUtils.accommodationRequestService.add(accommodationRequest).enqueue(new Callback<AccommodationRequest>() {
+                            @Override
+                            public void onResponse(@NonNull Call<AccommodationRequest> call, @NonNull Response<AccommodationRequest> response) {
+                                if (response.isSuccessful()) {
+//                                    NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+//                                    navController.navigate(R.id.nav_accommodations);
+                                } else {
+                                    Log.d("Update", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<AccommodationRequest> call, @NonNull Throwable t) {
+                                Log.d("Update", "Request failed: " + t.getMessage());
+                            }
+                        });
+                    } else {
+                        Log.d("REZ", "error update accomm: " + response.code());
+                    }
+                }
+                @Override
+                public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
+                    Log.d("REZ", "Error: " + t.getMessage());
+                }
+            });
+
+            oldAccommodation.setIsApproved(false);
+            call = ServiceUtils.accommodationService.update(oldAccommodation.getId(), oldAccommodation);
+            call.enqueue(new Callback<Accommodation>() {
+                @Override
+                public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
+
+                    Log.d("REZ","Old accomm update");
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
+                    Log.d("REZ", "Error: " + t.getMessage());
+                }
+            });
+        }
     }
 
     private boolean addNewAccommodation() {

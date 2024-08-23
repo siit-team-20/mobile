@@ -32,18 +32,11 @@
                     android:fontFamily="sans-serif-medium"
                     android:textSize="25sp" />
                 <ImageButton
-                    android:id="@+id/deleteAccommodationButton"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/round_border_background"
-                    android:contentDescription="Delete accommodation"
-                    app:srcCompat="@drawable/ic_delete"
-                    android:clickable="true"/>
-                <ImageButton
                     android:id="@+id/editAccommodationButton"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="4dp"
+                    android:visibility="gone"
                     android:background="@drawable/round_border_background"
                     android:contentDescription="Edit accommodation"
                     app:srcCompat="@drawable/ic_edit"
@@ -75,26 +68,26 @@
                 android:justificationMode="inter_word"
                 android:fontFamily="sans-serif-light"
                 android:textSize="20sp"/>
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:layout_marginTop="25dp"-->
-<!--                android:layout_marginHorizontal="10dp">-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Accommodation id: "-->
-<!--                    android:fontFamily="sans-serif-light"-->
-<!--                    android:textSize="20sp"></TextView>-->
-<!--                <TextView-->
-<!--                    android:id="@+id/accommodation_id"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Id"-->
-<!--                    android:fontFamily="sans-serif-light"-->
-<!--                    android:textSize="20sp"/>-->
-<!--            </LinearLayout>-->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:orientation="horizontal"-->
+            <!--                android:layout_marginTop="25dp"-->
+            <!--                android:layout_marginHorizontal="10dp">-->
+            <!--                <TextView-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="Accommodation id: "-->
+            <!--                    android:fontFamily="sans-serif-light"-->
+            <!--                    android:textSize="20sp"></TextView>-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/accommodation_id"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="Id"-->
+            <!--                    android:fontFamily="sans-serif-light"-->
+            <!--                    android:textSize="20sp"/>-->
+            <!--            </LinearLayout>-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:text="Owner email: "
                     android:fontFamily="sans-serif-light"
-                    android:textSize="20sp"></TextView>
+                    android:textSize="20sp"/>
                 <TextView
                     android:id="@+id/accommodation_owner_email"
                     android:layout_width="wrap_content"
@@ -144,26 +137,26 @@
                 android:text="Benefits"
                 android:fontFamily="sans-serif-light"
                 android:textSize="20sp"/>
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:layout_marginTop="25dp"-->
-<!--                android:layout_marginHorizontal="10dp">-->
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Approved: "-->
-<!--                    android:fontFamily="sans-serif-light"-->
-<!--                    android:textSize="20sp"></TextView>-->
-<!--                <TextView-->
-<!--                    android:id="@+id/accommodation_approved"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Approved"-->
-<!--                    android:fontFamily="sans-serif-light"-->
-<!--                    android:textSize="20sp"/>-->
-<!--            </LinearLayout>-->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:orientation="horizontal"-->
+            <!--                android:layout_marginTop="25dp"-->
+            <!--                android:layout_marginHorizontal="10dp">-->
+            <!--                <TextView-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="Approved: "-->
+            <!--                    android:fontFamily="sans-serif-light"-->
+            <!--                    android:textSize="20sp"></TextView>-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/accommodation_approved"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:text="Approved"-->
+            <!--                    android:fontFamily="sans-serif-light"-->
+            <!--                    android:textSize="20sp"/>-->
+            <!--            </LinearLayout>-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

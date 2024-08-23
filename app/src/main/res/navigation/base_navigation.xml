@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/nav_my_accommodations"
         android:name="com.bookingapp.fragments.accommodation.AccommodationsPageFragment"
-        android:label="Accommodations"
+        android:label="My Accommodations"
         tools:layout="@layout/fragment_accommodations_page"
         >
         <argument

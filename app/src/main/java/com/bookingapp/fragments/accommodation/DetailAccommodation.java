@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
@@ -54,6 +55,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,8 +97,7 @@ public class DetailAccommodation extends Fragment {
     private TextView availabilityDates;
     private TextView reservedDates;
     private ImageView imageView;
-    private ImageButton deleteAccommodation;
-    private ImageButton editAccommodation;
+    private ImageButton editAccommodationButton;
     private Button reservationStartDateButton;
     private Button reservationEndDateButton;
     private LocalDate reservationStartDate;
@@ -293,7 +294,7 @@ public class DetailAccommodation extends Fragment {
                 call = ServiceUtils.reservationService.add(newReservation);
                 call.enqueue(new Callback<Reservation>() {
                     @Override
-                    public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                    public void onResponse(@NonNull Call<Reservation> call, @NonNull Response<Reservation> response) {
                         if (response.code() == 201){
                             Log.d("Reservations-New","Message received");
                             System.out.println(response.body());
@@ -408,6 +409,7 @@ public class DetailAccommodation extends Fragment {
             }
         });
 
+
 //        id = view.findViewById(R.id.accommodation_id);
 //        id.setText(accommodation.getId().toString());
 
@@ -483,17 +485,38 @@ public class DetailAccommodation extends Fragment {
 //            });
 //        });
 
-//        editAccommodation = view.findViewById(R.id.editAccommodationButton);
-//        editAccommodation.setOnClickListener(v -> {
-//            Log.d("BookingApp", "EDIT ACCOMMODATION WITH ID " + accommodation.getId().toString());
-//            Bundle args = new Bundle();
-//            args.putLong("id", product.getId());
-//            args.putString("title", product.getTitle());
-//            args.putString("description", product.getDescription());
-//            args.putString("image", product.getImagePath());
-//            NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
-//            navController.navigate(R.id.nav_product_edit, args);
-//        });
+        editAccommodationButton = view.findViewById(R.id.editAccommodationButton);
+        editAccommodationButton.setOnClickListener(v -> {
+            Log.d("BookingApp", "EDIT ACCOMMODATION WITH ID " + accommodation.getId().toString());
+            Bundle args = new Bundle();
+            args.putLong("id", accommodation.getId());
+            args.putString("name", accommodation.getName());
+            args.putString("description", accommodation.getDescription());
+            args.putString("location", accommodation.getLocation());
+            args.putString("ownerEmail", accommodation.getOwnerEmail());
+            args.putString("accommodationType", accommodation.getAccommodationType().toString());
+            args.putStringArray("benefits", accommodation.getBenefits().toArray(new String[0]));
+            args.putBoolean("isApproved", accommodation.getIsApproved());
+            args.putBoolean("isAutomaticAcceptance", accommodation.getIsAutomaticAcceptance());
+            args.putBoolean("isPriceByGuest", accommodation.getIsPriceByGuest());
+            args.putInt("minGuests", accommodation.getMinGuests());
+            args.putInt("maxGuests", accommodation.getMaxGuests());
+            args.putInt("reservationCancellationDeadline", accommodation.getReservationCancellationDeadline());
+            args.putParcelableArray("availabilityDates", accommodation.getAvailabilityDates().toArray(new DateRange[accommodation.getAvailabilityDates().size()]));
+            NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+            navController.navigate(R.id.nav_create_accommodation, args);
+        });
+
+        try {
+            if(UserInfo.getToken() != null)
+                if(UserInfo.getEmail().equals(accommodation.getOwnerEmail()) && accommodation.getIsApproved())
+                {
+                    editAccommodationButton.setVisibility(View.VISIBLE);
+                }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
         return view;
     }
 
@@ -575,7 +598,7 @@ public class DetailAccommodation extends Fragment {
         Call<ArrayList<ReservationWithAccommodation>> call = ServiceUtils.reservationService.get(accommodation.getId(), ReservationStatus.Approved.name());
         call.enqueue(new Callback<ArrayList<ReservationWithAccommodation>>() {
             @Override
-            public void onResponse(Call<ArrayList<ReservationWithAccommodation>> call, Response<ArrayList<ReservationWithAccommodation>> response) {
+            public void onResponse(@NonNull Call<ArrayList<ReservationWithAccommodation>> call, @NonNull Response<ArrayList<ReservationWithAccommodation>> response) {
                 if (response.code() == 200) {
                     Log.d("Reservations-Approved","Message received");
                     System.out.println(response.body());

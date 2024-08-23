@@ -11,6 +11,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -29,6 +30,13 @@ public interface AccommodationService {
     })
     @GET("api/accommodations")
     Call<ArrayList<Accommodation>> get(@Query("ownerEmail") String ownerEmail);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @PUT("api/accommodations/{id}")
+    Call<Accommodation> update(@Path("id") Long id, @Body Accommodation accommodation);
 
     @Headers({
             "User-Agent: Mobile-Android",

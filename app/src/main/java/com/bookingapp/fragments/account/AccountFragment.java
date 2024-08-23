@@ -205,7 +205,7 @@ public class AccountFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<User> call, Throwable t) {
+                    public void onFailure(@NonNull Call<User> call, @NonNull Throwable t) {
                         Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
                     }
                 });
