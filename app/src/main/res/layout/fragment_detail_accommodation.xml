@@ -430,7 +430,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:textSize="30sp" />
                 <TextView
-                    android:id="@+id/rating_label"
+                    android:id="@+id/accommodation_rating_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rating"
@@ -440,7 +440,7 @@
                     android:layout_marginBottom="8dp"/>
 
                 <RatingBar
-                    android:id="@+id/rating_bar"
+                    android:id="@+id/accommodation_rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5"
@@ -451,7 +451,7 @@
 
                 <!-- Comment Section -->
                 <TextView
-                    android:id="@+id/comment_label"
+                    android:id="@+id/accommodation_comment_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Comment"
@@ -460,7 +460,7 @@
                     android:layout_marginBottom="8dp"/>
 
                 <EditText
-                    android:id="@+id/comment_input"
+                    android:id="@+id/accommodation_comment_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Write your comment"
@@ -471,7 +471,7 @@
 
                 <!-- Submit Button -->
                 <Button
-                    android:id="@+id/submit_review_button"
+                    android:id="@+id/submit_accommodation_review_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Submit"
