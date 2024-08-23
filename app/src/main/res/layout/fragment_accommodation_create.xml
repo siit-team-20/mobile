@@ -152,6 +152,35 @@
                     android:text="Per day"/>
             </RadioGroup>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Acceptance"
+                android:id="@+id/accommodationAcceptanceText"
+                android:textStyle="bold"
+                android:paddingTop="16dp"
+                android:visibility="gone"/>
+
+            <RadioGroup
+                android:id="@+id/accommodationAcceptance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RadioButton
+                    android:id="@+id/automatic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Automatic"
+                    android:checked="true"/>
+                <RadioButton
+                    android:id="@+id/manual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manual"/>
+            </RadioGroup>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
