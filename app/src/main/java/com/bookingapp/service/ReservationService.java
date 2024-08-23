@@ -71,6 +71,13 @@ public interface ReservationService {
             "Content-Type: application/json",
     })
     @GET("api/accommodations/reservations")
+    Call<ArrayList<ReservationWithAccommodation>> get(@Query("ownerEmail") String ownerEmail, @Query("status") String status, @Query("guestEmail") String guestEmail);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @GET("api/accommodations/reservations")
     Call<ArrayList<ReservationWithAccommodation>> getGuestReservations(@Query("guestEmail") String guestEmail, @Query("status") String status);
 
     @Headers({
