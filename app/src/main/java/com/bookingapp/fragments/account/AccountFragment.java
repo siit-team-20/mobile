@@ -12,10 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -145,6 +149,48 @@ public class AccountFragment extends Fragment {
         newPasswordLayout = (RelativeLayout) binding.newPasswordLayout;
         confirmPasswordLayout = (RelativeLayout) binding.confirmPasswordLayout;
 
+        try {
+            if (UserInfo.getToken() != null) {
+                if (!UserInfo.getEmail().equals(userEmail)) {
+                    editButton.setVisibility(View.GONE);
+                    logOutButton.setVisibility(View.GONE);
+                }
+                if (!UserInfo.getEmail().equals(userEmail) || UserInfo.getType().equals(UserType.Admin)) {
+                    deleteButton.setVisibility(View.GONE);
+                }
+            }
+            else {
+                deleteButton.setVisibility(View.GONE);
+                editButton.setVisibility(View.GONE);
+                logOutButton.setVisibility(View.GONE);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserInfo.setToken(null);
+                TextView user = getActivity().findViewById(R.id.user_name);
+                user.setText("");
+
+                com.google.android.material.navigation.NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
+                Menu menu = navigationView.getMenu();
+                for (int i = 0; i < menu.size(); i++) {
+                    MenuItem menuItem = menu.getItem(i);
+                    if (menuItem.getTitle().equals("Accommodations") ||
+                            menuItem.getTitle().equals("Register") ||
+                            menuItem.getTitle().equals("Login")
+                    )
+                        menuItem.setVisible(true);
+                    else
+                        menuItem.setVisible(false);
+                }
+                NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
+                navController.popBackStack();
+            }
+        });
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,11 +199,12 @@ public class AccountFragment extends Fragment {
                 surnameText.setEnabled(true);
                 addressText.setEnabled(true);
                 phoneText.setEnabled(true);
+                editButton.setVisibility(View.GONE);
                 saveChangesButton.setVisibility(View.VISIBLE);
                 cancelButton.setVisibility(View.VISIBLE);
                 changePasswordButton.setVisibility(View.VISIBLE);
-                deleteButton.setVisibility(View.INVISIBLE);
-                logOutButton.setVisibility(View.INVISIBLE);
+                deleteButton.setVisibility(View.GONE);
+                logOutButton.setVisibility(View.GONE);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -167,12 +214,13 @@ public class AccountFragment extends Fragment {
                 surnameText.setEnabled(false);
                 addressText.setEnabled(false);
                 phoneText.setEnabled(false);
-                saveChangesButton.setVisibility(View.INVISIBLE);
-                cancelButton.setVisibility(View.INVISIBLE);
-                changePasswordButton.setVisibility(View.INVISIBLE);
-                changePasswordButton.setVisibility(View.INVISIBLE);
-                newPasswordLayout.setVisibility(View.INVISIBLE);
-                confirmPasswordLayout.setVisibility(View.INVISIBLE);
+                editButton.setVisibility(View.VISIBLE);
+                saveChangesButton.setVisibility(View.GONE);
+                cancelButton.setVisibility(View.GONE);
+                changePasswordButton.setVisibility(View.GONE);
+                changePasswordButton.setVisibility(View.GONE);
+                newPasswordLayout.setVisibility(View.GONE);
+                confirmPasswordLayout.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.VISIBLE);
                 logOutButton.setVisibility(View.VISIBLE);
             }
