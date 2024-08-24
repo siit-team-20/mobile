@@ -346,7 +346,19 @@ public class AccountFragment extends Fragment {
                             User user1 = response.body();
                             System.out.println(user1);
                             UserInfo.setToken(response.body().getToken());
-
+                            nameText.setEnabled(false);
+                            surnameText.setEnabled(false);
+                            addressText.setEnabled(false);
+                            phoneText.setEnabled(false);
+                            editButton.setVisibility(View.VISIBLE);
+                            saveChangesButton.setVisibility(View.GONE);
+                            cancelButton.setVisibility(View.GONE);
+                            changePasswordButton.setVisibility(View.GONE);
+                            changePasswordButton.setVisibility(View.GONE);
+                            newPasswordLayout.setVisibility(View.GONE);
+                            confirmPasswordLayout.setVisibility(View.GONE);
+                            deleteButton.setVisibility(View.VISIBLE);
+                            logOutButton.setVisibility(View.VISIBLE);
                             //getActivity().getSupportFragmentManager().popBackStack();
                         }else{
                             Log.d("REZ","Meesage recieved: "+response.code());
