@@ -251,10 +251,12 @@ public class AccountFragment extends Fragment {
                 Call<Report> reportCall = ServiceUtils.reportService.add(report);
                 reportCall.enqueue(new Callback<Report>() {
                     @Override
-                    public void onResponse(Call<Report> call, Response<Report> response) {
+                    public void onResponse(@NonNull Call<Report> call, @NonNull Response<Report> response) {
                         if (response.code() == 200){
                             Log.d("Reservations-Update","Message received");
                             System.out.println(response.body());
+                            Toast.makeText(getContext(), "Successfully reported user!", Toast.LENGTH_SHORT).show();
+
                         }
                         else {
                             Log.d("Reservations-Update","Message received: "+response.code());
@@ -262,7 +264,7 @@ public class AccountFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<Report> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Report> call, @NonNull Throwable t) {
                         Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
                     }
                 });
@@ -346,6 +348,7 @@ public class AccountFragment extends Fragment {
                             User user1 = response.body();
                             System.out.println(user1);
                             UserInfo.setToken(response.body().getToken());
+                            Toast.makeText(getContext(), "Successfully updated your profile!", Toast.LENGTH_SHORT).show();
 
                             //getActivity().getSupportFragmentManager().popBackStack();
                         }else{

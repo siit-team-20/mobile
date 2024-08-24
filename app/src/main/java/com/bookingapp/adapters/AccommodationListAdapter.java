@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -177,6 +178,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                                                 if (response.code() == 201){
                                                     Log.d("Favourite Accommodation-New","Message received");
                                                     System.out.println(response.body());
+                                                    Toast.makeText(getContext(), "Successfully added to favourites!", Toast.LENGTH_SHORT).show();
                                                 }
                                                 else {
                                                     Log.d("Favourite Accommodation-New","Message received: "+response.code());
@@ -188,6 +190,10 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
                                                 Log.d("Favourite Accommodation-New", t.getMessage() != null?t.getMessage():"error");
                                             }
                                         });
+                                    }
+                                    else {
+                                        Toast.makeText(getContext(), "Accommodation is already in favourites!", Toast.LENGTH_SHORT).show();
+
                                     }
 
                                 }

@@ -645,6 +645,8 @@ public class AccommodationCreateFragment extends Fragment {
                             @Override
                             public void onResponse(@NonNull Call<AccommodationRequest> call, @NonNull Response<AccommodationRequest> response) {
                                 if (response.isSuccessful()) {
+                                    Toast.makeText(getContext(), "Successfully created accommodation!", Toast.LENGTH_SHORT).show();
+
 //                                    NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
 //                                    navController.navigate(R.id.nav_accommodations);
                                 } else {

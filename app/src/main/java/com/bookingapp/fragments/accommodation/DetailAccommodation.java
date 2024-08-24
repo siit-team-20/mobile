@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bookingapp.R;
 import com.bookingapp.fragments.FragmentTransition;
@@ -270,6 +271,8 @@ public class DetailAccommodation extends Fragment {
                             System.out.println(response.body());
                             accommodationRatingBar.setRating(0);
                             accommodationCommentEt.setText("");
+                            Toast.makeText(getContext(), "Successfully left a review!", Toast.LENGTH_SHORT).show();
+
                             Notification notification = new Notification();
                             notification.setUserEmail(accommodation.getOwnerEmail());
                             try {
@@ -337,6 +340,8 @@ public class DetailAccommodation extends Fragment {
                             System.out.println(response.body());
                             ownerRatingBar.setRating(0);
                             ownerCommentEt.setText("");
+                            Toast.makeText(getContext(), "Successfully left a review!", Toast.LENGTH_SHORT).show();
+
                             Notification notification = new Notification();
                             notification.setUserEmail(accommodation.getOwnerEmail());
                             try {
@@ -482,6 +487,8 @@ public class DetailAccommodation extends Fragment {
                             reservationStartDateButton.setText("Pick Start Date");
                             reservationEndDateButton.setText("Pick End Date");
                             reservationGuestNumber.setText("");
+                            Toast.makeText(getContext(), "Successfully made a reservation!", Toast.LENGTH_SHORT).show();
+
                             Notification notification = new Notification();
                             notification.setUserEmail(accommodation.getOwnerEmail());
                             try {
