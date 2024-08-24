@@ -34,7 +34,9 @@ import com.bookingapp.databinding.FragmentAccountBinding;
 import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.fragments.accommodation.AccommodationListFragment;
 import com.bookingapp.model.Accommodation;
+import com.bookingapp.model.AccommodationReview;
 import com.bookingapp.model.OwnerReview;
+import com.bookingapp.model.Rating;
 import com.bookingapp.model.Report;
 import com.bookingapp.model.Reservation;
 import com.bookingapp.model.ReservationStatus;
@@ -62,6 +64,7 @@ public class AccountFragment extends Fragment {
     private ActivityResultLauncher<String> mPermissionResult;
     private static final String ARG_USER_EMAIL = "userEmail";
     private String userEmail;
+    private TextView averageRating;
 
     private EditText nameText;
     private EditText surnameText;
@@ -133,6 +136,7 @@ public class AccountFragment extends Fragment {
         //passwordText = (EditText) binding.password;
         addressText = (EditText) binding.address;
         phoneText = (EditText) binding.phone;
+        averageRating = (TextView)binding.averageRating;
 
         /*if(updateUser != null) {
             nameText.setText(updateUser.getName());
@@ -572,6 +576,8 @@ public class AccountFragment extends Fragment {
                     emailText.setText(user.getEmail());
                     addressText.setText(user.getAddress());
                     phoneText.setText(user.getPhone());
+
+
                     FragmentTransition.to(OwnerReviewListFragment.newInstance(userEmail), getActivity(), false, R.id.scroll_owner_reviews_list);
 
                 }
@@ -583,6 +589,47 @@ public class AccountFragment extends Fragment {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+        Call<ArrayList<OwnerReview>> callResponse = ServiceUtils.ownerReviewService.get(userEmail,false);
+        callResponse.enqueue(new Callback<ArrayList<OwnerReview>>() {
+            @Override
+            public void onResponse(Call<ArrayList<OwnerReview>> call, Response<ArrayList<OwnerReview>> response) {
+                if (response.code() == 200) {
+                    Log.d("Reviews-Get","Message received");
+                    System.out.println(response.body());
+                    List<OwnerReview> ownerReviews = response.body();
+                    Long counter = 0L;
+                    Long sum = 0L;
+                    for(int i = 0; i < ownerReviews.size();i++){
+                        counter++;
+                        if(ownerReviews.get(i).getRating().equals(Rating.one))
+                            sum += 1;
+                        else if(ownerReviews.get(i).getRating().equals(Rating.two))
+                            sum += 2;
+                        else if(ownerReviews.get(i).getRating().equals(Rating.three))
+                            sum += 3;
+                        else if(ownerReviews.get(i).getRating().equals(Rating.four))
+                            sum += 4;
+                        else if(ownerReviews.get(i).getRating().equals(Rating.five))
+                            sum += 5;
+                    }
+                    if(counter == 0L){
+                        averageRating.setText("None");
+                        return;
+                    }
+                    averageRating.setText(""+sum/counter);
+                }
+                else {
+                    Log.d("Reviews-Get","Message received: "+response.code());
+                    averageRating.setText("None");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<OwnerReview>> call, Throwable t) {
+                Log.d("Reviews-Get", t.getMessage() != null?t.getMessage():"error");
+                averageRating.setText("None");
             }
         });
     }
