@@ -195,11 +195,11 @@ public class DetailAccommodation extends Fragment {
                                 NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
                                 com.google.android.material.navigation.NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
                                 Menu menu = navigationView.getMenu();
-                                MenuItem menuItem = menu.findItem(R.id.nav_account);
+                                MenuItem menuItem = menu.findItem(R.id.nav_user_account);
                                 NavigationUI.onNavDestinationSelected(menuItem, navController);
                                 Bundle args = new Bundle();
                                 args.putString("userEmail", accommodation.getOwnerEmail());
-                                navController.navigate(R.id.nav_account, args,
+                                navController.navigate(R.id.nav_user_account, args,
                                         new NavOptions.Builder()
                                         .setEnterAnim(android.R.animator.fade_in)
                                         .setExitAnim(android.R.animator.fade_out).setPopUpTo(R.id.nav_accommodations, false)
@@ -270,6 +270,39 @@ public class DetailAccommodation extends Fragment {
                             System.out.println(response.body());
                             accommodationRatingBar.setRating(0);
                             accommodationCommentEt.setText("");
+                            Notification notification = new Notification();
+                            notification.setUserEmail(accommodation.getOwnerEmail());
+                            try {
+                                notification.setOtherUserEmail(UserInfo.getEmail());
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            notification.setType(NotificationType.AccommodationReviewAdded);
+                            List<Integer> now = new ArrayList<>();
+                            now.add(LocalDateTime.now().getYear());
+                            now.add(LocalDateTime.now().getMonthValue());
+                            now.add(LocalDateTime.now().getDayOfMonth());
+                            now.add(LocalDateTime.now().getHour());
+                            now.add(LocalDateTime.now().getMinute());
+                            notification.setCreatedAt(now);
+                            Call<Notification> notificationCall = ServiceUtils.notificationService.add(notification);
+                            notificationCall.enqueue(new Callback<Notification>() {
+                                @Override
+                                public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                    if (response.code() == 201) {
+                                        Log.d("Notification-New","Message received");
+                                        System.out.println(response.body());
+                                    }
+                                    else {
+                                        Log.d("Notification-New","Message received: "+response.code());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Notification> call, Throwable t) {
+                                    Log.d("Notification-New", t.getMessage() != null?t.getMessage():"error");
+                                }
+                            });
                         }
                         else {
                             Log.d("Accommodation Review - Create","Message received: "+response.code());
@@ -304,6 +337,39 @@ public class DetailAccommodation extends Fragment {
                             System.out.println(response.body());
                             ownerRatingBar.setRating(0);
                             ownerCommentEt.setText("");
+                            Notification notification = new Notification();
+                            notification.setUserEmail(accommodation.getOwnerEmail());
+                            try {
+                                notification.setOtherUserEmail(UserInfo.getEmail());
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            notification.setType(NotificationType.OwnerReviewAdded);
+                            List<Integer> now = new ArrayList<>();
+                            now.add(LocalDateTime.now().getYear());
+                            now.add(LocalDateTime.now().getMonthValue());
+                            now.add(LocalDateTime.now().getDayOfMonth());
+                            now.add(LocalDateTime.now().getHour());
+                            now.add(LocalDateTime.now().getMinute());
+                            notification.setCreatedAt(now);
+                            Call<Notification> notificationCall = ServiceUtils.notificationService.add(notification);
+                            notificationCall.enqueue(new Callback<Notification>() {
+                                @Override
+                                public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                    if (response.code() == 201) {
+                                        Log.d("Notification-New","Message received");
+                                        System.out.println(response.body());
+                                    }
+                                    else {
+                                        Log.d("Notification-New","Message received: "+response.code());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Notification> call, Throwable t) {
+                                    Log.d("Notification-New", t.getMessage() != null?t.getMessage():"error");
+                                }
+                            });
                         }
                         else {
                             Log.d("Owner Review - Create","Message received: "+response.code());

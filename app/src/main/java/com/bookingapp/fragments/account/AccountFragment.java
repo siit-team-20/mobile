@@ -34,7 +34,12 @@ import com.bookingapp.databinding.FragmentAccountBinding;
 import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.fragments.accommodation.AccommodationListFragment;
 import com.bookingapp.model.Accommodation;
+import com.bookingapp.model.AccommodationReview;
+import com.bookingapp.model.OwnerReview;
+import com.bookingapp.model.Rating;
+import com.bookingapp.model.Report;
 import com.bookingapp.model.Reservation;
+import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
 import com.bookingapp.model.User;
 import com.bookingapp.model.UserType;
@@ -59,6 +64,7 @@ public class AccountFragment extends Fragment {
     private ActivityResultLauncher<String> mPermissionResult;
     private static final String ARG_USER_EMAIL = "userEmail";
     private String userEmail;
+    private TextView averageRating;
 
     private EditText nameText;
     private EditText surnameText;
@@ -75,6 +81,7 @@ public class AccountFragment extends Fragment {
     private Button cancelButton;
     private RelativeLayout newPasswordLayout;
     private RelativeLayout confirmPasswordLayout;
+    private Button reportButton;
 /*
     private static final String ARG_NAME = "name";
     private static final String ARG_SURNAME = "surname";
@@ -126,9 +133,11 @@ public class AccountFragment extends Fragment {
         nameText = (EditText) binding.name;
         surnameText = (EditText) binding.surname;
         emailText = (EditText) binding.email;
-        //passwordText = (EditText) binding.password;
+        newPasswordText = (EditText) binding.newPassword;
+        confirmPasswordText = (EditText) binding.confirmPassword;
         addressText = (EditText) binding.address;
         phoneText = (EditText) binding.phone;
+        averageRating = (TextView)binding.averageRating;
 
         /*if(updateUser != null) {
             nameText.setText(updateUser.getName());
@@ -148,6 +157,7 @@ public class AccountFragment extends Fragment {
         cancelButton = (Button) binding.cancelButton;
         newPasswordLayout = (RelativeLayout) binding.newPasswordLayout;
         confirmPasswordLayout = (RelativeLayout) binding.confirmPasswordLayout;
+        reportButton = binding.reportButton;
 
         try {
             if (UserInfo.getToken() != null) {
@@ -167,6 +177,97 @@ public class AccountFragment extends Fragment {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
+        try {
+            if (UserInfo.getType().equals(UserType.Admin) || UserInfo.getEmail().equals(userEmail)) {
+                reportButton.setVisibility(View.GONE);
+            }
+            else if (UserInfo.getType().equals(UserType.Guest)) {
+                Call<ArrayList<ReservationWithAccommodation>> reservationWithAccommodationCall = ServiceUtils.reservationService.get(userEmail, ReservationStatus.Finished.toString(), UserInfo.getEmail());
+                reservationWithAccommodationCall.enqueue(new Callback<ArrayList<ReservationWithAccommodation>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<ReservationWithAccommodation>> call, Response<ArrayList<ReservationWithAccommodation>> response) {
+                        if (response.code() == 200){
+                            Log.d("Reservations-Update","Message received");
+                            System.out.println(response.body());
+                            if (response.body().size() > 0)
+                                reportButton.setVisibility(View.VISIBLE);
+                            else
+                                reportButton.setVisibility(View.GONE);
+                        }
+                        else {
+                            reportButton.setVisibility(View.GONE);
+                            Log.d("Reservations-Update","Message received: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<ReservationWithAccommodation>> call, Throwable t) {
+                        reportButton.setVisibility(View.GONE);
+                        Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                    }
+                });
+            }
+            else if (UserInfo.getType().equals(UserType.Owner)) {
+                Call<ArrayList<ReservationWithAccommodation>> reservationWithAccommodationCall = ServiceUtils.reservationService.get(UserInfo.getEmail(), ReservationStatus.Finished.toString(), userEmail);
+                reservationWithAccommodationCall.enqueue(new Callback<ArrayList<ReservationWithAccommodation>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<ReservationWithAccommodation>> call, Response<ArrayList<ReservationWithAccommodation>> response) {
+                        if (response.code() == 200){
+                            Log.d("Reservations-Update","Message received");
+                            System.out.println(response.body());
+                            if (response.body().size() > 0)
+                                reportButton.setVisibility(View.VISIBLE);
+                            else
+                                reportButton.setVisibility(View.GONE);
+                        }
+                        else {
+                            reportButton.setVisibility(View.GONE);
+                            Log.d("Reservations-Update","Message received: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<ReservationWithAccommodation>> call, Throwable t) {
+                        reportButton.setVisibility(View.GONE);
+                        Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                    }
+                });
+            }
+        } catch (Exception e) {
+            reportButton.setVisibility(View.GONE);
+        }
+
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Report report = new Report();
+                try {
+                    report.setReporterEmail(UserInfo.getEmail());
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                report.setReportedEmail(userEmail);
+                Call<Report> reportCall = ServiceUtils.reportService.add(report);
+                reportCall.enqueue(new Callback<Report>() {
+                    @Override
+                    public void onResponse(Call<Report> call, Response<Report> response) {
+                        if (response.code() == 200){
+                            Log.d("Reservations-Update","Message received");
+                            System.out.println(response.body());
+                        }
+                        else {
+                            Log.d("Reservations-Update","Message received: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Report> call, Throwable t) {
+                        Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                    }
+                });
+            }
+        });
 
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -476,6 +577,8 @@ public class AccountFragment extends Fragment {
                     emailText.setText(user.getEmail());
                     addressText.setText(user.getAddress());
                     phoneText.setText(user.getPhone());
+
+
                     FragmentTransition.to(OwnerReviewListFragment.newInstance(userEmail), getActivity(), false, R.id.scroll_owner_reviews_list);
 
                 }
@@ -487,6 +590,47 @@ public class AccountFragment extends Fragment {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+            }
+        });
+        Call<ArrayList<OwnerReview>> callResponse = ServiceUtils.ownerReviewService.get(userEmail,false);
+        callResponse.enqueue(new Callback<ArrayList<OwnerReview>>() {
+            @Override
+            public void onResponse(Call<ArrayList<OwnerReview>> call, Response<ArrayList<OwnerReview>> response) {
+                if (response.code() == 200) {
+                    Log.d("Reviews-Get","Message received");
+                    System.out.println(response.body());
+                    List<OwnerReview> ownerReviews = response.body();
+                    Long counter = 0L;
+                    Long sum = 0L;
+                    for(int i = 0; i < ownerReviews.size();i++){
+                        counter++;
+                        if(ownerReviews.get(i).getRating().equals(Rating.one))
+                            sum += 1;
+                        else if(ownerReviews.get(i).getRating().equals(Rating.two))
+                            sum += 2;
+                        else if(ownerReviews.get(i).getRating().equals(Rating.three))
+                            sum += 3;
+                        else if(ownerReviews.get(i).getRating().equals(Rating.four))
+                            sum += 4;
+                        else if(ownerReviews.get(i).getRating().equals(Rating.five))
+                            sum += 5;
+                    }
+                    if(counter == 0L){
+                        averageRating.setText("None");
+                        return;
+                    }
+                    averageRating.setText(""+sum/counter);
+                }
+                else {
+                    Log.d("Reviews-Get","Message received: "+response.code());
+                    averageRating.setText("None");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<OwnerReview>> call, Throwable t) {
+                Log.d("Reviews-Get", t.getMessage() != null?t.getMessage():"error");
+                averageRating.setText("None");
             }
         });
     }

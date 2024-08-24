@@ -2,7 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/accommodation_card_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/accommodation_image"
@@ -34,12 +39,27 @@
                 android:textSize="20sp"
                 android:textStyle="bold"></TextView>
 
-            <TextView
-                android:id="@+id/accommodation_location"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/accommodation_location"></TextView>
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/accommodation_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/accommodation_location" />
+
+                <TextView
+                    android:id="@+id/accommodation_average_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Average Rating: 3"
+                    android:layout_marginTop="5dp"
+                    android:textSize="11sp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -55,5 +75,6 @@
 
         </ImageButton>
     </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -141,14 +141,15 @@ public class HomeActivity extends AppCompatActivity {
 
         mAppBarConfiguration = new AppBarConfiguration
                 .Builder(
-                    R.id.nav_accommodations, R.id.nav_accommodation_detail,
-                    R.id.nav_reservations, R.id.nav_create_accommodation,
-                    R.id.nav_login, R.id.nav_register,
-                    R.id.nav_account, R.id.nav_my_accommodations,
-                    R.id.nav_favourite_accommodations, R.id.nav_notifications,
-                    R.id.nav_accommodation_requests, R.id.nav_accommodation_reviews,
-                    R.id.nav_owner_reviews
-                )
+                R.id.nav_accommodations, R.id.nav_accommodation_detail,
+                R.id.nav_reservations, R.id.nav_create_accommodation,
+                R.id.nav_login, R.id.nav_register,
+                R.id.nav_account, R.id.nav_my_accommodations,
+                R.id.nav_favourite_accommodations, R.id.nav_notifications,
+                R.id.nav_accommodation_requests, R.id.nav_accommodation_reviews,
+                R.id.nav_owner_reviews, R.id.nav_reports,
+                R.id.nav_user_account
+        )
                 .setOpenableLayout(drawer)
                 .build();
 

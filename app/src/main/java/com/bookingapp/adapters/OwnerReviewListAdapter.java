@@ -17,8 +17,11 @@ import androidx.fragment.app.FragmentManager;
 import com.bookingapp.R;
 import com.bookingapp.model.AccommodationReview;
 import com.bookingapp.model.OwnerReview;
+import com.bookingapp.model.UserType;
 import com.bookingapp.service.ServiceUtils;
 import com.bookingapp.service.UserInfo;
+
+import org.json.JSONException;
 
 import java.security.acl.Owner;
 import java.util.ArrayList;
@@ -33,12 +36,15 @@ public class OwnerReviewListAdapter extends ArrayAdapter<OwnerReview> {
     private FragmentManager fragmentManager;
     private boolean[] guestDeleteButtonVisibility = null;
 
+    private boolean[] ownerReportButtonVisibility = null;
+
     public OwnerReviewListAdapter(Activity context, FragmentManager fragmentManager, ArrayList<OwnerReview> ownerReviews){
         super(context, R.layout.owner_review_card, ownerReviews);
         aOwnersReviews = ownerReviews;
         activity = context;
         fragmentManager = fragmentManager;
         this.guestDeleteButtonVisibility = new boolean[ownerReviews.size()];
+        this.ownerReportButtonVisibility = new boolean[ownerReviews.size()];
     }
     @Override
     public int getCount() {
@@ -62,6 +68,7 @@ public class OwnerReviewListAdapter extends ArrayAdapter<OwnerReview> {
         TextView rating = convertView.findViewById(R.id.owner_review_rating_value);
         TextView submitDate = convertView.findViewById(R.id.owner_review_submit_date);
         Button deleteButton = convertView.findViewById(R.id.owner_review_delete_button);
+        Button reportButton = convertView.findViewById(R.id.owner_review_report_button);
 
         if(ownerReview != null){
             guestEmail.setText(ownerReview.getGuestEmail());
@@ -75,10 +82,24 @@ public class OwnerReviewListAdapter extends ArrayAdapter<OwnerReview> {
             } catch (Exception e) {
                 guestDeleteButtonVisibility[position] = false;
             }
+            try {
+                if (UserInfo.getEmail().equals(ownerReview.getOwnerEmail()) && !ownerReview.getIsReported()) {
+                    ownerReportButtonVisibility[position] = true;
+                }
+            } catch (Exception e) {
+                ownerReportButtonVisibility[position] = false;
+            }
+
             if(guestDeleteButtonVisibility[position]) {
                 deleteButton.setVisibility(View.VISIBLE);
             } else {
                 deleteButton.setVisibility(View.GONE);
+            }
+
+            if(ownerReportButtonVisibility[position]) {
+                reportButton.setVisibility(View.VISIBLE);
+            } else {
+                reportButton.setVisibility(View.GONE);
             }
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,6 +120,60 @@ public class OwnerReviewListAdapter extends ArrayAdapter<OwnerReview> {
                                             System.out.println(response.body());
                                             aOwnersReviews = response.body();
                                             guestDeleteButtonVisibility = new boolean[aOwnersReviews.size()];
+                                            notifyDataSetChanged();
+                                        }
+                                        else {
+                                            Log.d("Reservations-Update","Message received: "+response.code());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ArrayList<OwnerReview>> call, Throwable t) {
+                                        Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                                    }
+                                });
+                            }
+                            else {
+                                Log.d("REZ","Message received: "+response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<OwnerReview> call, @NonNull Throwable t) {
+                            Log.d("REZ", t.getMessage() != null?t.getMessage():"error");
+                        }
+                    });
+                }
+            });
+
+            reportButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OwnerReview updatedOwnerReview = new OwnerReview();
+                    updatedOwnerReview.setId(ownerReview.getId());
+                    updatedOwnerReview.setGuestEmail(ownerReview.getGuestEmail());
+                    updatedOwnerReview.setOwnerEmail(ownerReview.getOwnerEmail());
+                    updatedOwnerReview.setComment(ownerReview.getComment());
+                    updatedOwnerReview.setRating(ownerReview.getRating());
+                    updatedOwnerReview.setIsReported(true);
+                    updatedOwnerReview.setSubmitDate(ownerReview.getSubmitDate());
+                    Call<OwnerReview> call = ServiceUtils.ownerReviewService.update(ownerReview.getId(), updatedOwnerReview);
+                    call.enqueue(new Callback<OwnerReview>() {
+                        @Override
+                        public void onResponse(@NonNull Call<OwnerReview> call, Response<OwnerReview> response) {
+                            if (response.isSuccessful()) {
+                                Log.d("REZ","Message received");
+                                System.out.println(response.body());
+                                Call<ArrayList<OwnerReview>> callReviews = ServiceUtils.ownerReviewService.get(ownerReview.getOwnerEmail(), false);
+                                callReviews.enqueue(new Callback<ArrayList<OwnerReview>>() {
+                                    @Override
+                                    public void onResponse(Call<ArrayList<OwnerReview>> call, Response<ArrayList<OwnerReview>> response) {
+                                        if (response.code() == 200){
+                                            Log.d("Reservations-Update","Message received");
+                                            System.out.println(response.body());
+                                            aOwnersReviews = response.body();
+                                            guestDeleteButtonVisibility = new boolean[aOwnersReviews.size()];
+                                            ownerReportButtonVisibility = new boolean[aOwnersReviews.size()];
                                             notifyDataSetChanged();
                                         }
                                         else {
