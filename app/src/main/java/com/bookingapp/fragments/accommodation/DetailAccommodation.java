@@ -195,11 +195,11 @@ public class DetailAccommodation extends Fragment {
                                 NavController navController = Navigation.findNavController(getActivity(), R.id.fragment_nav_content_main);
                                 com.google.android.material.navigation.NavigationView navigationView = getActivity().findViewById(R.id.nav_view);
                                 Menu menu = navigationView.getMenu();
-                                MenuItem menuItem = menu.findItem(R.id.nav_account);
+                                MenuItem menuItem = menu.findItem(R.id.nav_user_account);
                                 NavigationUI.onNavDestinationSelected(menuItem, navController);
                                 Bundle args = new Bundle();
                                 args.putString("userEmail", accommodation.getOwnerEmail());
-                                navController.navigate(R.id.nav_account, args,
+                                navController.navigate(R.id.nav_user_account, args,
                                         new NavOptions.Builder()
                                         .setEnterAnim(android.R.animator.fade_in)
                                         .setExitAnim(android.R.animator.fade_out).setPopUpTo(R.id.nav_accommodations, false)

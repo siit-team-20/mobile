@@ -105,6 +105,19 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_user_account"
+        android:name="com.bookingapp.fragments.account.AccountFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_account"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true"
+        >
+        <argument
+            android:name="userEmail"
+            app:argType="string"/>
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_accommodation_detail"
         android:name="com.bookingapp.fragments.accommodation.DetailAccommodation"
         android:label="Detail"
