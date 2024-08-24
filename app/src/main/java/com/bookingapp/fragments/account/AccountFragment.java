@@ -133,7 +133,8 @@ public class AccountFragment extends Fragment {
         nameText = (EditText) binding.name;
         surnameText = (EditText) binding.surname;
         emailText = (EditText) binding.email;
-        //passwordText = (EditText) binding.password;
+        newPasswordText = (EditText) binding.newPassword;
+        confirmPasswordText = (EditText) binding.confirmPassword;
         addressText = (EditText) binding.address;
         phoneText = (EditText) binding.phone;
         averageRating = (TextView)binding.averageRating;
