@@ -145,7 +145,8 @@ public class HomeActivity extends AppCompatActivity {
                     R.id.nav_reservations, R.id.nav_create_accommodation,
                     R.id.nav_login, R.id.nav_register,
                     R.id.nav_account, R.id.nav_my_accommodations,
-                    R.id.nav_favourite_accommodations, R.id.nav_notifications
+                    R.id.nav_favourite_accommodations, R.id.nav_notifications,
+                    R.id.nav_accommodation_requests
                 )
                 .setOpenableLayout(drawer)
                 .build();
