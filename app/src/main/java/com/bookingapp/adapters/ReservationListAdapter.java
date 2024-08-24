@@ -49,6 +49,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
     private Activity activity;
     private FragmentManager fragmentManager;
     private boolean[] viewVisibility = null;
+    private boolean[] acceptRejectViewVisibility = null;
 
     public ReservationListAdapter(Activity context, FragmentManager fragmentManager, ArrayList<ReservationWithAccommodation> reservations) {
         super(context, R.layout.reservation_card, reservations);
@@ -56,6 +57,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
         activity = context;
         fragmentManager = fragmentManager;
         this.viewVisibility = new boolean[reservations.size()];
+        this.acceptRejectViewVisibility = new boolean[reservations.size()];
     }
 
     @Override
@@ -96,6 +98,8 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
         TextView deadline = convertView.findViewById(R.id.reservation_cancellation_deadline);
         TextView cancelledTimes = convertView.findViewById(R.id.reservation_cancelled_times);
         Button cancelButton = convertView.findViewById(R.id.reservation_cancel_button);
+        Button acceptButton = convertView.findViewById(R.id.reservation_accept_button);
+        Button rejectButton = convertView.findViewById(R.id.reservation_reject_button);
 
         if(reservation != null) {
             //String uri = "@drawable/" + product.getImagePath();
@@ -161,6 +165,24 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
+            try {
+                if(reservation.getStatus().equals(ReservationStatus.Waiting) && UserInfo.getType().equals(UserType.Owner)) {
+                    acceptRejectViewVisibility[position] = true;
+                }
+                else {
+                    acceptRejectViewVisibility[position] = false;
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            if(acceptRejectViewVisibility[position]){
+                acceptButton.setVisibility(View.VISIBLE);
+                rejectButton.setVisibility(View.VISIBLE);
+            }
+            else {
+                acceptButton.setVisibility(View.GONE);
+                rejectButton.setVisibility(View.GONE);
+            }
             if(viewVisibility[position]) {
                 cancelButton.setVisibility(View.VISIBLE);
             } else {
@@ -181,7 +203,7 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
                     Call<Reservation> call = ServiceUtils.reservationService.update(res.getId(), res);
                     call.enqueue(new Callback<Reservation>() {
                         @Override
-                        public void onResponse(Call<Reservation> call, Response<Reservation> response) {
+                        public void onResponse(@NonNull Call<Reservation> call, @NonNull Response<Reservation> response) {
                             if (response.code() == 200){
                                 Log.d("Reservations-Update","Message received");
                                 System.out.println(response.body());
@@ -200,8 +222,89 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
                         }
 
                         @Override
-                        public void onFailure(Call<Reservation> call, Throwable t) {
+                        public void onFailure(@NonNull Call<Reservation> call, @NonNull Throwable t) {
                             Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                        }
+                    });
+                }
+            });
+            acceptButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Reservation res = new Reservation();
+                    res.setId(reservation.getId());
+                    res.setGuestEmail(reservation.getGuestEmail());
+                    res.setAccommodationId(reservation.getAccommodation().getId());
+                    res.setDate(reservation.getDate());
+                    res.setDays(reservation.getDays());
+                    res.setGuestNumber(reservation.getGuestNumber());
+                    res.setPrice(reservation.getPrice());
+                    res.setStatus(ReservationStatus.Approved);
+                    Call<Reservation> call = ServiceUtils.reservationService.update(res.getId(), res);
+                    call.enqueue(new Callback<Reservation>() {
+                        @Override
+                        public void onResponse(@NonNull Call<Reservation> call, @NonNull Response<Reservation> response) {
+                            if (response.code() == 200){
+                                Log.d("Reservations-Update","Message received");
+                                reservation.setStatus(ReservationStatus.Approved);
+                                for (int i = 0; i < rReservations.size(); i++) {
+                                    if (rReservations.get(i).getId() == res.getId()) {
+                                        rReservations.set(i, reservation);
+                                        break;
+                                    }
+                                }
+                                notifyDataSetChanged();
+                            }
+                            else {
+                                Log.d("Reservations-Accept","Message received: "+response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<Reservation> call, @NonNull Throwable t) {
+                            Log.d("Reservations-Accept", t.getMessage() != null?t.getMessage():"error");
+                        }
+                    });
+
+
+                }
+            });
+            rejectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Reservation res = new Reservation();
+                    res.setId(reservation.getId());
+                    res.setGuestEmail(reservation.getGuestEmail());
+                    res.setAccommodationId(reservation.getAccommodation().getId());
+                    res.setDate(reservation.getDate());
+                    res.setDays(reservation.getDays());
+                    res.setGuestNumber(reservation.getGuestNumber());
+                    res.setPrice(reservation.getPrice());
+                    res.setStatus(ReservationStatus.Rejected);
+                    Call<Reservation> call = ServiceUtils.reservationService.update(res.getId(), res);
+                    call.enqueue(new Callback<Reservation>() {
+                        @Override
+                        public void onResponse(@NonNull Call<Reservation> call, @NonNull Response<Reservation> response) {
+                            if (response.code() == 200){
+                                Log.d("Reservations-Update","Message received");
+                                reservation.setStatus(ReservationStatus.Rejected);
+                                for (int i = 0; i < rReservations.size(); i++) {
+                                    if (rReservations.get(i).getId() == res.getId()) {
+                                        rReservations.set(i, reservation);
+                                        break;
+                                    }
+                                }
+                                notifyDataSetChanged();
+                            }
+                            else {
+                                Log.d("Reservations-Reject","Message received: "+response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<Reservation> call, @NonNull Throwable t) {
+                            Log.d("Reservations-Reject", t.getMessage() != null?t.getMessage():"error");
+
                         }
                     });
                 }

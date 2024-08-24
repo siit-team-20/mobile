@@ -265,8 +265,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="Cancel"
-            android:visibility="gone"></Button>
+            android:backgroundTint="@color/material_dynamic_secondary50"
+            android:visibility="gone"
+            android:text="Cancel"></Button>
+        <Button
+            android:id="@+id/reservation_accept_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:visibility="gone"
+            android:text="Accept"></Button>
+        <Button
+            android:id="@+id/reservation_reject_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:backgroundTint="#ba3c3c"
+            android:visibility="gone"
+            android:text="Reject"></Button>
     </RelativeLayout>
 
 </LinearLayout>

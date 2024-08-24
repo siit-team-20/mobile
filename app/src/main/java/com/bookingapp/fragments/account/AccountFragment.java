@@ -362,7 +362,7 @@ public class AccountFragment extends Fragment {
                 public void onResponse(@NonNull Call<ArrayList<ReservationWithAccommodation>> call, @NonNull Response<ArrayList<ReservationWithAccommodation>> response) {
                     if (response.isSuccessful() && response.body() != null) {
                         if (response.body().isEmpty())
-                            deleteWaitingReservationsAndAccount(user.getEmail(), "Guest");
+                            deleteWaitingReservationsAndAccount(user.getEmail(), "Owner");
                     } else {
                         Toast.makeText(getContext(), "You have future reservations!", Toast.LENGTH_LONG).show();
                     }
@@ -412,9 +412,9 @@ public class AccountFragment extends Fragment {
     private void deleteUserAccount(String email, String role) {
         //prvo brisemo smestaje za vlasnika
         if (role.equals("Owner")) {
-            ServiceUtils.accommodationService.delete(email).enqueue(new Callback<ArrayList<Accommodation>>() {
+            ServiceUtils.accommodationService.delete(email).enqueue(new Callback<Accommodation>() {
                 @Override
-                public void onResponse(@NonNull Call<ArrayList<Accommodation>> call, @NonNull Response<ArrayList<Accommodation>> response) {
+                public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
                     if (response.isSuccessful()) {
                         // Nakon brisanja smeštaja, brišemo nalog
                         deleteAccount(email);
@@ -422,7 +422,7 @@ public class AccountFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<ArrayList<Accommodation>> call, @NonNull Throwable t) {
+                public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
                     Log.d("REZ", t.getMessage() != null?t.getMessage():"error deleting accommodations");
                 }
             });

@@ -51,7 +51,7 @@ public interface AccommodationService {
             "Content-Type: application/json",
     })
     @DELETE("api/accommodations")
-    Call<ArrayList<Accommodation>> delete(@Query("ownerEmail") String ownerEmail);
+    Call<Accommodation> delete(@Query("ownerEmail") String ownerEmail);
 
     @Headers({
             "User-Agent: Mobile-Android",

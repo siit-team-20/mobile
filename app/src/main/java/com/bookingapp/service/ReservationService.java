@@ -110,4 +110,11 @@ public interface ReservationService {
     @PUT("api/accommodations/reservations/{id}")
     Call<Reservation> update(@Path("id") Long id, @Body Reservation accommodationReservation);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @PUT("api/accommodations/reservations")
+    Call<Reservation> updateNew(@Query("id") Long oldAccommodationId, @Query("") Long newAccommodationId);
+
 }
