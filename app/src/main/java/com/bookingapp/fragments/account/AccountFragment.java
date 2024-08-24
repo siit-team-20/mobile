@@ -35,6 +35,7 @@ import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.fragments.accommodation.AccommodationListFragment;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.OwnerReview;
+import com.bookingapp.model.Report;
 import com.bookingapp.model.Reservation;
 import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
@@ -235,7 +236,31 @@ public class AccountFragment extends Fragment {
         reportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Report report = new Report();
+                try {
+                    report.setReporterEmail(UserInfo.getEmail());
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                report.setReportedEmail(userEmail);
+                Call<Report> reportCall = ServiceUtils.reportService.add(report);
+                reportCall.enqueue(new Callback<Report>() {
+                    @Override
+                    public void onResponse(Call<Report> call, Response<Report> response) {
+                        if (response.code() == 200){
+                            Log.d("Reservations-Update","Message received");
+                            System.out.println(response.body());
+                        }
+                        else {
+                            Log.d("Reservations-Update","Message received: "+response.code());
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<Report> call, Throwable t) {
+                        Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                    }
+                });
             }
         });
 
