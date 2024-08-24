@@ -290,6 +290,39 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
                                         break;
                                     }
                                 }
+                                Notification notification = new Notification();
+                                notification.setUserEmail(reservation.getGuestEmail());
+                                try {
+                                    notification.setOtherUserEmail(UserInfo.getEmail());
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                notification.setType(NotificationType.ReservationResponse);
+                                List<Integer> now = new ArrayList<>();
+                                now.add(LocalDateTime.now().getYear());
+                                now.add(LocalDateTime.now().getMonthValue());
+                                now.add(LocalDateTime.now().getDayOfMonth());
+                                now.add(LocalDateTime.now().getHour());
+                                now.add(LocalDateTime.now().getMinute());
+                                notification.setCreatedAt(now);
+                                Call<Notification> notificationCall = ServiceUtils.notificationService.add(notification);
+                                notificationCall.enqueue(new Callback<Notification>() {
+                                    @Override
+                                    public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                        if (response.code() == 201) {
+                                            Log.d("Notification-New","Message received");
+                                            System.out.println(response.body());
+                                        }
+                                        else {
+                                            Log.d("Notification-New","Message received: "+response.code());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Notification> call, Throwable t) {
+                                        Log.d("Notification-New", t.getMessage() != null?t.getMessage():"error");
+                                    }
+                                });
                                 notifyDataSetChanged();
                             }
                             else {
@@ -331,6 +364,39 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
                                         break;
                                     }
                                 }
+                                Notification notification = new Notification();
+                                notification.setUserEmail(reservation.getGuestEmail());
+                                try {
+                                    notification.setOtherUserEmail(UserInfo.getEmail());
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                notification.setType(NotificationType.ReservationResponse);
+                                List<Integer> now = new ArrayList<>();
+                                now.add(LocalDateTime.now().getYear());
+                                now.add(LocalDateTime.now().getMonthValue());
+                                now.add(LocalDateTime.now().getDayOfMonth());
+                                now.add(LocalDateTime.now().getHour());
+                                now.add(LocalDateTime.now().getMinute());
+                                notification.setCreatedAt(now);
+                                Call<Notification> notificationCall = ServiceUtils.notificationService.add(notification);
+                                notificationCall.enqueue(new Callback<Notification>() {
+                                    @Override
+                                    public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                        if (response.code() == 201) {
+                                            Log.d("Notification-New","Message received");
+                                            System.out.println(response.body());
+                                        }
+                                        else {
+                                            Log.d("Notification-New","Message received: "+response.code());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Notification> call, Throwable t) {
+                                        Log.d("Notification-New", t.getMessage() != null?t.getMessage():"error");
+                                    }
+                                });
                                 notifyDataSetChanged();
                             }
                             else {
