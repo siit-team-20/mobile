@@ -296,7 +296,9 @@ public class LoginFragment extends Fragment {
             )
                 menuItem.setVisible(false);
             if (menuItem.getTitle().equals("Requests") ||
-                    menuItem.getTitle().equals("Account")
+                    menuItem.getTitle().equals("Account") ||
+                    menuItem.getTitle().equals("Accommodation Reviews") ||
+                    menuItem.getTitle().equals("Owner Reviews")
             )
                 menuItem.setVisible(true);
         }

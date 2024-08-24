@@ -171,6 +171,22 @@
         app:popUpTo="@+id/nav_accommodations"
         app:popUpToInclusive="true"
         />
+    <fragment
+        android:id="@+id/nav_accommodation_reviews"
+        android:name="com.bookingapp.fragments.accommodation.AdminAccommodationReviewPageFragment"
+        android:label="Accommodation Reviews"
+        tools:layout="@layout/fragment_admin_accommodation_review_page"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true"
+        />
+    <fragment
+        android:id="@+id/nav_owner_reviews"
+        android:name="com.bookingapp.fragments.account.AdminOwnerReviewPageFragment"
+        android:label="Owner Reviews"
+        tools:layout="@layout/fragment_admin_owner_review_page"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true"
+        />
 
 
     <!--    <fragment-->

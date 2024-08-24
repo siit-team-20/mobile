@@ -12,6 +12,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -25,10 +26,24 @@ public interface AccommodationReviewService {
 
     @Headers({
             "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @GET("api/accommodations/reviews")
+    Call<ArrayList<AccommodationReview>> get(@Query("onlyNotApproved") boolean onlyNotApproved);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
     @POST("api/accommodations/reviews")
     Call<AccommodationReview> add(@Body AccommodationReview accommodationReview);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @PUT("api/accommodations/reviews/{id}")
+    Call<AccommodationReview> update(@Path("id") Long id, @Body AccommodationReview accommodationReview);
 
     @Headers({
             "User-Agent: Mobile-Android",
