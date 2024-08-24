@@ -1,5 +1,10 @@
 package com.bookingapp.fragments.accommodation;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.ListFragment;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -19,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 
 import com.bookingapp.R;
 import com.bookingapp.adapters.AccommodationListAdapter;
@@ -39,12 +46,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AccommodationListFragment extends ListFragment {
+public class AccommodationListFragment extends ListFragment implements SensorEventListener {
     private static final String ARG_IS_ON_HOME = "isOnHome";
     private static final String ARG_IS_ON_FAVOURITES = "isOnFavourites";
     private AccommodationListAdapter adapter;
@@ -56,6 +64,14 @@ public class AccommodationListFragment extends ListFragment {
     private ArrayList<Accommodation> filteredAccommodations = new ArrayList<>();
     private boolean isOnHome;
     private boolean isOnFavourites;
+
+    private SensorManager sensorManager;
+    private static final int SHAKE_THRESHOLD = 1000;
+    private long lastUpdate;
+    private float last_x;
+    private float last_y;
+    private float last_z;
+
 
     public static AccommodationListFragment newInstance(boolean isOnHome, boolean isOnFavourites) {
         AccommodationListFragment fragment = new AccommodationListFragment();
@@ -341,6 +357,12 @@ public class AccommodationListFragment extends ListFragment {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
+        sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     private void addMenu() {
@@ -366,6 +388,7 @@ public class AccommodationListFragment extends ListFragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        sensorManager.unregisterListener(this);
     }
 
     private void getDataFromClient() throws JSONException {
@@ -462,4 +485,76 @@ public class AccommodationListFragment extends ListFragment {
         if (!isOnFavourites)
             call.enqueue(callback);
     }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        Spinner spinner = requireActivity().findViewById(R.id.btnSort);
+
+        if (sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+            long curTime = System.currentTimeMillis();
+            // only allow one update every 100ms.
+            if ((curTime - lastUpdate) > 200) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                float[] values = sensorEvent.values;
+                float x = values[0];
+                float y = values[1];
+                float z = values[2];
+
+                float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+
+                if (speed > SHAKE_THRESHOLD && spinner != null) {
+                    if (filteredAccommodations != null){
+                        ArrayList<Accommodation> newList = new ArrayList<>();
+
+                        LiveData<String> selectedSort = accommodationsViewModel.getSelectedSort();
+                        int sortOption = 1;
+                        if (selectedSort.getValue() == null)
+                            sortOption = 0;
+                        else if (selectedSort.getValue().equals("Ascending"))
+                            sortOption = 0;
+                        if (sortOption == 0) {
+                            accommodationsViewModel.setSelectedSort("Descending");
+                            spinner.setSelection(1);
+                        }
+                        else {
+                            accommodationsViewModel.setSelectedSort("Ascending");
+                            spinner.setSelection(0);
+                        }
+                        applyFilters(
+                                accommodationsViewModel.getSelectedTypes().getValue(),
+                                accommodationsViewModel.getSelectedBenefits().getValue(),
+                                accommodationsViewModel.getSelectedPrice().getValue(),
+                                accommodationsViewModel.getSearchText().getValue(),
+                                accommodationsViewModel.getGuestNumber().getValue(),
+                                accommodationsViewModel.getStartDate().getValue(),
+                                accommodationsViewModel.getEndDate().getValue()
+                        );
+                        applySort(accommodationsViewModel.getSelectedSort().getValue());
+                        Log.d("REZ", "shake detected w/ speed: " + speed);
+                    }
+                }
+                last_x = x;
+                last_y = y;
+                last_z = z;
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        if(sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+            Log.i("REZ_ACCELEROMETER", String.valueOf(accuracy));
+        }
+    }
+
+    public void sortList(ArrayList<Accommodation> newList, Comparator<? super String> keyComparator){
+        newList.addAll(filteredAccommodations.stream()
+                .sorted(Comparator.comparing(Accommodation::getName, keyComparator))
+                .collect(Collectors.toList()));
+    }
+
+
 }
