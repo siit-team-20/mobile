@@ -450,7 +450,7 @@ public class AccommodationCreateFragment extends Fragment {
                         return;
                 call.enqueue(new Callback<Accommodation>() {
                     @Override
-                    public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
+                    public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
                         if (response.code() == 201){
                             Log.d("REZ","Message received");
                             System.out.println(response.body());
@@ -461,7 +461,7 @@ public class AccommodationCreateFragment extends Fragment {
                             Call<AccommodationRequest> accommodationRequestCall = ServiceUtils.accommodationRequestService.add(accommodationRequest);
                             accommodationRequestCall.enqueue(new Callback<AccommodationRequest>() {
                                 @Override
-                                public void onResponse(Call<AccommodationRequest> call, Response<AccommodationRequest> response) {
+                                public void onResponse(@NonNull Call<AccommodationRequest> call, @NonNull Response<AccommodationRequest> response) {
                                     if (response.code() == 201){
                                         Log.d("REZ","Message received");
                                         System.out.println(response.body());
