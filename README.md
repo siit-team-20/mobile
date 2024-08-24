@@ -16,12 +16,12 @@ Prerequisites
 - Backend Setup
 
 ## Steps
-1. Clone the repository:  
-git clone https://github.com/siit-team-20/backend
-2. Create database  
-Create database named bookingappdb in postgresql with default parameters otherwise
-3. Build and run the backend
-4. Configure environment variables:  
-In frontend add this line to local.properties file:  
-ip_addr=[local ipv4 address of backend]
+1. Clone the repository:    
+git clone https://github.com/siit-team-20/backend  
+2. Create database    
+Create database named bookingappdb in postgresql with default parameters otherwise  
+3. Build and run the backend  
+4. Configure environment variables    
+In frontend add this line to local.properties file    
+ip_addr=[local ipv4 address of backend]  
 5. Build and run frontend
