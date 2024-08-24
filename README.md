@@ -13,7 +13,6 @@ The backend is built with Spring Boot, and the frontend is an Android applicatio
 Prerequisites
 - Spring Boot
 - Android Studio (for the frontend)
-- Backend Setup
 
 ## Steps
 1. Clone the repository:    
