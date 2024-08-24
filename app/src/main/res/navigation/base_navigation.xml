@@ -192,52 +192,68 @@
         app:popUpTo="@+id/nav_accommodations"
         app:popUpToInclusive="true"
         />
+    <fragment
+        android:id="@+id/nav_accommodation_reviews"
+        android:name="com.bookingapp.fragments.accommodation.AdminAccommodationReviewPageFragment"
+        android:label="Accommodation Reviews"
+        tools:layout="@layout/fragment_admin_accommodation_review_page"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true"
+        />
+    <fragment
+        android:id="@+id/nav_owner_reviews"
+        android:name="com.bookingapp.fragments.account.AdminOwnerReviewPageFragment"
+        android:label="Owner Reviews"
+        tools:layout="@layout/fragment_admin_owner_review_page"
+        app:popUpTo="@+id/nav_accommodations"
+        app:popUpToInclusive="true"
+        />
 
 
     <!--    <fragment-->
-<!--        android:id="@+id/nav_new"-->
+    <!--        android:id="@+id/nav_new"-->
     <!--        android:name="com.example.shopapp.fragments.new_product.NewProductFragment"-->
-<!--        android:label="New product"-->
-<!--        tools:layout="@layout/fragment_new_product"-->
-<!--        app:popUpTo="@+id/nav_products"-->
-<!--        app:popUpToInclusive="true"-->
-<!--        />-->
+    <!--        android:label="New product"-->
+    <!--        tools:layout="@layout/fragment_new_product"-->
+    <!--        app:popUpTo="@+id/nav_products"-->
+    <!--        app:popUpToInclusive="true"-->
+    <!--        />-->
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_profile"-->
-<!--        android:name="com.example.shopapp.fragments.profile.ProfileFragment"-->
-<!--        android:label="Profile"-->
-<!--        tools:layout="@layout/fragment_profile"-->
-<!--        app:popUpTo="@+id/nav_products"-->
-<!--        app:popUpToInclusive="true"-->
-<!--        />-->
+    <!--    <fragment-->
+    <!--        android:id="@+id/nav_profile"-->
+    <!--        android:name="com.example.shopapp.fragments.profile.ProfileFragment"-->
+    <!--        android:label="Profile"-->
+    <!--        tools:layout="@layout/fragment_profile"-->
+    <!--        app:popUpTo="@+id/nav_products"-->
+    <!--        app:popUpToInclusive="true"-->
+    <!--        />-->
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_logout"-->
-<!--        android:name="com.example.shopapp.fragments.login.LoginFragment"-->
-<!--        android:label="Login"-->
-<!--        tools:layout="@layout/fragment_login"-->
-<!--        app:popUpTo="@+id/nav_products"-->
-<!--        app:popUpToInclusive="true"-->
-<!--        />-->
+    <!--    <fragment-->
+    <!--        android:id="@+id/nav_logout"-->
+    <!--        android:name="com.example.shopapp.fragments.login.LoginFragment"-->
+    <!--        android:label="Login"-->
+    <!--        tools:layout="@layout/fragment_login"-->
+    <!--        app:popUpTo="@+id/nav_products"-->
+    <!--        app:popUpToInclusive="true"-->
+    <!--        />-->
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_settings"-->
-<!--        android:name="com.example.shopapp.fragments.SettingsFragment"-->
-<!--        android:label="Settings"-->
-<!--        tools:layout="@layout/fragment_settings"-->
-<!--        app:popUpTo="@+id/nav_products"-->
-<!--        app:popUpToInclusive="true"-->
-<!--        />-->
+    <!--    <fragment-->
+    <!--        android:id="@+id/nav_settings"-->
+    <!--        android:name="com.example.shopapp.fragments.SettingsFragment"-->
+    <!--        android:label="Settings"-->
+    <!--        tools:layout="@layout/fragment_settings"-->
+    <!--        app:popUpTo="@+id/nav_products"-->
+    <!--        app:popUpToInclusive="true"-->
+    <!--        />-->
 
-<!--    <fragment-->
-<!--        android:id="@+id/nav_language"-->
-<!--        android:name="com.example.shopapp.fragments.SettingsFragment"-->
-<!--        android:label="Language"-->
-<!--        tools:layout="@layout/fragment_settings"-->
-<!--        app:popUpTo="@+id/nav_products"-->
-<!--        app:popUpToInclusive="true"-->
-<!--        />-->
+    <!--    <fragment-->
+    <!--        android:id="@+id/nav_language"-->
+    <!--        android:name="com.example.shopapp.fragments.SettingsFragment"-->
+    <!--        android:label="Language"-->
+    <!--        tools:layout="@layout/fragment_settings"-->
+    <!--        app:popUpTo="@+id/nav_products"-->
+    <!--        app:popUpToInclusive="true"-->
+    <!--        />-->
 
 
 </navigation>

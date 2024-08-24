@@ -21,6 +21,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStructure;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -83,6 +84,8 @@ public class AccommodationCreateFragment extends Fragment {
     private RadioGroup accommodationType;
     private EditText benefits;
     private RadioGroup pricing;
+    private RadioGroup acceptance;
+    private TextView accommodationAcceptanceText;
     private EditText minGuests;
     private EditText maxGuests;
     private Button startDateButton;
@@ -383,10 +386,12 @@ public class AccommodationCreateFragment extends Fragment {
         minGuests = binding.minGuests;
         maxGuests = binding.maxGuests;
         pricing = binding.accommodationPricing;
+        acceptance = binding.accommodationAcceptance;
         reservationCancellationDeadline = binding.cancellationDeadline;
         startDateButton = binding.startDate;
         endDateButton = binding.endDate;
         price = binding.etPrice;
+        accommodationAcceptanceText = binding.accommodationAcceptanceText;
 
         if (editAccommodation != null) {
             ownerEmail.setText(editAccommodation.getOwnerEmail());
@@ -408,6 +413,14 @@ public class AccommodationCreateFragment extends Fragment {
             for (int i = 0; i < pricing.getChildCount(); i++) {
                 RadioButton rb = (RadioButton) pricing.getChildAt(i);
                 if (rb.getText().toString().equals(editAccommodation.getIsPriceByGuest() ? "Per guest" : "Fixed price")) {
+                    rb.setChecked(true);
+                    break;
+                }
+            }
+
+            for (int i = 0; i < acceptance.getChildCount(); i++) {
+                RadioButton rb = (RadioButton) acceptance.getChildAt(i);
+                if (rb.getText().toString().equals(editAccommodation.getIsAutomaticAcceptance() ? "Automatic" : "Manual")) {
                     rb.setChecked(true);
                     break;
                 }
@@ -437,7 +450,7 @@ public class AccommodationCreateFragment extends Fragment {
                         return;
                 call.enqueue(new Callback<Accommodation>() {
                     @Override
-                    public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
+                    public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
                         if (response.code() == 201){
                             Log.d("REZ","Message received");
                             System.out.println(response.body());
@@ -448,7 +461,7 @@ public class AccommodationCreateFragment extends Fragment {
                             Call<AccommodationRequest> accommodationRequestCall = ServiceUtils.accommodationRequestService.add(accommodationRequest);
                             accommodationRequestCall.enqueue(new Callback<AccommodationRequest>() {
                                 @Override
-                                public void onResponse(Call<AccommodationRequest> call, Response<AccommodationRequest> response) {
+                                public void onResponse(@NonNull Call<AccommodationRequest> call, @NonNull Response<AccommodationRequest> response) {
                                     if (response.code() == 201){
                                         Log.d("REZ","Message received");
                                         System.out.println(response.body());
@@ -487,6 +500,8 @@ public class AccommodationCreateFragment extends Fragment {
 
         if(editAccommodation != null){
             createButton.setVisibility(View.GONE);
+            acceptance.setVisibility(View.VISIBLE);
+            accommodationAcceptanceText.setVisibility(View.VISIBLE);
         }
         else {
             updateButton.setVisibility(View.GONE);
@@ -515,8 +530,12 @@ public class AccommodationCreateFragment extends Fragment {
             Integer reservationDeadline = Integer.valueOf(this.reservationCancellationDeadline.getText().toString());
             RadioButton accommodationTypeRb = this.accommodationType.findViewById(this.accommodationType.getCheckedRadioButtonId());
             String accommodationType = accommodationTypeRb.getText().toString();
+
             RadioButton pricingRb = this.pricing.findViewById(this.pricing.getCheckedRadioButtonId());
             String pricing = pricingRb.getText().toString();
+
+            RadioButton acceptanceRb = this.acceptance.findViewById(this.acceptance.getCheckedRadioButtonId());
+            String acceptance = acceptanceRb.getText().toString();
 
             List<DateRange> availabilityRanges = new ArrayList<>();
             DateRange dateRange = new DateRange();
@@ -584,6 +603,10 @@ public class AccommodationCreateFragment extends Fragment {
                 editAccommodation.setIsPriceByGuest(true);
             else
                 editAccommodation.setIsPriceByGuest(false);
+            if (acceptance.equals("Automatic"))
+                editAccommodation.setIsAutomaticAcceptance(true);
+            else
+                editAccommodation.setIsAutomaticAcceptance(false);
             editAccommodation.setAvailabilityDates(availabilityRanges);
             editAccommodation.setIsApproved(false);
 

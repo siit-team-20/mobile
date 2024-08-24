@@ -86,13 +86,32 @@
             android:visibility="gone" />
 
         <!-- Delete Button (Visible for Admin or Guest if reported) -->
+
+        <Button
+            android:id="@+id/approveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Approve"
+            android:backgroundTint="#028A0F"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"/>
+
+        <!-- Report Button (Visible for Owner if not reported) -->
         <Button
             android:id="@+id/delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete"
-            android:layout_marginEnd="8dp" />
-
+            android:backgroundTint="#ba3c3c"
+            android:layout_marginEnd="8dp"/>
+        <Button
+            android:id="@+id/admin_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:backgroundTint="#ba3c3c"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"/>
         <!-- Report Button (Visible for Owner if not reported) -->
         <Button
             android:layout_width="wrap_content"

@@ -2,11 +2,9 @@ package com.bookingapp.service;
 
 //import com.bookingapp.model.AccommodationReview;
 
-import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.AccommodationReview;
 import com.bookingapp.model.OwnerReview;
 
-import java.security.acl.Owner;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -29,6 +27,13 @@ public interface OwnerReviewService {
 
     @Headers({
             "User-Agent: Mobile-Android",
+            "Content-Type: application/json",
+    })
+    @GET("api/ownerReviews")
+    Call<ArrayList<OwnerReview>> get(@Query("isReported") boolean isReported);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
     @POST("api/ownerReviews")
@@ -38,13 +43,13 @@ public interface OwnerReviewService {
             "User-Agent: Mobile-Android",
             "Content-Type: application/json",
     })
-    @DELETE("api/ownerReviews/{id}")
-    Call<OwnerReview> delete(@Path("id") Long id);
+    @PUT("api/ownerReviews/{id}")
+    Call<OwnerReview> update(@Path("id") Long id, @Body OwnerReview ownerReview);
 
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type: application/json",
     })
-    @PUT("api/ownerReviews/{id}")
-    Call<OwnerReview> update(@Path("id") Long id, @Body OwnerReview ownerReview);
+    @DELETE("api/ownerReviews/{id}")
+    Call<OwnerReview> delete(@Path("id") Long id);
 }

@@ -125,7 +125,7 @@ public class RegisterFragment extends Fragment {
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        if (response.code() == 200) {
+                        if (response.code() == 201) {
                             Log.d("REZ", "Message received");
                             System.out.println(response.body());
                             UserInfo.setToken(response.body().getToken());

@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.ListFragment;
 
 import com.bookingapp.R;
+import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.AccommodationRequest;
 import com.bookingapp.model.AccommodationRequestType;
 import com.bookingapp.model.Notification;
@@ -41,6 +42,10 @@ public class AccommodationRequestListAdapter extends ArrayAdapter<AccommodationR
     private Activity activity;
     private FragmentManager fragmentManager;
     private boolean[] createViewVisibility = null;
+    private Button approveCreate;
+    private Button rejectCreate;
+    private Button approveUpdate;
+    private Button rejectUpdate;
 
     public AccommodationRequestListAdapter(Activity context, FragmentManager fragmentManager, ArrayList<AccommodationRequest> accommodationRequests) {
         super(context, R.layout.accommodation_request_card, accommodationRequests);
@@ -75,104 +80,156 @@ public class AccommodationRequestListAdapter extends ArrayAdapter<AccommodationR
             TextView ownerEmail = convertView.findViewById(R.id.accommodation_request_owner_email);
             TextView minGuests = convertView.findViewById(R.id.accommodation_request_min_guests);
             TextView maxGuests = convertView.findViewById(R.id.accommodation_request_max_guests);
-            Button approveButton = convertView.findViewById(R.id.accommodation_request_approve_button);
-            Button rejectButton = convertView.findViewById(R.id.accommodation_request_reject_button);
+            approveCreate = convertView.findViewById(R.id.accommodation_request_approve_button);
+            rejectCreate = convertView.findViewById(R.id.accommodation_request_reject_button);
 
             if(accommodationRequest != null) {
-                //String uri = "@drawable/" + product.getImagePath();
-                //Resources resources = getContext().getResources();
-                //final int resourceId = resources.getIdentifier(uri, "drawable", getContext().getPackageName());
                 imageView.setImageResource(R.drawable.a);
-                name.setText(accommodationRequest.getNewAccommodation().getName() +", " +accommodationRequest.getNewAccommodation().getAccommodationType().toString());
+                name.setText(accommodationRequest.getNewAccommodation().getName() + ", " + accommodationRequest.getNewAccommodation().getAccommodationType().toString());
                 location.setText(accommodationRequest.getNewAccommodation().getLocation());
                 ownerEmail.setText(accommodationRequest.getNewAccommodation().getOwnerEmail());
                 minGuests.setText(Integer.toString(accommodationRequest.getNewAccommodation().getMinGuests()));
                 maxGuests.setText(Integer.toString(accommodationRequest.getNewAccommodation().getMaxGuests()));
-//
-//
-//          approveButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Reservation res = new Reservation();
-//                    res.setId(reservation.getId());
-//                    res.setGuestEmail(reservation.getGuestEmail());
-//                    res.setAccommodationId(reservation.getAccommodation().getId());
-//                    res.setDate(reservation.getDate());
-//                    res.setDays(reservation.getDays());
-//                    res.setGuestNumber(reservation.getGuestNumber());
-//                    res.setPrice(reservation.getPrice());
-//                    res.setStatus(ReservationStatus.Cancelled);
-//                    Call<Reservation> call = ServiceUtils.reservationService.update(res.getId(), res);
-//                    call.enqueue(new Callback<Reservation>() {
-//                        @Override
-//                        public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-//                            if (response.code() == 200){
-//                                Log.d("Reservations-Update","Message received");
-//                                System.out.println(response.body());
-//                                reservation.setStatus(ReservationStatus.Cancelled);
-//                                for (int i = 0; i < rReservations.size(); i++) {
-//                                    if (rReservations.get(i).getId() == res.getId()) {
-//                                        rReservations.set(i, reservation);
-//                                        break;
-//                                    }
-//                                }
-//                                notifyDataSetChanged();
-//                            }
-//                            else {
-//                                Log.d("Reservations-Update","Message received: "+response.code());
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Reservation> call, Throwable t) {
-//                            Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
-//                        }
-//                    });
-//                }
-//            });
 
-//            rejectButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Reservation res = new Reservation();
-//                    res.setId(reservation.getId());
-//                    res.setGuestEmail(reservation.getGuestEmail());
-//                    res.setAccommodationId(reservation.getAccommodation().getId());
-//                    res.setDate(reservation.getDate());
-//                    res.setDays(reservation.getDays());
-//                    res.setGuestNumber(reservation.getGuestNumber());
-//                    res.setPrice(reservation.getPrice());
-//                    res.setStatus(ReservationStatus.Cancelled);
-//                    Call<Reservation> call = ServiceUtils.reservationService.update(res.getId(), res);
-//                    call.enqueue(new Callback<Reservation>() {
-//                        @Override
-//                        public void onResponse(Call<Reservation> call, Response<Reservation> response) {
-//                            if (response.code() == 200){
-//                                Log.d("Reservations-Update","Message received");
-//                                System.out.println(response.body());
-//                                reservation.setStatus(ReservationStatus.Cancelled);
-//                                for (int i = 0; i < rReservations.size(); i++) {
-//                                    if (rReservations.get(i).getId() == res.getId()) {
-//                                        rReservations.set(i, reservation);
-//                                        break;
-//                                    }
-//                                }
-//                                notifyDataSetChanged();
-//                            }
-//                            else {
-//                                Log.d("Reservations-Update","Message received: "+response.code());
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Reservation> call, Throwable t) {
-//                            Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
-//                        }
-//                    });
-//                }
-//            });
+                approveCreate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Call<AccommodationRequest> callRequest;
+                        Call<Accommodation> callAccommodation;
 
+                        callRequest = ServiceUtils.accommodationRequestService.delete(accommodationRequest.getId());
+                        callRequest.enqueue(new Callback<AccommodationRequest>() {
+                            @Override
+                            public void onResponse(@NonNull Call<AccommodationRequest> call, @NonNull Response<AccommodationRequest> response) {
+                                if (response.isSuccessful()) {
+                                    Call<ArrayList<AccommodationRequest>> call1 = null;
+                                    try {
+                                        if (UserInfo.getType().equals(UserType.Admin)) {
+                                            call1 = ServiceUtils.accommodationRequestService.getAll();
+                                            call1.enqueue(new Callback<ArrayList<AccommodationRequest>>() {
+                                                @Override
+                                                public void onResponse(@NonNull Call<ArrayList<AccommodationRequest>> call, @NonNull Response<ArrayList<AccommodationRequest>> response) {
+                                                    if (response.code() == 200) {
+                                                        Log.d("REZ", "Message received");
+                                                        System.out.println(response.body());
+                                                        aAccommodationRequests = response.body();
+                                                        notifyDataSetChanged();
+                                                    } else {
+                                                        Log.d("REZ", "Message received: " + response.code());
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(@NonNull Call<ArrayList<AccommodationRequest>> call, @NonNull Throwable t) {
+                                                    Log.d("REZ", t.getMessage() != null ? t.getMessage() : "error");
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.e("JSONException", e.getMessage());
+                                    }
+                                } else {
+                                    Log.d("ApproveCreate", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<AccommodationRequest> call, @NonNull Throwable t) {
+                                Log.d("ApproveCreate", "Request failed: " + t.getMessage());
+                            }
+                        });
+
+                        accommodationRequest.getNewAccommodation().setIsApproved(true);
+
+                        callAccommodation = ServiceUtils.accommodationService.update(accommodationRequest.getNewAccommodation().getId(), accommodationRequest.getNewAccommodation());
+                        callAccommodation.enqueue(new Callback<Accommodation>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
+                                if (response.isSuccessful()) {
+                                    // Navigate or handle success
+                                } else {
+                                    Log.d("ApproveCreate UpdateAcc", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
+                                Log.d("ApproveCreate UpdateAcc", "Request failed: " + t.getMessage());
+                            }
+                        });
+                    }
+                });
+                rejectCreate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Call<AccommodationRequest> callRequest;
+                        Call<Accommodation> callAccommodation;
+
+                        callRequest = ServiceUtils.accommodationRequestService.delete(accommodationRequest.getId());
+                        callRequest.enqueue(new Callback<AccommodationRequest>() {
+                            @Override
+                            public void onResponse(@NonNull Call<AccommodationRequest> call, @NonNull Response<AccommodationRequest> response) {
+                                if (response.isSuccessful()) {
+                                    Call<ArrayList<AccommodationRequest>> call1 = null;
+                                    try {
+                                        if (UserInfo.getType().equals(UserType.Admin)) {
+                                            call1 = ServiceUtils.accommodationRequestService.getAll();
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.e("JSONException", e.getMessage());
+                                    }
+
+                                    if (call1 != null) {
+                                        call1.enqueue(new Callback<ArrayList<AccommodationRequest>>() {
+                                            @Override
+                                            public void onResponse(@NonNull Call<ArrayList<AccommodationRequest>> call, @NonNull Response<ArrayList<AccommodationRequest>> response) {
+                                                if (response.code() == 200) {
+                                                    Log.d("REZ", "Message received");
+                                                    System.out.println(response.body());
+                                                    aAccommodationRequests = response.body();
+                                                    notifyDataSetChanged();
+                                                } else {
+                                                    Log.d("REZ", "Message received: " + response.code());
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(@NonNull Call<ArrayList<AccommodationRequest>> call, @NonNull Throwable t) {
+                                                Log.d("REZ", t.getMessage() != null ? t.getMessage() : "error");
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    Log.d("RejectCreate", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<AccommodationRequest> call, @NonNull Throwable t) {
+                                Log.d("RejectCreate", "Request failed: " + t.getMessage());
+                            }
+                        });
+
+                        callAccommodation = ServiceUtils.accommodationService.deleteOne(accommodationRequest.getNewAccommodation().getId());
+                        callAccommodation.enqueue(new Callback<Accommodation>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
+                                if (response.isSuccessful()) {
+                                    // Navigate or handle success
+                                } else {
+                                    Log.d("RejectCreate DeleteAcc", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
+                                Log.d("RejectCreate DeleteAcc", "Request failed: " + t.getMessage());
+                            }
+                        });
+                    }
+                });
             }
+
         }
         else {
             ImageView oldImageView = convertView.findViewById(R.id.old_accommodation_request_image);
@@ -189,8 +246,8 @@ public class AccommodationRequestListAdapter extends ArrayAdapter<AccommodationR
             TextView newMinGuests = convertView.findViewById(R.id.new_accommodation_request_min_guests);
             TextView newMaxGuests = convertView.findViewById(R.id.new_accommodation_request_max_guests);
 
-            Button approveButton = convertView.findViewById(R.id.update_accommodation_request_approve_button);
-            Button rejectButton = convertView.findViewById(R.id.update_accommodation_request_reject_button);
+            approveUpdate = convertView.findViewById(R.id.update_accommodation_request_approve_button);
+            rejectUpdate = convertView.findViewById(R.id.update_accommodation_request_reject_button);
 
             if(accommodationRequest != null) {
                 //String uri = "@drawable/" + product.getImagePath();
@@ -210,6 +267,208 @@ public class AccommodationRequestListAdapter extends ArrayAdapter<AccommodationR
                 newOwnerEmail.setText(accommodationRequest.getNewAccommodation().getOwnerEmail());
                 newMinGuests.setText(Integer.toString(accommodationRequest.getNewAccommodation().getMinGuests()));
                 newMaxGuests.setText(Integer.toString(accommodationRequest.getNewAccommodation().getMaxGuests()));
+
+
+
+                approveUpdate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Call<AccommodationRequest> callRequest;
+                        Call<Accommodation> callAccommodation;
+
+                        callRequest = ServiceUtils.accommodationRequestService.delete(accommodationRequest.getId());
+                        callRequest.enqueue(new Callback<AccommodationRequest>() {
+                            @Override
+                            public void onResponse(@NonNull Call<AccommodationRequest> call, @NonNull Response<AccommodationRequest> response) {
+                                if (response.isSuccessful()) {
+                                    Call<ArrayList<AccommodationRequest>> call1 = null;
+                                    try {
+                                        if (UserInfo.getType().equals(UserType.Admin)) {
+                                            call1 = ServiceUtils.accommodationRequestService.getAll();
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.e("JSONException", e.getMessage());
+                                    }
+
+                                    if (call1 != null) {
+                                        call1.enqueue(new Callback<ArrayList<AccommodationRequest>>() {
+                                            @Override
+                                            public void onResponse(@NonNull Call<ArrayList<AccommodationRequest>> call, @NonNull Response<ArrayList<AccommodationRequest>> response) {
+                                                if (response.code() == 200) {
+                                                    Log.d("REZ", "Message received");
+                                                    System.out.println(response.body());
+                                                    aAccommodationRequests = response.body();
+                                                    notifyDataSetChanged();
+                                                } else {
+                                                    Log.d("REZ", "Message received: " + response.code());
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(@NonNull Call<ArrayList<AccommodationRequest>> call, @NonNull Throwable t) {
+                                                Log.d("REZ", t.getMessage() != null ? t.getMessage() : "error");
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    Log.d("ApproveUpdate", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<AccommodationRequest> call, @NonNull Throwable t) {
+                                Log.d("ApproveUpdate", "Request failed: " + t.getMessage());
+                            }
+                        });
+
+                        Call<Reservation> callReservation = ServiceUtils.reservationService.updateNew(accommodationRequest.getOldAccommodation().getId(),accommodationRequest.getNewAccommodation().getId());
+                        callReservation.enqueue(new Callback<Reservation>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Reservation> call, @NonNull Response<Reservation> response) {
+                                if (response.isSuccessful()) {
+                                    Log.d("ApproveUpdate UpdateReservation", "Reservations updated successfully");
+                                } else {
+                                    Log.d("ApproveUpdate UpdateReservation", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Reservation> call, @NonNull Throwable t) {
+                                Log.d("ApproveUpdate UpdateReservation", "Request failed: " + t.getMessage());
+
+                            }
+                        });
+
+                        callAccommodation = ServiceUtils.accommodationService.deleteOne(accommodationRequest.getOldAccommodation().getId());
+                        callAccommodation.enqueue(new Callback<Accommodation>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
+                                if (response.isSuccessful()) {
+                                    // Navigacija/Obavestenje
+                                    Log.d("DeleteOldAcc", "Old accommodation deleted successfully");
+
+                                } else {
+                                    Log.d("ApproveUpdate DeleteOld", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
+                                Log.d("ApproveUpdate DeleteOld", "Request failed: " + t.getMessage());
+
+                            }
+                        });
+
+                        accommodationRequest.getNewAccommodation().setIsApproved(true);
+
+                        callAccommodation = ServiceUtils.accommodationService.update(accommodationRequest.getNewAccommodation().getId(), accommodationRequest.getNewAccommodation());
+                        callAccommodation.enqueue(new Callback<Accommodation>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
+                                if (response.isSuccessful()) {
+                                    // Navigacija/Obavestenje
+                                } else {
+                                    Log.d("ApproveUpdate UpdateAcc", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
+                                Log.d("ApproveUpdate UpdateAcc", "Request failed: " + t.getMessage());
+                            }
+                        });
+                    }
+                });
+
+                rejectUpdate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Call<AccommodationRequest> callRequest;
+                        Call<Accommodation> callAccommodation;
+
+                        callRequest = ServiceUtils.accommodationRequestService.delete(accommodationRequest.getId());
+                        callRequest.enqueue(new Callback<AccommodationRequest>() {
+                            @Override
+                            public void onResponse(@NonNull Call<AccommodationRequest> call, @NonNull Response<AccommodationRequest> response) {
+                                if (response.isSuccessful()) {
+                                    Call<ArrayList<AccommodationRequest>> call1 = null;
+                                    try {
+                                        if (UserInfo.getType().equals(UserType.Admin)) {
+                                            call1 = ServiceUtils.accommodationRequestService.getAll();
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.e("JSONException", e.getMessage());
+                                    }
+
+                                    if (call1 != null) {
+                                        call1.enqueue(new Callback<ArrayList<AccommodationRequest>>() {
+                                            @Override
+                                            public void onResponse(@NonNull Call<ArrayList<AccommodationRequest>> call, @NonNull Response<ArrayList<AccommodationRequest>> response) {
+                                                if (response.code() == 200) {
+                                                    Log.d("REZ", "Message received");
+                                                    System.out.println(response.body());
+                                                    aAccommodationRequests = response.body();
+                                                    notifyDataSetChanged();
+                                                } else {
+                                                    Log.d("REZ", "Message received: " + response.code());
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(@NonNull Call<ArrayList<AccommodationRequest>> call, @NonNull Throwable t) {
+                                                Log.d("REZ", t.getMessage() != null ? t.getMessage() : "error");
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    Log.d("RejectUpdate", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<AccommodationRequest> call, @NonNull Throwable t) {
+                                Log.d("RejectUpdate", "Request failed: " + t.getMessage());
+                            }
+                        });
+
+                        callAccommodation = ServiceUtils.accommodationService.deleteOne(accommodationRequest.getNewAccommodation().getId());
+                        callAccommodation.enqueue(new Callback<Accommodation>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
+                                if (response.isSuccessful()) {
+                                    // Navigacija/Obavestenje
+                                } else {
+                                    Log.d("RejectCreate DeleteAcc", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
+                                Log.d("RejectCreate DeleteAcc", "Request failed: " + t.getMessage());
+                            }
+                        });
+
+                        accommodationRequest.getOldAccommodation().setIsApproved(true);
+
+                        callAccommodation = ServiceUtils.accommodationService.update(accommodationRequest.getOldAccommodation().getId(), accommodationRequest.getOldAccommodation());
+                        callAccommodation.enqueue(new Callback<Accommodation>() {
+                            @Override
+                            public void onResponse(@NonNull Call<Accommodation> call, @NonNull Response<Accommodation> response) {
+                                if (response.isSuccessful()) {
+                                    // Navigacija/Obavestenje
+                                } else {
+                                    Log.d("RejectUpdate UpdateOldAcc", "Request failed: " + response.code());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<Accommodation> call, @NonNull Throwable t) {
+                                Log.d("RejectUpdate UpdateOldAcc", "Request failed: " + t.getMessage());
+                            }
+                        });
+
+                    }
+                });
             }
         }
 
@@ -224,6 +483,8 @@ public class AccommodationRequestListAdapter extends ArrayAdapter<AccommodationR
         }
 
         return convertView;
+
     }
 }
+
 
