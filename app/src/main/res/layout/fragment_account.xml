@@ -200,6 +200,14 @@
             android:backgroundTint="@color/material_dynamic_secondary50"
             android:text="Log out"/>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reportButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:backgroundTint="@color/material_dynamic_neutral30"
+            android:text="Report"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

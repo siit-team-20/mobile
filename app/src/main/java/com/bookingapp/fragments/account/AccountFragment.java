@@ -34,7 +34,9 @@ import com.bookingapp.databinding.FragmentAccountBinding;
 import com.bookingapp.fragments.FragmentTransition;
 import com.bookingapp.fragments.accommodation.AccommodationListFragment;
 import com.bookingapp.model.Accommodation;
+import com.bookingapp.model.OwnerReview;
 import com.bookingapp.model.Reservation;
+import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
 import com.bookingapp.model.User;
 import com.bookingapp.model.UserType;
@@ -75,6 +77,7 @@ public class AccountFragment extends Fragment {
     private Button cancelButton;
     private RelativeLayout newPasswordLayout;
     private RelativeLayout confirmPasswordLayout;
+    private Button reportButton;
 /*
     private static final String ARG_NAME = "name";
     private static final String ARG_SURNAME = "surname";
@@ -148,6 +151,7 @@ public class AccountFragment extends Fragment {
         cancelButton = (Button) binding.cancelButton;
         newPasswordLayout = (RelativeLayout) binding.newPasswordLayout;
         confirmPasswordLayout = (RelativeLayout) binding.confirmPasswordLayout;
+        reportButton = binding.reportButton;
 
         try {
             if (UserInfo.getToken() != null) {
@@ -167,6 +171,73 @@ public class AccountFragment extends Fragment {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
+        try {
+            if (UserInfo.getType().equals(UserType.Admin) || UserInfo.getEmail().equals(userEmail)) {
+                reportButton.setVisibility(View.GONE);
+            }
+            else if (UserInfo.getType().equals(UserType.Guest)) {
+                Call<ArrayList<ReservationWithAccommodation>> reservationWithAccommodationCall = ServiceUtils.reservationService.get(userEmail, ReservationStatus.Finished.toString(), UserInfo.getEmail());
+                reservationWithAccommodationCall.enqueue(new Callback<ArrayList<ReservationWithAccommodation>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<ReservationWithAccommodation>> call, Response<ArrayList<ReservationWithAccommodation>> response) {
+                        if (response.code() == 200){
+                            Log.d("Reservations-Update","Message received");
+                            System.out.println(response.body());
+                            if (response.body().size() > 0)
+                                reportButton.setVisibility(View.VISIBLE);
+                            else
+                                reportButton.setVisibility(View.GONE);
+                        }
+                        else {
+                            reportButton.setVisibility(View.GONE);
+                            Log.d("Reservations-Update","Message received: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<ReservationWithAccommodation>> call, Throwable t) {
+                        reportButton.setVisibility(View.GONE);
+                        Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                    }
+                });
+            }
+            else if (UserInfo.getType().equals(UserType.Owner)) {
+                Call<ArrayList<ReservationWithAccommodation>> reservationWithAccommodationCall = ServiceUtils.reservationService.get(UserInfo.getEmail(), ReservationStatus.Finished.toString(), userEmail);
+                reservationWithAccommodationCall.enqueue(new Callback<ArrayList<ReservationWithAccommodation>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<ReservationWithAccommodation>> call, Response<ArrayList<ReservationWithAccommodation>> response) {
+                        if (response.code() == 200){
+                            Log.d("Reservations-Update","Message received");
+                            System.out.println(response.body());
+                            if (response.body().size() > 0)
+                                reportButton.setVisibility(View.VISIBLE);
+                            else
+                                reportButton.setVisibility(View.GONE);
+                        }
+                        else {
+                            reportButton.setVisibility(View.GONE);
+                            Log.d("Reservations-Update","Message received: "+response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ArrayList<ReservationWithAccommodation>> call, Throwable t) {
+                        reportButton.setVisibility(View.GONE);
+                        Log.d("Reservations-Update", t.getMessage() != null?t.getMessage():"error");
+                    }
+                });
+            }
+        } catch (Exception e) {
+            reportButton.setVisibility(View.GONE);
+        }
+
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
