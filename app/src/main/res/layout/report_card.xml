@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/report_card_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/reportText"
+        android:textSize="20sp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:text="User 1 has reported user 2"></TextView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/blockButton"
+        android:backgroundTint="#ba3c3c"
+        android:layout_marginHorizontal="20dp"
+        android:text="Block"></Button>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dismissButton"
+        android:backgroundTint="@color/material_dynamic_secondary50"
+        android:layout_marginHorizontal="20dp"
+        android:text="Dismiss"></Button>
+</LinearLayout>

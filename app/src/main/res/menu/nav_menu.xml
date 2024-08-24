@@ -64,6 +64,12 @@
             android:orderInCategory="100"
             android:visible="false" />
 
+        <item android:id="@+id/nav_reports"
+            android:title="Reports"
+            android:icon="@drawable/ic_product"
+            android:orderInCategory="100"
+            android:visible="false" />
+
 <!--        <item android:id="@+id/nav_new"-->
 <!--            android:title="@string/new_product"-->
 <!--            android:icon="@drawable/ic_new"-->
