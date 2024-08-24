@@ -27,6 +27,8 @@ import com.bookingapp.R;
 import com.bookingapp.activities.HomeActivity;
 import com.bookingapp.model.Accommodation;
 import com.bookingapp.model.DateRange;
+import com.bookingapp.model.Notification;
+import com.bookingapp.model.NotificationType;
 import com.bookingapp.model.Reservation;
 import com.bookingapp.model.ReservationStatus;
 import com.bookingapp.model.ReservationWithAccommodation;
@@ -38,7 +40,9 @@ import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -192,6 +196,39 @@ public class ReservationListAdapter extends ArrayAdapter<ReservationWithAccommod
                                         break;
                                     }
                                 }
+                                Notification notification = new Notification();
+                                notification.setUserEmail(reservation.getAccommodation().getOwnerEmail());
+                                try {
+                                    notification.setOtherUserEmail(UserInfo.getEmail());
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                notification.setType(NotificationType.ReservationCancelled);
+                                List<Integer> now = new ArrayList<>();
+                                now.add(LocalDateTime.now().getYear());
+                                now.add(LocalDateTime.now().getMonthValue());
+                                now.add(LocalDateTime.now().getDayOfMonth());
+                                now.add(LocalDateTime.now().getHour());
+                                now.add(LocalDateTime.now().getMinute());
+                                notification.setCreatedAt(now);
+                                Call<Notification> notificationCall = ServiceUtils.notificationService.add(notification);
+                                notificationCall.enqueue(new Callback<Notification>() {
+                                    @Override
+                                    public void onResponse(Call<Notification> call, Response<Notification> response) {
+                                        if (response.code() == 201) {
+                                            Log.d("Notification-New","Message received");
+                                            System.out.println(response.body());
+                                        }
+                                        else {
+                                            Log.d("Notification-New","Message received: "+response.code());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Notification> call, Throwable t) {
+                                        Log.d("Notification-New", t.getMessage() != null?t.getMessage():"error");
+                                    }
+                                });
                                 notifyDataSetChanged();
                             }
                             else {
