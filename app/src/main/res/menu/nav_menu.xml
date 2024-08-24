@@ -66,19 +66,19 @@
 
         <item android:id="@+id/nav_reports"
             android:title="Reports"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/request"
             android:orderInCategory="100"
             android:visible="false" />
 
         <item android:id="@+id/nav_accommodation_reviews"
             android:title="Accommodation Reviews"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/request"
             android:orderInCategory="100"
             android:visible="false" />
 
         <item android:id="@+id/nav_owner_reviews"
             android:title="Owner Reviews"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/request"
             android:orderInCategory="100"
             android:visible="false" />
 
