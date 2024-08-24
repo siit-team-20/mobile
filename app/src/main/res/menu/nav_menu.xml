@@ -6,60 +6,61 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_accommodations"
             android:title="@string/accommodations"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/accommodation"
             android:orderInCategory="100" />
         <item android:id="@+id/nav_my_accommodations"
             android:title="@string/my_accommodations"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/accommodation"
             android:orderInCategory="100"
             android:visible="false" />
         <item android:id="@+id/nav_favourite_accommodations"
             android:title="Favourite Accommodations"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/favourite"
+            android:iconTint="@color/black"
             android:orderInCategory="100"
             android:visible="false" />
         <item android:id="@+id/nav_reservations"
             android:title="@string/reservations"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/reservation"
             android:orderInCategory="100"
             android:visible="false" />
         <item android:id="@+id/nav_account"
             android:title="Account"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/account"
             android:orderInCategory="100"
             android:visible="false"/>
 
         <item android:id="@+id/nav_user_account"
             android:title="User's Account"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/account"
             android:orderInCategory="100"
             android:visible="false"/>
 
         <item android:id="@+id/nav_create_accommodation"
             android:title="Create Accommodation"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/create_accommodation"
             android:orderInCategory="100"
             android:visible="false" />
 
         <item android:id="@+id/nav_login"
             android:title="Login"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/login_register"
             android:orderInCategory="100" />
 
         <item android:id="@+id/nav_register"
             android:title="Register"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/login_register"
             android:orderInCategory="100" />
 
         <item android:id="@+id/nav_notifications"
             android:title="Notifications"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/notifications_users"
             android:orderInCategory="100"
             android:visible="false" />
 
         <item android:id="@+id/nav_accommodation_requests"
             android:title="Requests"
-            android:icon="@drawable/ic_product"
+            android:icon="@drawable/request"
             android:orderInCategory="100"
             android:visible="false" />
 
