@@ -1,6 +1,7 @@
 package com.bookingapp.adapters;
 
 import android.app.Activity;
+import android.app.Service;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +21,10 @@ import androidx.navigation.Navigation;
 
 import com.bookingapp.R;
 import com.bookingapp.model.Accommodation;
+import com.bookingapp.model.AccommodationReview;
 import com.bookingapp.model.DateRange;
 import com.bookingapp.model.FavouriteAccommodationWithAccommodation;
+import com.bookingapp.model.Rating;
 import com.bookingapp.model.Reservation;
 import com.bookingapp.model.UserType;
 import com.bookingapp.service.ServiceUtils;
@@ -30,6 +33,7 @@ import com.bookingapp.service.UserInfo;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,6 +82,7 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
         TextView name = convertView.findViewById(R.id.accommodation_name);
         TextView location = convertView.findViewById(R.id.accommodation_location);
         ImageButton favouritesButton = convertView.findViewById(R.id.add_to_favourites_button);
+        TextView averageRating = convertView.findViewById(R.id.accommodation_average_rating);
 //        TextView minGuests = convertView.findViewById(R.id.accommodation_min_guests);
 //        TextView maxGuests = convertView.findViewById(R.id.accommodation_max_guests);
 
@@ -86,9 +91,51 @@ public class AccommodationListAdapter extends ArrayAdapter<Accommodation> {
             //Resources resources = getContext().getResources();
             //final int resourceId = resources.getIdentifier(uri, "drawable", getContext().getPackageName());
             imageView.setImageResource(R.drawable.a);
+            Call<ArrayList<AccommodationReview>> call = ServiceUtils.accommodationReviewService.get(accommodation.getId(), false);
+            call.enqueue(new Callback<ArrayList<AccommodationReview>>() {
+                @Override
+                public void onResponse(Call<ArrayList<AccommodationReview>> call, Response<ArrayList<AccommodationReview>> response) {
+                    if (response.code() == 200) {
+                        Log.d("Reviews-Get","Message received");
+                        System.out.println(response.body());
+                        List<AccommodationReview> accommodationReviews = response.body();
+                        Long counter = 0L;
+                        Long sum = 0L;
+                        for(int i = 0; i < accommodationReviews.size();i++){
+                            counter++;
+                            if(accommodationReviews.get(i).getRating().equals(Rating.one))
+                                sum += 1;
+                            else if(accommodationReviews.get(i).getRating().equals(Rating.two))
+                                sum += 2;
+                            else if(accommodationReviews.get(i).getRating().equals(Rating.three))
+                                sum += 3;
+                            else if(accommodationReviews.get(i).getRating().equals(Rating.four))
+                                sum += 4;
+                            else if(accommodationReviews.get(i).getRating().equals(Rating.five))
+                                sum += 5;
+                        }
+                        if(counter == 0L){
+                            averageRating.setText("Average Rating: None");
+                            return;
+                        }
+                        averageRating.setText("Average Rating: " + sum/counter);
+                    }
+                    else {
+                        Log.d("Reviews-Get","Message received: "+response.code());
+                        averageRating.setText("Average Rating: None");
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<ArrayList<AccommodationReview>> call, Throwable t) {
+                    Log.d("Reviews-Get", t.getMessage() != null?t.getMessage():"error");
+                    averageRating.setText("Rating: None");
+                }
+            });
             name.setText(accommodation.getName());
             location.setText(accommodation.getLocation());
+
+
             if (UserInfo.getToken() != null) {
                 try {
                     if (UserInfo.getType().equals(UserType.Guest) && !isOnFavourites) {

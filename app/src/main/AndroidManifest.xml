@@ -35,7 +35,7 @@
         <activity
             android:name=".activities.SplashScreenActivity"
 
-            android:label="Shop App"
+            android:label="Booking App"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
